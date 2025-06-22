@@ -1,0 +1,56 @@
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f8f8f8;
+  margin: 0;
+}
+h1 {
+  background: linear-gradient(to right, #8B0000, #A52A2A);
+  color: white;
+  text-align: center;
+  padding: 20px;
+  font-size: 24px;
+}
+.menu {
+  display: flex;
+  justify-content: space-around;
+  background: white;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+}
+.menu button {
+  background: none;
+  border: none;
+  padding: 15px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.aba {
+  display: none;
+  padding: 20px;
+}
+.ativa {
+  display: block;
+}
+.card {
+  background: white;
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+input, select, textarea {
+  width: 100%;
+  margin: 8px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+button.action {
+  background-color: #8B0000;
+  color: white;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
