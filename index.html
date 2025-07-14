@@ -896,3 +896,1583 @@
         </div>
 
         <!-- Os capítulos serão inseridos aqui nas próximas partes -->
+        <div class="chapter" id="capitulo1">
+            <h2>Capítulo 1: Setup de Campo e Controle de Território</h2>
+            <p><em>O Terminal, o Ecossistema e o Git</em></p>
+
+            <div class="section">
+                <h3>1.1 Dominando o Terminal</h3>
+                
+                <h4>Conceitos Fundamentais</h4>
+                <p>O terminal é a interface direta com o sistema operacional. Enquanto interfaces gráficas abstraem operações, o terminal oferece <strong>controle granular</strong> e <strong>automação completa</strong>. É a ferramenta fundamental que separa desenvolvedores iniciantes dos profissionais.</p>
+
+                <div class="architect-tip">
+                    <p><strong>Por que o terminal é fundamental:</strong> Desenvolvedores profissionais trabalham em ambientes distribuídos, servidores remotos e sistemas de CI/CD. O terminal é a única interface consistente entre todos esses ambientes. Dominar o terminal significa dominar qualquer ambiente de desenvolvimento, desde desenvolvimento local até deployment em produção.</p>
+                </div>
+
+                <div class="deus-ex-machina">
+                    <p><strong>Como o shell funciona:</strong> O shell é um interpretador que traduz comandos em chamadas de sistema (syscalls). Ele mantém um processo pai que spawna processos filhos para cada comando, gerenciando streams de entrada (stdin), saída (stdout) e erro (stderr). O shell também gerencia variáveis de ambiente, histórico de comandos, expansão de wildcards e job control.</p>
+                </div>
+
+                <h4>Navegação e Exploração do Sistema</h4>
+                <div class="code-block">
+                    <pre>
+# Navegação básica
+pwd                       # Print Working Directory - mostra diretório atual
+ls                        # Lista arquivos e diretórios
+ls -la                    # Lista com detalhes (permissions, owner, size, date)
+ls -lh                    # Lista com tamanhos human-readable (KB, MB, GB)
+ls -lt                    # Lista ordenada por data de modificação
+ls -lS                    # Lista ordenada por tamanho
+ls -lR                    # Lista recursivamente todos os subdiretórios
+
+# Navegação avançada
+cd /path/to/directory     # Muda para diretório específico
+cd ~                      # Vai para home directory
+cd -                      # Volta para diretório anterior
+cd ..                     # Sobe um nível
+cd ../..                  # Sobe dois níveis
+cd /                      # Vai para root
+cd                        # Vai para home (sem argumentos)
+
+# Atalhos de navegação
+pushd /path/to/dir        # Salva diretório atual na pilha e muda para novo
+popd                      # Volta para diretório na pilha
+dirs                      # Mostra pilha de diretórios
+dirs -v                   # Mostra pilha numerada
+dirs -c                   # Limpa pilha de diretórios
+
+# Busca de arquivos e diretórios
+find . -name "*.py"                    # Busca arquivos .py no diretório atual
+find /home -name "config*"             # Busca arquivos que começam com "config"
+find . -type f -name "*.log"           # Busca apenas arquivos .log
+find . -type d -name "node_modules"    # Busca apenas diretórios node_modules
+find . -size +100M                     # Busca arquivos maiores que 100MB
+find . -mtime -7                       # Arquivos modificados nos últimos 7 dias
+find . -atime +30                      # Arquivos acessados há mais de 30 dias
+
+# Localizador de comandos
+which python                           # Mostra caminho do executável
+which -a python                        # Mostra todos os caminhos
+whereis python                         # Mostra binário, source e manual
+type python                            # Mostra tipo do comando
+command -v python                      # Verifica se comando existe
+                    </pre>
+                </div>
+
+                <h4>Manipulação Avançada de Arquivos</h4>
+                <div class="code-block">
+                    <pre>
+# Criação estruturada
+mkdir projeto                          # Cria diretório
+mkdir -p projeto/{src,tests,docs}      # Cria estrutura de diretórios
+mkdir -p projeto/src/{js,css,assets}   # Cria subdiretórios
+touch arquivo.txt                      # Cria arquivo vazio
+touch arquivo{1,2,3}.txt              # Cria múltiplos arquivos
+touch projeto/src/main.{js,css,html}  # Cria arquivos em diretório específico
+
+# Cópia inteligente
+cp arquivo.txt backup.txt              # Copia arquivo
+cp -r diretorio/ backup_dir/          # Copia diretório recursivamente
+cp -u source dest                      # Copia apenas se source é mais novo
+cp -i source dest                      # Confirma antes de sobrescrever
+cp -a source dest                      # Preserva atributos e links
+cp --parents path/to/file dest/        # Preserva estrutura de diretórios
+rsync -av source/ dest/               # Sincronização avançada
+
+# Movimentação e renomeação
+mv arquivo.txt novo_nome.txt          # Renomeia arquivo
+mv arquivo.txt /outro/diretorio/      # Move arquivo
+mv *.txt /diretorio/                  # Move todos os .txt
+mv projeto{,_backup}                  # Renomeia com expansão de chaves
+
+# Remoção segura
+rm arquivo.txt                        # Remove arquivo
+rm -i arquivo.txt                     # Confirma antes de remover
+rm -r diretorio/                      # Remove diretório recursivamente
+rm -rf diretorio/                     # Remove diretório forçadamente
+find . -name "*.tmp" -delete          # Remove arquivos temporários
+find . -type f -empty -delete         # Remove arquivos vazios
+
+# Links simbólicos e hard links
+ln -s /path/to/original link_name     # Cria link simbólico
+ln -sf /path/to/original link_name    # Força criação de link simbólico
+ln original hard_link                 # Cria hard link
+readlink link_name                    # Mostra destino do link simbólico
+readlink -f link_name                 # Mostra caminho absoluto do link
+
+# Permissões e propriedade
+chmod 755 arquivo.sh                  # Define permissões (rwxr-xr-x)
+chmod +x arquivo.sh                   # Adiciona permissão de execução
+chmod -R 644 diretorio/              # Define permissões recursivamente
+chown usuario:grupo arquivo.txt       # Muda proprietário
+chown -R usuario:grupo diretorio/     # Muda proprietário recursivamente
+umask 022                             # Define máscara de permissões padrão
+                    </pre>
+                </div>
+
+                <h4>Visualização e Análise de Conteúdo</h4>
+                <div class="code-block">
+                    <pre>
+# Visualização básica
+cat arquivo.txt                       # Mostra conteúdo completo
+cat -n arquivo.txt                    # Mostra com números de linha
+cat -b arquivo.txt                    # Numera apenas linhas não vazias
+cat -A arquivo.txt                    # Mostra todos os caracteres especiais
+tac arquivo.txt                       # Mostra arquivo invertido (últimas linhas primeiro)
+
+# Visualização paginada
+less arquivo.txt                      # Visualiza com paginação (q para sair)
+less +G arquivo.txt                   # Abre no final do arquivo
+less +/pattern arquivo.txt            # Abre e busca por pattern
+more arquivo.txt                      # Visualização paginada básica
+head arquivo.txt                      # Primeiras 10 linhas
+head -n 20 arquivo.txt                # Primeiras 20 linhas
+tail arquivo.txt                      # Últimas 10 linhas
+tail -n 20 arquivo.txt                # Últimas 20 linhas
+tail -f log.txt                       # Monitora arquivo em tempo real
+tail -f -n 100 log.txt                # Monitora últimas 100 linhas
+
+# Análise de arquivos
+wc arquivo.txt                        # Conta linhas, palavras e caracteres
+wc -l arquivo.txt                     # Conta apenas linhas
+wc -w arquivo.txt                     # Conta apenas palavras
+wc -c arquivo.txt                     # Conta apenas caracteres
+wc -m arquivo.txt                     # Conta caracteres multibyte
+file arquivo.txt                      # Identifica tipo do arquivo
+file -i arquivo.txt                   # Mostra MIME type
+stat arquivo.txt                      # Mostra estatísticas detalhadas
+du -h arquivo.txt                     # Mostra tamanho do arquivo
+du -sh diretorio/                     # Mostra tamanho total do diretório
+du -sh * | sort -h                    # Lista diretórios por tamanho
+
+# Comparação de arquivos
+diff arquivo1.txt arquivo2.txt        # Mostra diferenças entre arquivos
+diff -u arquivo1.txt arquivo2.txt     # Diff no formato unified
+diff -y arquivo1.txt arquivo2.txt     # Diff lado a lado
+comm arquivo1.txt arquivo2.txt        # Compara arquivos ordenados
+cmp arquivo1.txt arquivo2.txt         # Compara arquivos byte a byte
+md5sum arquivo.txt                    # Calcula hash MD5
+sha256sum arquivo.txt                 # Calcula hash SHA256
+                    </pre>
+                </div>
+
+                <h4>Processamento de Texto Avançado</h4>
+                <div class="code-block">
+                    <pre>
+# Busca com grep
+grep "pattern" arquivo.txt                      # Busca padrão no arquivo
+grep -i "pattern" arquivo.txt                   # Busca case-insensitive
+grep -r "pattern" diretorio/                    # Busca recursiva em diretório
+grep -n "pattern" arquivo.txt                   # Mostra números das linhas
+grep -v "pattern" arquivo.txt                   # Mostra linhas que NÃO contêm o padrão
+grep -c "pattern" arquivo.txt                   # Conta ocorrências
+grep -l "pattern" *.txt                         # Mostra apenas nomes dos arquivos
+grep -A 3 -B 3 "pattern" arquivo.txt            # Mostra 3 linhas antes e depois
+grep -C 3 "pattern" arquivo.txt                 # Mostra 3 linhas de contexto
+grep -o "pattern" arquivo.txt                   # Mostra apenas o match
+grep -E "pattern1|pattern2" arquivo.txt         # Busca múltiplos padrões
+grep -P "\d{3}-\d{3}-\d{4}" arquivo.txt         # Busca com Perl regex
+
+# Expressões regulares avançadas
+grep "^pattern" arquivo.txt                     # Linha que começa com pattern
+grep "pattern$" arquivo.txt                     # Linha que termina com pattern
+grep "^$" arquivo.txt                           # Linhas vazias
+grep -v "^$" arquivo.txt                        # Linhas não vazias
+grep "[0-9]" arquivo.txt                        # Linhas contendo números
+grep "[a-zA-Z]" arquivo.txt                     # Linhas contendo letras
+grep "pattern.*outro" arquivo.txt               # Pattern seguido de outro
+grep "pattern\|outro" arquivo.txt               # Pattern OU outro
+grep -E "colou?r" arquivo.txt                   # color ou colour
+grep -E "patterns?" arquivo.txt                 # pattern ou patterns
+
+# Substituição com sed
+sed 's/old/new/' arquivo.txt                    # Substitui primeira ocorrência por linha
+sed 's/old/new/g' arquivo.txt                   # Substitui todas as ocorrências
+sed 's/old/new/gi' arquivo.txt                  # Substitui case-insensitive
+sed -i 's/old/new/g' arquivo.txt                # Substitui no próprio arquivo
+sed -i.bak 's/old/new/g' arquivo.txt            # Substitui e faz backup
+sed '1d' arquivo.txt                            # Remove primeira linha
+sed '$d' arquivo.txt                            # Remove última linha
+sed '1,5d' arquivo.txt                          # Remove linhas 1 a 5
+sed '/pattern/d' arquivo.txt                    # Remove linhas com pattern
+sed '/^$/d' arquivo.txt                         # Remove linhas vazias
+sed 's/^/    /' arquivo.txt                     # Adiciona 4 espaços no início
+sed 's/$/;/' arquivo.txt                        # Adiciona ; no final
+
+# Processamento com awk
+awk '{print $1}' arquivo.txt                    # Imprime primeira coluna
+awk '{print $NF}' arquivo.txt                   # Imprime última coluna
+awk '{print NF}' arquivo.txt                    # Imprime número de colunas
+awk '{print NR, $0}' arquivo.txt                # Imprime número da linha e conteúdo
+awk '/pattern/{print $0}' arquivo.txt           # Imprime linhas que contêm pattern
+awk '{sum+=$1} END {print sum}' arquivo.txt     # Soma valores da primeira coluna
+awk '{print length($0)}' arquivo.txt            # Imprime tamanho de cada linha
+awk -F',' '{print $2}' arquivo.csv              # Usa vírgula como separador
+awk '{if($3 > 100) print $1}' arquivo.txt       # Condicional: se coluna 3 > 100
+
+# Ordenação e manipulação
+sort arquivo.txt                                # Ordena linhas
+sort -n arquivo.txt                             # Ordena numericamente
+sort -r arquivo.txt                             # Ordena em ordem reversa
+sort -k 2 arquivo.txt                           # Ordena pela segunda coluna
+sort -k 2,2 arquivo.txt                         # Ordena apenas pela segunda coluna
+sort -t',' -k 2 arquivo.csv                     # Ordena CSV pela segunda coluna
+sort -u arquivo.txt                             # Ordena e remove duplicatas
+sort -h arquivo.txt                             # Ordena por tamanho humano (1K, 1M, etc)
+uniq arquivo.txt                                # Remove duplicatas consecutivas
+uniq -c arquivo.txt                             # Conta ocorrências de cada linha
+uniq -d arquivo.txt                             # Mostra apenas duplicatas
+uniq -u arquivo.txt                             # Mostra apenas linhas únicas
+shuf arquivo.txt                                # Embaralha linhas
+shuf -n 5 arquivo.txt                           # Mostra 5 linhas aleatórias
+
+# Divisão e junção
+split -l 1000 arquivo.txt parte_                # Divide arquivo em partes de 1000 linhas
+split -b 10M arquivo.txt parte_                 # Divide arquivo em partes de 10MB
+csplit arquivo.txt /pattern/ {*}                # Divide arquivo por padrão
+paste arquivo1.txt arquivo2.txt                 # Junta arquivos lado a lado
+paste -d',' arquivo1.txt arquivo2.txt           # Junta com vírgula como separador
+join arquivo1.txt arquivo2.txt                  # Junta arquivos por campo comum
+cut -d',' -f1,3 arquivo.csv                     # Extrai colunas 1 e 3 de CSV
+cut -c1-10 arquivo.txt                          # Extrai caracteres 1-10 de cada linha
+                    </pre>
+                </div>
+
+                <div class="project-box">
+                    <h4>🎯 Projeto Prático: Sistema de Organização de Arquivos</h4>
+                    <p>Crie um sistema completo de organização de downloads por extensão e </p>
+                    <div class="code-block">
+                        <pre>
+#!/bin/bash
+# organize_downloads.sh - Sistema avançado de organização
+
+set -euo pipefail  # Modo rigoroso
+
+# Configurações
+DOWNLOADS_DIR="${HOME}/Downloads"
+TARGET_DIR="${HOME}/OrganizedFiles"
+LOG_FILE="${HOME}/organize_$(date +%Y%m%d_%H%M%S).log"
+DRY_RUN=false
+
+# Cores para output
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly YELLOW='\033[1;33m'
+readonly BLUE='\033[0;34m'
+readonly PURPLE='\033[0;35m'
+readonly NC='\033[0m'
+
+# Função para logging
+log() {
+    local level=$1
+    shift
+    local message="$*"
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    
+    case $level in
+        "INFO")
+            echo -e "${GREEN}[INFO]${NC} $message" | tee -a "$LOG_FILE"
+            ;;
+        "WARN")
+            echo -e "${YELLOW}[WARN]${NC} $message" | tee -a "$LOG_FILE"
+            ;;
+        "ERROR")
+            echo -e "${RED}[ERROR]${NC} $message" | tee -a "$LOG_FILE"
+            ;;
+        "DEBUG")
+            echo -e "${BLUE}[DEBUG]${NC} $message" | tee -a "$LOG_FILE"
+            ;;
+    esac
+}
+
+# Função para mostrar progresso
+show_progress() {
+    local current=$1
+    local total=$2
+    local percent=$((current * 100 / total))
+    local bar_length=50
+    local filled_length=$((percent * bar_length / 100))
+    
+    printf "\r${BLUE}Progresso: ["
+    printf "%${filled_length}s" | tr ' ' '='
+    printf "%$((bar_length - filled_length))s" | tr ' ' '-'
+    printf "] ${percent}%% (${current}/${total})${NC}"
+}
+
+# Função para criar estrutura de diretórios
+create_structure() {
+    log "INFO" "Criando estrutura de diretórios..."
+    
+    # Diretórios principais por tipo
+    local types=("images" "documents" "videos" "audio" "code" "archives" "executables" "other")
+    
+    for type in "${types[@]}"; do
+        mkdir -p "$TARGET_DIR/$type"
+        
+        # Subdiretórios por ano/mês
+        for year in {2020..2025}; do
+            for month in {01..12}; do
+                mkdir -p "$TARGET_DIR/$type/$year/$month"
+            done
+        done
+    done
+    
+    log "INFO" "Estrutura de diretórios criada"
+}
+
+# Função para determinar tipo de arquivo
+get_file_type() {
+    local file="$1"
+    local extension="${file##*.}"
+    extension=$(echo "$extension" | tr '[:upper:]' '[:lower:]')
+    
+    case "$extension" in
+        # Imagens
+        jpg|jpeg|png|gif|bmp|svg|webp|ico|tiff|raw|heic|avif)
+            echo "images"
+            ;;
+        # Documentos
+        pdf|doc|docx|txt|rtf|odt|xls|xlsx|ppt|pptx|csv|md|tex|epub)
+            echo "documents"
+            ;;
+        # Vídeos
+        mp4|avi|mkv|mov|wmv|flv|webm|m4v|mpg|mpeg|3gp|ogv)
+            echo "videos"
+            ;;
+        # Áudio
+        mp3|wav|flac|aac|ogg|wma|m4a|opus|ape|alac)
+            echo "audio"
+            ;;
+        # Código
+        py|js|html|css|php|cpp|c|h|java|go|rs|rb|swift|kt|ts|jsx|vue|scss|sass|less|sql|json|xml|yaml|yml|toml|ini|cfg|conf)
+            echo "code"
+            ;;
+        # Arquivos compactados
+        zip|rar|tar|gz|bz2|xz|7z|z|lz|lzma|cab|iso|dmg)
+            echo "archives"
+            ;;
+        # Executáveis
+        exe|msi|deb|rpm|pkg|dmg|app|bin|run|appimage)
+            echo "executables"
+            ;;
+        # Outros
+        *)
+            echo "other"
+            ;;
+    esac
+}
+
+# Função para obter informações do arquivo
+get_file_info() {
+    local file="$1"
+    
+    if [[ ! -f "$file" ]]; then
+        echo "0|unknown|unknown"
+        return
+    fi
+    
+    local size=$(stat -c%s "$file" 2>/dev/null || echo "0")
+    local timestamp=$(stat -c%Y "$file" 2>/dev/null || echo "0")
+    local readable_size=$(numfmt --to=iec-i --suffix=B "$size" 2>/dev/null || echo "0B")
+    local readable_date=$(date -d "@$timestamp" '+%Y-%m-%d %H:%M:%S' 2>/dev/null || echo "unknown")
+    
+    echo "$readable_size|$readable_date|$timestamp"
+}
+
+# Função para verificar duplicatas
+check_duplicate() {
+    local file="$1"
+    local dest_dir="$2"
+    local filename=$(basename "$file")
+    
+    if [[ -f "$dest_dir/$filename" ]]; then
+        # Verifica se são realmente iguais
+        if cmp -s "$file" "$dest_dir/$filename"; then
+            echo "identical"
+        else
+            echo "different"
+        fi
+    else
+        echo "new"
+    fi
+}
+
+# Função para gerar nome único
+generate_unique_name() {
+    local dest_dir="$1"
+    local filename="$2"
+    local base_name="${filename%.*}"
+    local extension="${filename##*.}"
+    local counter=1
+    
+    # Se não tem extensão
+    if [[ "$base_name" == "$extension" ]]; then
+        extension=""
+    fi
+    
+    local new_name="$filename"
+    while [[ -f "$dest_dir/$new_name" ]]; do
+        if [[ -n "$extension" ]]; then
+            new_name="${base_name}_${counter}.${extension}"
+        else
+            new_name="${base_name}_${counter}"
+        fi
+        ((counter++))
+    done
+    
+    echo "$new_name"
+}
+
+# Função principal de organização
+organize_files() {
+    log "INFO" "Iniciando organização de arquivos..."
+    
+    # Contadores
+    local total_files=0
+    local processed_files=0
+    local moved_files=0
+    local duplicate_files=0
+    local error_files=0
+    local total_size=0
+    
+    # Conta total de arquivos
+    total_files=$(find "$DOWNLOADS_DIR" -type f -not -path "*/.*" | wc -l)
+    
+    if [[ $total_files -eq 0 ]]; then
+        log "WARN" "Nenhum arquivo encontrado em $DOWNLOADS_DIR"
+        return 0
+    fi
+    
+    log "INFO" "Total de arquivos a processar: $total_files"
+    
+    # Processa cada arquivo
+    while IFS= read -r -d '' file; do
+        if [[ -f "$file" ]]; then
+            local filename=$(basename "$file")
+            local file_type=$(get_file_type "$filename")
+            local file_info=$(get_file_info "$file")
+            local file_size=$(echo "$file_info" | cut -d'|' -f1)
+            local file_date=$(echo "$file_info" | cut -d'|' -f2)
+            local file_timestamp=$(echo "$file_info" | cut -d'|' -f3)
+            
+            # Determina diretório de destino baseado na data do arquivo
+            local file_year=$(date -d "@$file_timestamp" '+%Y' 2>/dev/null || date '+%Y')
+            local file_month=$(date -d "@$file_timestamp" '+%m' 2>/dev/null || date '+%m')
+            local dest_dir="$TARGET_DIR/$file_type/$file_year/$file_month"
+            
+            # Cria diretório se não existir
+            mkdir -p "$dest_dir"
+            
+            # Verifica duplicatas
+            local duplicate_status=$(check_duplicate "$file" "$dest_dir")
+            
+            case $duplicate_status in
+                "identical")
+                    log "DEBUG" "Arquivo idêntico ignorado: $filename"
+                    rm "$file"  # Remove o duplicado
+                    ((duplicate_files++))
+                    ;;
+                "different")
+                    local new_name=$(generate_unique_name "$dest_dir" "$filename")
+                    log "DEBUG" "Arquivo com nome duplicado renomeado: $filename -> $new_name"
+                    
+                    if [[ "$DRY_RUN" == "false" ]]; then
+                        if mv "$file" "$dest_dir/$new_name"; then
+                            ((moved_files++))
+                            local size_bytes=$(stat -c%s "$dest_dir/$new_name" 2>/dev/null || echo "0")
+                            ((total_size += size_bytes))
+                        else
+                            log "ERROR" "Falha ao mover: $filename"
+                            ((error_files++))
+                        fi
+                    else
+                        log "INFO" "[DRY RUN] Moveria: $filename -> $file_type/$file_year/$file_month/$new_name"
+                    fi
+                    ;;
+                "new")
+                    if [[ "$DRY_RUN" == "false" ]]; then
+                        if mv "$file" "$dest_dir/$filename"; then
+                            ((moved_files++))
+                            local size_bytes=$(stat -c%s "$dest_dir/$filename" 2>/dev/null || echo "0")
+                            ((total_size += size_bytes))
+                        else
+                            log "ERROR" "Falha ao mover: $filename"
+                            ((error_files++))
+                        fi
+                    else
+                        log "INFO" "[DRY RUN] Moveria: $filename -> $file_type/$file_year/$file_month/"
+                    fi
+                    ;;
+            esac
+            
+            ((processed_files++))
+            
+            # Mostra progresso
+            show_progress $processed_files $total_files
+        fi
+    done < <(find "$DOWNLOADS_DIR" -type f -not -path "*/.*" -print0)
+    
+    echo  # Nova linha após barra de progresso
+    
+    # Relatório final
+    log "INFO" "Organização concluída!"
+    log "INFO" "Arquivos processados: $processed_files"
+    log "INFO" "Arquivos movidos: $moved_files"
+    log "INFO" "Duplicados removidos: $duplicate_files"
+    log "INFO" "Erros: $error_files"
+    
+    if [[ $total_size -gt 0 ]]; then
+        local readable_total=$(numfmt --to=iec-i --suffix=B "$total_size")
+        log "INFO" "Volume total organizado: $readable_total"
+    fi
+}
+
+# Função para gerar relatório detalhado
+generate_report() {
+    local report_file="$TARGET_DIR/organization_report_$(date +%Y%m%d_%H%M%S).txt"
+    
+    log "INFO" "Gerando relatório detalhado..."
+    
+    {
+        echo "=== RELATÓRIO DE ORGANIZAÇÃO DE ARQUIVOS ==="
+        echo "Data: $(date)"
+        echo "Diretório origem: $DOWNLOADS_DIR"
+        echo "Diretório destino: $TARGET_DIR"
+        echo
+        
+        echo "=== ESTATÍSTICAS POR TIPO ==="
+        for type in images documents videos audio code archives executables other; do
+            if [[ -d "$TARGET_DIR/$type" ]]; then
+                local count=$(find "$TARGET_DIR/$type" -type f 2>/dev/null | wc -l)
+                local size=$(du -sh "$TARGET_DIR/$type" 2>/dev/null | cut -f1)
+                printf "%-12s: %6d arquivos (%s)\n" "$type" "$count" "$size"
+            fi
+        done
+        
+        echo
+        echo "=== DISTRIBUIÇÃO POR ANO ==="
+        for year_dir in "$TARGET_DIR"/*/*; do
+            if [[ -d "$year_dir" ]]; then
+                local year=$(basename "$year_dir")
+                local type=$(basename $(dirname "$year_dir"))
+                local count=$(find "$year_dir" -type f 2>/dev/null | wc -l)
+                local size=$(du -sh "$year_dir" 2>/dev/null | cut -f1)
+                printf "%-12s/%s: %6d arquivos (%s)\n" "$type" "$year" "$count" "$size"
+            fi
+        done
+        
+        echo
+        echo "=== ARQUIVOS MAIORES ==="
+        echo "Top 10 maiores arquivos:"
+        find "$TARGET_DIR" -type f -exec ls -lh {} \; 2>/dev/null | \
+            sort -k5 -hr | head -10 | \
+            awk '{print $5 " " $9}' | \
+            nl -w3 -s'. '
+        
+        echo
+        echo "=== EXTENSÕES MAIS COMUNS ==="
+        find "$TARGET_DIR" -type f -name "*.*" 2>/dev/null | \
+            sed 's/.*\.//' | \
+            tr '[:upper:]' '[:lower:]' | \
+            sort | uniq -c | sort -nr | head -20 | \
+            awk '{printf "%3d. %s (%d arquivos)\n", NR, $2, $1}'
+        
+    } > "$report_file"
+    
+    log "INFO" "Relatório salvo em: $report_file"
+}
+
+# Função para limpeza de diretórios vazios
+cleanup_empty_dirs() {
+    log "INFO" "Removendo diretórios vazios..."
+    
+    local removed_count=0
+    
+    # Remove diretórios vazios do diretório origem
+    while IFS= read -r -d '' dir; do
+        if rmdir "$dir" 2>/dev/null; then
+            ((removed_count++))
+        fi
+    done < <(find "$DOWNLOADS_DIR" -type d -empty -print0 2>/dev/null)
+    
+    # Remove diretórios vazios do diretório destino
+    while IFS= read -r -d '' dir; do
+        if rmdir "$dir" 2>/dev/null; then
+            ((removed_count++))
+        fi
+    done < <(find "$TARGET_DIR" -type d -empty -print0 2>/dev/null)
+    
+    log "INFO" "Removidos $removed_count diretórios vazios"
+}
+
+# Função para mostrar estatísticas
+show_statistics() {
+    log "INFO" "=== ESTATÍSTICAS FINAIS ==="
+    
+    for type in images documents videos audio code archives executables other; do
+        if [[ -d "$TARGET_DIR/$type" ]]; then
+            local count=$(find "$TARGET_DIR/$type" -type f 2>/dev/null | wc -l)
+            local size=$(du -sh "$TARGET_DIR/$type" 2>/dev/null | cut -f1)
+            
+            if [[ $count -gt 0 ]]; then
+                printf "${PURPLE}%-12s${NC}: ${GREEN}%6d${NC} arquivos (${YELLOW}%s${NC})\n" \
+                    "$type" "$count" "$size"
+            fi
+        fi
+    done
+}
+
+# Função para mostrar ajuda
+show_help() {
+    cat << EOF
+${BLUE}organize_downloads.sh${NC} - Sistema de organização de arquivos
+
+${YELLOW}USAGE:${NC}
+    $0 [OPTIONS]
+
+${YELLOW}OPTIONS:${NC}
+    -h, --help        Mostra esta ajuda
+    -d, --dry-run     Executa em modo teste (não move arquivos)
+    -s, --source DIR  Diretório de origem (padrão: ~/Downloads)
+    -t, --target DIR  Diretório de destino (padrão: ~/OrganizedFiles)
+    -v, --verbose     Modo verbose (mostra debug)
+
+${YELLOW}EXAMPLES:${NC}
+    $0                                    # Organiza ~/Downloads
+    $0 --dry-run                          # Testa organização sem mover arquivos
+    $0 --source ~/Desktop --target ~/Organized
+    $0 --verbose                          # Mostra informações detalhadas
+
+${YELLOW}TIPOS DE ARQUIVO SUPORTADOS:${NC}
+    • ${GREEN}images${NC}: jpg, png, gif, svg, webp, etc.
+    • ${GREEN}documents${NC}: pdf, doc, txt, xls, ppt, etc.
+    • ${GREEN}videos${NC}: mp4, avi, mkv, mov, etc.
+    • ${GREEN}audio${NC}: mp3, wav, flac, aac, etc.
+    • ${GREEN}code${NC}: py, js, html, css, php, etc.
+    • ${GREEN}archives${NC}: zip, rar, tar, gz, etc.
+    • ${GREEN}executables${NC}: exe, deb, rpm, pkg, etc.
+    • ${GREEN}other${NC}: arquivos não categorizados
+
+EOF
+}
+
+# Função para processar argumentos
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -h|--help)
+                show_help
+                exit 0
+                ;;
+            -d|--dry-run)
+                DRY_RUN=true
+                log "INFO" "Modo DRY RUN ativado"
+                shift
+                ;;
+            -s|--source)
+                DOWNLOADS_DIR="$2"
+                shift 2
+                ;;
+            -t|--target)
+                TARGET_DIR="$2"
+                shift 2
+                ;;
+            -v|--verbose)
+                set -x
+                shift
+                ;;
+            *)
+                log "ERROR" "Opção desconhecida: $1"
+                show_help
+                exit 1
+                ;;
+        esac
+    done
+}
+
+# Função principal
+main() {
+    parse_args "$@"
+    
+    log "INFO" "=== INICIANDO ORGANIZAÇÃO DE ARQUIVOS ==="
+    log "INFO" "Origem: $DOWNLOADS_DIR"
+    log "INFO" "Destino: $TARGET_DIR"
+    
+    # Verifica se diretório de origem existe
+    if [[ ! -d "$DOWNLOADS_DIR" ]]; then
+        log "ERROR" "Diretório de origem não encontrado: $DOWNLOADS_DIR"
+        exit 1
+    fi
+    
+    # Cria diretório de destino se não existir
+    if [[ ! -d "$TARGET_DIR" ]]; then
+        mkdir -p "$TARGET_DIR"
+        log "INFO" "Diretório de destino criado: $TARGET_DIR"
+    fi
+    
+    # Cria estrutura de diretórios
+    create_structure
+    
+    # Organiza arquivos
+    organize_files
+    
+    # Gera relatório
+    generate_report
+    
+    # Limpeza de diretórios vazios
+    cleanup_empty_dirs
+    
+    # Mostra estatísticas finais
+    show_statistics
+    
+    log "INFO" "=== ORGANIZAÇÃO CONCLUÍDA ==="
+    log "INFO" "Log completo em: $LOG_FILE"
+}
+
+# Executa se chamado diretamente
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>1.2 Gerenciamento de Ambientes e Variáveis</h3>
+                
+                <h4>Sistema de Variáveis de Ambiente</h4>
+                <p>Variáveis de ambiente são valores dinâmicos que afetam o comportamento de processos em execução. Elas controlam configurações sem necessidade de modificar código fonte e são fundamentais para desenvolvimento profissional.</p>
+
+                <div class="code-block">
+                    <pre>
+# Visualização de variáveis
+env                       # Lista todas as variáveis de ambiente
+printenv                  # Alternativa para listar variáveis
+set                       # Mostra variáveis do shell atual
+echo $PATH               # Mostra variável específica
+echo $HOME               # Diretório home do usuário
+echo $USER               # Nome do usuário atual
+echo $SHELL              # Shell atual
+echo $PWD                # Diretório atual
+echo $OLDPWD             # Diretório anterior
+echo $LANG               # Configuração de idioma
+echo $LC_ALL             # Configuração de localização
+
+# Definição de variáveis
+export VAR="value"                    # Define variável global
+VAR="value"                          # Define variável local
+export VAR="${VAR}:addon"            # Adiciona valor à variável existente
+unset VAR                            # Remove variável
+readonly VAR="value"                 # Define variável somente leitura
+
+# Variáveis importantes para desenvolvimento
+export PATH="$PATH:/usr/local/bin"              # Adiciona diretório ao PATH
+export EDITOR="code"                            # Define editor padrão
+export VISUAL="code"                            # Define editor visual
+export BROWSER="firefox"                        # Define browser padrão
+export PAGER="less"                             # Define pager padrão
+export PYTHONPATH="/path/to/modules"            # Adiciona módulos Python
+export JAVA_HOME="/usr/lib/jvm/java-11"         # Define Java home
+export ANDROID_HOME="$HOME/Android/Sdk"         # Define Android SDK
+export NODE_PATH="/usr/local/lib/node_modules"  # Módulos Node.js globais
+export GOPATH="$HOME/go"                        # Workspace Go
+export CARGO_HOME="$HOME/.cargo"                # Diretório do Cargo (Rust)
+export RUSTUP_HOME="$HOME/.rustup"              # Diretório do Rustup
+
+# Variáveis de configuração
+export HISTSIZE=10000                           # Tamanho do histórico
+export HISTFILESIZE=20000                       # Tamanho do arquivo de histórico
+export HISTCONTROL=ignoredups:erasedups         # Controle de duplicatas
+export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"  # Comandos ignorados
+export LESS="-R"                                # Opções para less
+export GREP_OPTIONS="--color=auto"              # Cores para grep
+export MANPAGER="less -X"                       # Pager para man pages
+
+# Verificação de variáveis
+if [[ -n "${VAR:-}" ]]; then
+    echo "Variável VAR está definida: $VAR"
+fi
+
+# Valor padrão para variáveis
+echo ${VAR:-"valor padrão"}                     # Usa valor padrão se não definida
+echo ${VAR:="valor padrão"}                     # Define e usa valor padrão
+echo ${VAR:?"VAR não definida"}                 # Erro se não definida
+echo ${VAR:+"VAR está definida"}                # Valor apenas se definida
+                    </pre>
+                </div>
+
+                <div class="deus-ex-machina">
+                    <p><strong>Como variáveis de ambiente funcionam:</strong> O sistema operacional mantém um ambiente (environ) para cada processo, que é uma matriz de strings no formato "NOME=valor". Quando um processo cria um processo filho via fork(), o ambiente é copiado. Comandos como export modificam o ambiente do shell atual, que é então passado para programas executados. O PATH é especial: é uma lista de diretórios separados por ':' que o shell usa para localizar executáveis.</p>
+                </div>
+
+                <h4>Configuração Permanente de Ambiente</h4>
+                <div class="code-block">
+                    <pre>
+# Arquivos de configuração do shell
+~/.bashrc                # Bash - executado em shells não-login
+~/.bash_profile          # Bash - executado em shells login
+~/.profile              # Shell agnóstico - executado em shells login
+~/.zshrc                # Zsh - executado em shells interativos
+~/.zsh_profile          # Zsh - executado em shells login
+~/.config/fish/config.fish  # Fish shell
+
+# Configuração do ~/.bashrc
+cat << 'EOF' >> ~/.bashrc
+# Variáveis de ambiente personalizadas
+export PATH="$HOME/.local/bin:$PATH"
+export EDITOR="code"
+export BROWSER="firefox"
+export PYTHONPATH="$HOME/dev/python:$PYTHONPATH"
+
+# Configurações do histórico
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+export HISTCONTROL=ignoredups:erasedups
+shopt -s histappend
+
+# Prompt personalizado
+export PS1='\[\e[32m\]\u@\h\[\e[0m\]:\[\e[34m\]\w\[\e[0m\]\$ '
+
+# Aliases úteis
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias h='history'
+alias j='jobs -l'
+alias which='type -all'
+alias du='du -h'
+alias df='df -h'
+
+# Aliases para desenvolvimento
+alias py='python3'
+alias pip='pip3'
+alias serve='python3 -m http.server'
+alias myip='curl -s ipinfo.io/ip'
+alias ports='netstat -tuln'
+
+# Funções úteis
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+extract() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1"     ;;
+            *.tar.gz)    tar xzf "$1"     ;;
+            *.bz2)       bunzip2 "$1"     ;;
+            *.rar)       unrar x "$1"     ;;
+            *.gz)        gunzip "$1"      ;;
+            *.tar)       tar xf "$1"      ;;
+            *.tbz2)      tar xjf "$1"     ;;
+            *.tgz)       tar xzf "$1"     ;;
+            *.zip)       unzip "$1"       ;;
+            *.Z)         uncompress "$1"  ;;
+            *.7z)        7z x "$1"        ;;
+            *)           echo "Formato não suportado: '$1'" ;;
+        esac
+    else
+        echo "'$1' não é um arquivo válido"
+    fi
+}
+
+backup() {
+    local file="$1"
+    cp "$file" "${file}.backup.$(date +%Y%m%d_%H%M%S)"
+}
+
+search() {
+    grep -r "$1" . --include="*.py" --include="*.js" --include="*.html" --include="*.css" --include="*.java" --include="*.cpp" --include="*.c" --include="*.h"
+}
+
+# Recarrega configuração
+alias reload='source ~/.bashrc'
+EOF
+
+# Recarrega configuração
+source ~/.bashrc
+                    </pre>
+                </div>
+
+                <h4>Gerenciadores de Versão</h4>
+                <div class="code-block">
+                    <pre>
+# Node Version Manager (NVM)
+# Instalação
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+# Ou via wget
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# Configuração (adicionar ao ~/.bashrc)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Uso do NVM
+nvm --version                    # Verifica versão do NVM
+nvm list-remote                  # Lista versões disponíveis do Node.js
+nvm list-remote --lts            # Lista apenas versões LTS
+nvm install node                 # Instala versão mais recente
+nvm install 18.17.0              # Instala versão específica
+nvm install --lts                # Instala versão LTS mais recente
+nvm use 18.17.0                  # Usa versão específica
+nvm use node                     # Usa versão mais recente
+nvm use --lts                    # Usa versão LTS
+nvm list                         # Lista versões instaladas
+nvm alias default 18.17.0        # Define versão padrão
+nvm alias dev 19.0.0             # Cria alias personalizado
+nvm uninstall 16.0.0             # Remove versão específica
+nvm which node                   # Mostra caminho da versão atual
+nvm current                      # Mostra versão atual
+nvm run node --version           # Executa comando com versão específica
+
+# Python Version Manager (pyenv)
+# Instalação
+curl https://pyenv.run | bash
+# Ou via git
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+
+# Configuração (adicionar ao ~/.bashrc)
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+# Uso do pyenv
+pyenv --version                  # Verifica versão do pyenv
+pyenv install --list             # Lista versões disponíveis
+pyenv install 3.11.5             # Instala Python 3.11.5
+pyenv install 3.10.12            # Instala Python 3.10.12
+pyenv versions                   # Lista versões instaladas
+pyenv global 3.11.5              # Define versão global
+pyenv local 3.10.12              # Define versão para projeto atual
+pyenv shell 3.11.5               # Define versão para sessão atual
+pyenv which python               # Mostra caminho do Python atual
+pyenv exec python --version      # Executa comando com versão específica
+pyenv uninstall 3.9.0            # Remove versão específica
+
+# Ambientes virtuais com pyenv
+pyenv virtualenv 3.11.5 myproject  # Cria ambiente virtual
+pyenv activate myproject            # Ativa ambiente virtual
+pyenv deactivate                    # Desativa ambiente virtual
+pyenv virtualenvs                   # Lista ambientes virtuais
+
+# Ruby Version Manager (rbenv)
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+
+# Configuração (adicionar ao ~/.bashrc)
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
+# Uso do rbenv
+rbenv install --list             # Lista versões disponíveis
+rbenv install 3.2.0              # Instala Ruby 3.2.0
+rbenv versions                   # Lista versões instaladas
+rbenv global 3.2.0               # Define versão global
+rbenv local 3.1.0                # Define versão local
+rbenv shell 3.2.0                # Define versão para sessão
+
+# Java Version Manager (jenv)
+git clone https://github.com/jenv/jenv.git ~/.jenv
+
+# Configuração (adicionar ao ~/.bashrc)
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+
+# Uso do jenv
+jenv add /usr/lib/jvm/java-11     # Adiciona versão Java
+jenv add /usr/lib/jvm/java-17     # Adiciona Java 17
+jenv versions                     # Lista versões disponíveis
+jenv global 11.0                  # Define versão global
+jenv local 17.0                   # Define versão local
+jenv shell 11.0                   # Define versão para sessão
+
+# Go Version Manager (g)
+curl -sSL https://git.io/g-install | sh -s
+
+# Uso do g
+g install 1.21.0                  # Instala Go 1.21.0
+g use 1.21.0                      # Usa versão específica
+g list                            # Lista versões instaladas
+g list-all                        # Lista versões disponíveis
+g remove 1.20.0                   # Remove versão específica
+
+# Rust Version Manager (rustup)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Uso do rustup
+rustup update                     # Atualiza Rust
+rustup install stable            # Instala canal stable
+rustup install nightly           # Instala canal nightly
+rustup default stable            # Define canal padrão
+rustup override set nightly      # Define canal para projeto atual
+rustup show                       # Mostra informações da instalação
+rustup toolchain list            # Lista toolchains instaladas
+rustup target list               # Lista targets disponíveis
+rustup target add wasm32-unknown-unknown  # Adiciona target WASM
+                    </pre>
+                </div>
+
+                <div class="architect-tip">
+                    <p><strong>Estratégia de gerenciamento de versões:</strong> Use um gerenciador de versão para cada linguagem principal que você trabalha. Configure versões globais para uso geral e versões locais por projeto. Crie scripts de setup que automatizam a instalação e configuração do ambiente de desenvolvimento para novos projetos ou máquinas.</p>
+                </div>
+
+                <h4>Configuração Avançada de Desenvolvimento</h4>
+                <div class="code-block">
+                    <pre>
+# Arquivo .bashrc/.zshrc otimizado para desenvolvimento
+# ~/.bashrc ou ~/.zshrc
+
+# ============================================
+# CONFIGURAÇÕES BÁSICAS DO SHELL
+# ============================================
+
+# Histórico otimizado
+export HISTSIZE=50000
+export HISTFILESIZE=100000
+export HISTCONTROL=ignoredups:erasedups
+export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help:history"
+export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S "
+shopt -s histappend              # Bash only
+shopt -s cmdhist                 # Bash only - multiline commands in one entry
+shopt -s lithist                 # Bash only - multiline commands with newlines
+
+# Prompt personalizado com informações Git
+parse_git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
+export PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(parse_git_branch)\[\033[00m\]\$ '
+
+# Correção automática de typos
+shopt -s cdspell                 # Bash only
+shopt -s dirspell                # Bash only
+
+# ============================================
+# VARIÁVEIS DE AMBIENTE PARA DESENVOLVIMENTO
+# ============================================
+
+# Editores e ferramentas
+export EDITOR="code --wait"
+export VISUAL="code"
+export BROWSER="firefox"
+export PAGER="less"
+export MANPAGER="less -X"
+export LESS="-R -S -M -I -J"
+
+# Configurações de linguagens
+export PYTHONPATH="$HOME/dev/python:$PYTHONPATH"
+export PYTHONDONTWRITEBYTECODE=1
+export PIPENV_VENV_IN_PROJECT=1
+export NODE_PATH="/usr/local/lib/node_modules"
+export NPM_CONFIG_PREFIX="$HOME/.npm-global"
+export JAVA_HOME="/usr/lib/jvm/java-11"
+export MAVEN_HOME="/opt/maven"
+export GRADLE_HOME="/opt/gradle"
+export GOPATH="$HOME/go"
+export GOROOT="/usr/local/go"
+export CARGO_HOME="$HOME/.cargo"
+export RUSTUP_HOME="$HOME/.rustup"
+export ANDROID_HOME="$HOME/Android/Sdk"
+export FLUTTER_HOME="$HOME/dev/flutter"
+
+# Configurações de ferramentas
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
+export BUILDX_EXPERIMENTAL=1
+
+# ============================================
+# PATH OTIMIZADO
+# ============================================
+
+# Função para adicionar ao PATH apenas se não existir
+add_to_path() {
+    if [[ -d "$1" ]] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="$1:$PATH"
+    fi
+}
+
+# Diretórios locais primeiro
+add_to_path "$HOME/.local/bin"
+add_to_path "$HOME/bin"
+
+# Ferramentas de desenvolvimento
+add_to_path "$HOME/.npm-global/bin"
+add_to_path "$HOME/.yarn/bin"
+add_to_path "$CARGO_HOME/bin"
+add_to_path "$GOPATH/bin"
+add_to_path "$GOROOT/bin"
+add_to_path "$JAVA_HOME/bin"
+add_to_path "$MAVEN_HOME/bin"
+add_to_path "$GRADLE_HOME/bin"
+add_to_path "$ANDROID_HOME/tools"
+add_to_path "$ANDROID_HOME/platform-tools"
+add_to_path "$FLUTTER_HOME/bin"
+
+# Gerenciadores de versão
+add_to_path "$HOME/.pyenv/bin"
+add_to_path "$HOME/.rbenv/bin"
+add_to_path "$HOME/.jenv/bin"
+
+export PATH
+
+# ============================================
+# ALIASES PARA DESENVOLVIMENTO
+# ============================================
+
+# Aliases básicos
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+alias h='history'
+alias j='jobs -l'
+alias path='echo -e ${PATH//:/\\n}'
+alias now='date +"%T"'
+alias nowdate='date +"%d-%m-%Y"'
+
+# Aliases para arquivos
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias diff='diff --color=auto'
+alias du='du -h'
+alias df='df -h'
+alias free='free -h'
+alias mount='mount | column -t'
+
+# Aliases para desenvolvimento
+alias py='python3'
+alias py2='python2'
+alias pip='pip3'
+alias serve='python3 -m http.server'
+alias jsonpp='python3 -m json.tool'
+alias urlencode='python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]))"'
+alias urldecode='python3 -c "import sys, urllib.parse as ul; print(ul.unquote_plus(sys.argv[1]))"'
+
+# Aliases para Node.js
+alias ni='npm install'
+alias nid='npm install --save-dev'
+alias nig='npm install --global'
+alias nis='npm install --save'
+alias nit='npm install --save-dev @types/'
+alias nr='npm run'
+alias ns='npm start'
+alias nt='npm test'
+alias nb='npm run build'
+alias npx='npx --no-install'
+
+# Aliases para Git
+alias g='git'
+alias gs='git status'
+alias ga='git add'
+alias gaa='git add --all'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gca='git commit --amend'
+alias gcan='git commit --amend --no-edit'
+alias gp='git push'
+alias gpl='git pull'
+alias gf='git fetch'
+alias gd='git diff'
+alias gds='git diff --staged'
+alias gb='git branch'
+alias gba='git branch -a'
+alias gco='git checkout'
+alias gcb='git checkout -b'
+alias gm='git merge'
+alias gr='git rebase'
+alias gri='git rebase -i'
+alias gst='git stash'
+alias gsta='git stash apply'
+alias gstd='git stash drop'
+alias gstl='git stash list'
+alias gstp='git stash pop'
+alias gsts='git stash show'
+alias gl='git log --oneline --graph --decorate'
+alias gla='git log --oneline --graph --decorate --all'
+alias gll='git log --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+
+# Aliases para Docker
+alias d='docker'
+alias dc='docker-compose'
+alias dps='docker ps'
+alias dpa='docker ps -a'
+alias di='docker images'
+alias dex='docker exec -it'
+alias dlog='docker logs'
+alias dlogf='docker logs -f'
+alias dstop='docker stop'
+alias dstart='docker start'
+alias drm='docker rm'
+alias drmi='docker rmi'
+alias dprune='docker system prune -f'
+alias dclean='docker system prune -af'
+
+# Aliases para sistema
+alias myip='curl -s ipinfo.io/ip'
+alias localip='hostname -I | cut -d" " -f1'
+alias ports='netstat -tuln'
+alias listening='lsof -i -P | grep LISTEN'
+alias meminfo='free -m -l -t'
+alias cpuinfo='lscpu'
+alias diskinfo='df -h'
+alias biggest='du -h --max-depth=1 | sort -hr'
+alias tree='tree -C'
+alias treed='tree -d'
+alias treef='tree -f'
+
+# ============================================
+# FUNÇÕES UTILITÁRIAS
+# ============================================
+
+# Cria diretório e navega para ele
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# Backup de arquivo com timestamp
+backup() {
+    local file="$1"
+    local backup_name="${file}.backup.$(date +%Y%m%d_%H%M%S)"
+    cp "$file" "$backup_name"
+    echo "Backup criado: $backup_name"
+}
+
+# Extrai qualquer arquivo compactado
+extract() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1"     ;;
+            *.tar.gz)    tar xzf "$1"     ;;
+            *.tar.xz)    tar xJf "$1"     ;;
+            *.bz2)       bunzip2 "$1"     ;;
+            *.rar)       unrar x "$1"     ;;
+            *.gz)        gunzip "$1"      ;;
+            *.tar)       tar xf "$1"      ;;
+            *.tbz2)      tar xjf "$1"     ;;
+            *.tgz)       tar xzf "$1"     ;;
+            *.zip)       unzip "$1"       ;;
+            *.Z)         uncompress "$1"  ;;
+            *.7z)        7z x "$1"        ;;
+            *)           echo "Formato não suportado: '$1'" ;;
+        esac
+    else
+        echo "'$1' não é um arquivo válido"
+    fi
+}
+
+# Busca em código fonte
+search() {
+    if [[ $# -eq 0 ]]; then
+        echo "Uso: search <padrão> [diretório]"
+        return 1
+    fi
+    
+    local pattern="$1"
+    local dir="${2:-.}"
+    
+    grep -r "$pattern" "$dir" \
+        --include="*.py" \
+        --include="*.js" \
+        --include="*.ts" \
+        --include="*.jsx" \
+        --include="*.tsx" \
+        --include="*.html" \
+        --include="*.css" \
+        --include="*.scss" \
+        --include="*.sass" \
+        --include="*.less" \
+        --include="*.java" \
+        --include="*.cpp" \
+        --include="*.c" \
+        --include="*.h" \
+        --include="*.go" \
+        --include="*.rs" \
+        --include="*.php" \
+        --include="*.rb" \
+        --include="*.swift" \
+        --include="*.kt" \
+        --include="*.scala" \
+        --include="*.sh" \
+        --include="*.bash" \
+        --include="*.zsh" \
+        --include="*.json" \
+        --include="*.yaml" \
+        --include="*.yml" \
+        --include="*.xml" \
+        --include="*.toml" \
+        --include="*.ini" \
+        --include="*.cfg" \
+        --include="*.conf" \
+        --include="*.md" \
+        --include="*.txt" \
+        --color=auto \
+        --line-number \
+        --exclude-dir=node_modules \
+        --exclude-dir=.git \
+        --exclude-dir=.svn \
+        --exclude-dir=.hg \
+        --exclude-dir=.vscode \
+        --exclude-dir=.idea \
+        --exclude-dir=build \
+        --exclude-dir=dist \
+        --exclude-dir=target \
+        --exclude-dir=__pycache__ \
+        --exclude-dir=.pytest_cache \
+        --exclude-dir=.coverage \
+        --exclude-dir=coverage \
+        --exclude-dir=.tox \
+        --exclude-dir=.env \
+        --exclude-dir=.venv \
+        --exclude-dir=venv \
+        --exclude-dir=env
+}
+
+# Substitui texto em múltiplos arquivos
+replace() {
+    if [[ $# -lt 2 ]]; then
+        echo "Uso: replace <antigo> <novo> [extensão]"
+        return 1
+    fi
+    
+    local old="$1"
+    local new="$2"
+    local ext="${3:-*}"
+    
+    find . -name "*.$ext" -type f -exec sed -i "s/$old/$new/g" {} +
+    echo "Substituição '$old' -> '$new' concluída em arquivos .$ext"
+}
+
+# Informações do sistema
+sysinfo() {
+    echo -e "\n${GREEN}Sistema:${NC}"
+    uname -a
+    
+    echo -e "\n${GREEN}Distribuição:${NC}"
+    cat /etc/os-release | head -n 2
+    
+    echo -e "\n${GREEN}Uso de memória:${NC}"
+    free -h
+    
+    echo -e "\n${GREEN}Uso de disco:${NC}"
+    df -h /
+    
+    echo -e "\n${GREEN}Uptime:${NC}"
+    uptime
+    
+    echo -e "\n${GREEN}Usuários logados:${NC}"
+    who
+    
+    echo -e "\n${GREEN}Processo atual:${NC}"
+    ps aux | head -n 10
+}
+
+# Servidor HTTP rápido
+server() {
+    local port="${1:-8000}"
+    python3 -m http.server "$port"
+}
+
+# Gera senha aleatória
+genpass() {
+    local length="${1:-16}"
+    openssl rand -base64 "$length" | tr -d "=+/" | cut -c1-"$length"
+}
+
+# ============================================
+# INICIALIZAÇÃO DE GERENCIADORES DE VERSÃO
+# ============================================
+
+# NVM (Node Version Manager)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Pyenv
+if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+fi
+
+# Rbenv
+if command -v rbenv 1>/dev/null 2>&1; then
+    eval "$(rbenv init -)"
+fi
+
+# Jenv
+if command -v jenv 1>/dev/null 2>&1; then
+    eval "$(jenv init -)"
+fi
+
+# ============================================
+# CONFIGURAÇÕES FINAIS
+# ============================================
+
+# Autocompletar avançado
+if [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+fi
+
+# Configuração do terminal
+export TERM="xterm-256color"
+export COLORTERM="truecolor"
+
+# Alias para recarregar configuração
+alias reload='source ~/.bashrc && echo "Configuração recarregada!"'
+
+# Mensagem de boas-vindas
+echo -e "${GREEN}Ambiente de desenvolvimento carregado!${NC}"
+echo -e "${BLUE}Comandos úteis: search, replace, sysinfo, server, genpass, extract, backup${NC}"
+                    </pre>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>1.3 Controle de Versão com Git</h3>
+                
+                <h4>Arquitetura Interna do Git</h4>
+                <p>Git é um sistema de controle de versão <strong>distribuído</strong> baseado em snapshots, não diferenças. Cada commit representa um snapshot completo do projeto em um momento específico.</p>
+
+                <div class="deus-ex-machina">
+                    <p><strong>Modelo de objetos do Git:</strong> Git armazena quatro tipos de objetos no diretório .git/objects: <strong>blob</strong> (conteúdo de arquivo), <strong>tree</strong> (estrutura de diretório), <strong>commit</strong> (snapshot com metadados) e <strong>tag</strong> (referência nomeada). Cada objeto é identificado por um hash SHA-1 de seu conteúdo. O Git usa um sistema de endereçamento por conteúdo, onde objetos idênticos são armazenados apenas uma vez, proporcionando eficiência de espaço.</p>
+                </div>
+
+                <h4>Configuração Inicial Completa</h4>
+                <div class="code-block">
+                    <pre>
+# ============================================
+# CONFIGURAÇÃO DE IDENTIDADE
+# ============================================
+
+# Configuração básica obrigatória
+git config --global user.name "Seu Nome Completo"
+git config --global user.email "seu.email@exemplo.com"
+
+# Configuração para diferentes contextos
+git config --global user.work.name "Nome Profissional"
+git config --global user.work.email "trabalho@empresa.com"
+git config --global user.personal.name "Nome Pessoal"
+git config --global user.personal.email "pessoal@gmail.com"
+
+# ============================================
+# CONFIGURAÇÕES ESSENCIAIS
+# ============================================
+
+# Branch padrão
+git config --global init.defaultBranch main
+
+# Editor padrão
+git config --global core.editor "code --wait"
+git config --global core.autocrlf input    # Unix/Mac
+git config --global core.autocrlf true     # Windows
+git config --global core.safecrlf true
+git config --global core.filemode false    # Ignora mudanças de permissão
+
+# Configurações de merge e diff
+git config --global merge.tool vimdiff
+git config --global diff.tool vimdiff
+git config --global merge.conflictstyle diff3
+git config --global rerere.enabled true   # Reutiliza resoluções de conflito
+
+# Configurações de push
+git config --global push.default simple
+git config --global push.followTags true
+git config --global push.autoSetupRemote true
+
+# Configurações de pull
+git config --global pull.rebase true
+git config --global rebase.autoStash true
+git config --global rebase.autoSquash true
+
+# Configurações de log
+git config --global log.date short
+git config --global log.decorate short
+git config --global log.showSignature true
+
+# Configurações de performance
+git config --global core.preloadindex true
+git config --global core.fscache true
+git config --global gc.auto 256
+
+# ============================================
+# ALIASES PROFISSIONAIS
+# ============================================
+
+# Aliases básicos
+git config --global alias.st status
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+git config --global alias.unstage 'reset HEAD --'
+git config --global alias.last 'log -1 HEAD'
+git config --global alias.visual '!gitk'
+
+# Aliases para log
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+git config --global alias.lga "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all"
+git config --global alias.adog "log --all --decorate --oneline --graph"
+git config --global alias.tree "log --all --graph --decorate --oneline"
+git config --global alias.hist "log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short"
+
+# Aliases para status e diff
+git config --global alias.s "status -s"
+git config --global alias.d "diff"
+git config --global alias.ds "diff --staged"
+git config --global alias.dc "diff --cached"
+
+# Aliases para branches
+git config --global alias.b "branch"
+git config --global alias.ba "branch -a"
+git config --global alias.bd "branch -d"
+git config --global alias.bD "branch -D"
+git config --global alias.bm "branch -m"
+
+# Aliases para commits
+git config --global alias.c "commit"
+git config --global alias.cm "commit -m"
+git config --global alias.ca "commit -a"
+git config --global alias.cam "commit -am"
+git config --global alias.amend "commit --amend"
+git config --global alias.amendne "commit --amend --no-edit"
+
+# Aliases para checkout
+git config --global alias.co "checkout"
+git config --global alias.cob "checkout -b"
+git config --global alias.com "checkout main"
+git config --global alias.cod "checkout develop"
+
+# Aliases para remote
+git config --global alias.r "remote"
+git config --global alias.rv "remote -v"
+git config --global alias.ra "remote add"
+git config --global alias.rr "remote rm"
+
+# Aliases para push/pull
+git config --global alias.p "push"
+git config --global alias.po "push origin"
+git config --global alias.pom "push origin main"
+git config --global alias.pl "pull"
+git config --global alias.plo "pull origin"
+git config --global alias.plom "pull origin main"
+git config --global alias.f "fetch"
+git config --global alias.fo "fetch origin"
+
+# Aliases para stash
+git config --global alias.st "stash"
+git config --global alias.sta "stash apply"
+git config --global alias.std "stash drop"
+git config --global alias.stl "stash list"
+git config --global alias.stp "stash pop"
+git config --global alias.
