@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programa Titã: Manual Definitivo - Capítulo 1 (Nível DEUS EX MACHINA)</title>
+    <title>Programa Titã: Manual Definitivo - Capítulo 1</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
@@ -75,11 +75,8 @@
         }
 
         .mission-module {
-            background-color: transparent;
-            border: 1px solid var(--border-color);
             padding: 40px;
             margin-bottom: 50px;
-            border-radius: 8px;
         }
         
         .mission-module h2 {
@@ -136,7 +133,6 @@
         .dem-insight h5 { color: var(--dem-color); }
 
         .task-block {
-            background-color: rgba(48, 54, 61, 0.3);
             padding: 30px;
             margin-top: 30px;
             border: 1px solid #2a2f36;
@@ -245,13 +241,73 @@
             font-size: 0.9em;
             color: #888;
         }
+
+        /* --- REGRAS DE IMPRESSÃO --- */
+        @media print {
+            body {
+                background-color: #fff;
+                color: #000;
+                font-size: 10pt;
+                line-height: 1.4;
+            }
+
+            .container, .mission-module, .task-block {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                padding: 15px;
+                margin: 20px 0;
+            }
+            
+            .container {
+                border: none;
+                padding: 0;
+            }
+
+            .controls-container, footer {
+                display: none;
+            }
+
+            h1, h2, h3, h4, h5 {
+                color: #000;
+                border-color: #000;
+                page-break-after: avoid; /* Evita quebra de página logo após um título */
+            }
+
+            .mission-module {
+                page-break-before: always; /* Cada grande módulo começa numa nova página */
+            }
+            
+            .task-block, .dem-insight, .architect-tip, pre {
+                page-break-inside: avoid; /* Tenta manter estes blocos inteiros na mesma página */
+            }
+
+            a {
+                text-decoration: none;
+                color: #000;
+            }
+
+            code, pre {
+                background-color: #f4f4f4 !important;
+                border: 1px solid #ddd !important;
+                color: #000 !important;
+            }
+
+            .code-comment, .code-keyword, .code-string, .code-prompt, .code-output {
+                color: #000 !important; /* Simplifica cores para impressão */
+            }
+            
+            .mission-objective, .architect-tip, .dem-insight {
+                border: 1px solid #ccc;
+                background-color: #f9f9f9 !important;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>PROTOCOLO TITÃ</h1>
-            <h2>Manual Definitivo - Capítulo 1 (Nível DEUS EX MACHINA)</h2>
+            <h1>Programa Titã</h1>
+            <h2>Manual Definitivo - Capítulo 1</h2>
         </header>
 
         <div class="controls-container">
@@ -265,26 +321,39 @@
                 <h3>Módulo de Treinamento 1</h3>
                 <h2>SETUP DE CAMPO E CONTROLE DE TERRITÓRIO</h2>
                 <div class="mission-objective">
-                    <p><strong>Objetivo do Módulo:</strong> Construir a fundação de todo o seu trabalho. Isso envolve dominar a ferramenta mais fundamental (o terminal), instalar seu ambiente de desenvolvimento e implementar um sistema para controlar cada versão do seu código. Um erro nesta fase compromete todas as missões futuras.</p>
+                    <p><strong>Objetivo do Módulo:</strong> Construir a fundação indestrutível do seu ambiente de desenvolvimento. Iremos além de "usar" as ferramentas para entender a sua arquitetura interna. Este capítulo estabelece o controlo total sobre a sua máquina e o seu código, desde o nível do sistema operativo até ao controlo de versões distribuído.</p>
                 </div>
                 <div class="task-block">
-                    <h4>1.1: O Terminal: Dialogando com o Kernel</h4>
-                    <p><strong>Filosofia:</strong> O terminal não é apenas uma ferramenta; é uma exposição da arquitetura fundamental de um sistema operativo. Cada comando que você digita inicia uma conversa complexa entre o "espaço do utilizador" (onde os seus programas vivem) e o "espaço do kernel" (o núcleo protegido do sistema operativo).</p>
-                    
-                    <div class="dem-insight">
-                        <h5>DEUS EX MACHINA INSIGHT: System Calls, Fork e Exec</h5>
-                        <p>Quando você digita <code>ls</code> e prime Enter, não é o shell que lista os ficheiros. O que acontece é:</p>
-                        <ol>
-                            <li><strong>Parsing:</strong> O shell analisa a string "ls -la" para identificar o comando e os seus argumentos.</li>
-                            <li><strong><code>fork()</code>:</strong> O shell invoca a chamada de sistema (system call) <code>fork()</code>. Isto cria um processo-filho, que é uma cópia exata do processo do shell.</li>
-                            <li><strong><code>exec()</code>:</strong> No processo-filho, o shell invoca a chamada de sistema <code>exec()</code> (especificamente, uma das suas variantes como <code>execvp()</code>). O <code>exec</code> substitui completamente o código do processo-filho (que era uma cópia do shell) pelo código do programa <code>/bin/ls</code>.</li>
-                            <li><strong>Execução:</strong> O programa <code>ls</code> agora corre no seu próprio processo. Ele usa outras system calls (como <code>opendir()</code>, <code>readdir()</code>, <code>stat()</code>) para pedir ao kernel informações sobre os ficheiros.</li>
-                            <li><strong><code>wait()</code>:</strong> Enquanto isso, o processo-pai (o shell) geralmente invoca a system call <code>wait()</code>, que o põe a "dormir" até que o processo-filho termine.</li>
-                            <li><strong>Saída:</strong> O processo-filho <code>ls</code> termina e o controlo volta ao shell, que exibe o prompt novamente.</li>
-                        </ol>
-                        <p>O operador pipe (<code>|</code>) é uma manipulação elegante disto. Em vez de o <code>stdout</code> do processo-filho ser ligado à tela, o shell liga-o ao <code>stdin</code> de um segundo processo-filho, criando um pipeline de dados diretamente no nível do sistema operativo.</p>
+                    <h4>1.1: O Terminal: A Interface com a Alma da Máquina</h4>
+                    <p><strong>Filosofia:</strong> O terminal não é uma ferramenta; é uma exposição da arquitetura fundamental de um sistema operativo. Cada comando que você digita inicia uma conversa complexa entre o "espaço do utilizador" (onde os seus programas vivem) e o "espaço do kernel" (o núcleo protegido do sistema operativo).</p>
+                    <p><strong>Anatomia de um Comando:</strong></p>
+                    <p><code>ls -la /home/rogeriomendonca/Projetos</code></p>
+                    <ul>
+                        <li><code>ls</code>: O <strong>comando</strong> em si. O programa a ser executado.</li>
+                        <li><code>-la</code>: As <strong>flags</strong> (ou opções). Modificam o comportamento do comando. O hífen único precede flags de uma só letra, que podem ser combinadas (<code>-l -a</code> é o mesmo que <code>-la</code>). Flags de palavra inteira usam dois hífens (ex: <code>--version</code>).</li>
+                        <li><code>/home/rogeriomendonca/Projetos</code>: O <strong>argumento</strong>. É o "alvo" sobre o qual o comando irá operar. Neste caso, o caminho do diretório a ser listado.</li>
+                    </ul>
+
+                    <div class="architect-tip">
+                        <h5>Dica de Arquiteto: A Filosofia Unix e o Poder da Composição</h5>
+                        <p>O poder do terminal não reside em comandos individuais, mas na sua capacidade de serem compostos. A Filosofia Unix dita: 1. Faça uma coisa e faça-a bem. 2. Espere que a saída de um programa seja a entrada de outro. Isto é alcançado através de três fluxos de dados padrão (standard streams) e do operador "pipe" (<code>|</code>).</p>
+                        <p>O operador pipe (<code>|</code>) "conecta" o <code>stdout</code> do comando à sua esquerda ao <code>stdin</code> do comando à sua direita, criando um pipeline de dados.</p>
+                        <pre><code><span class="code-comment"># Exemplo: Encontrar as 5 maiores pastas no diretório atual</span>
+<span class="code-prompt">~ $</span> du -h . | sort -rh | head -n 5
+
+<span class="code-comment"># Dissecando: 'du' (disk usage) calcula o tamanho, 'sort -rh' ordena numericamente em reverso, 'head' pega as 5 primeiras.</span></code></pre>
                     </div>
 
+                    <div class="dem-insight">
+                        <h5>DEUS EX MACHINA INSIGHT: System Calls, Fork e Exec</h5>
+                        <p>Quando você digita <code>ls</code>, não é o shell que lista os ficheiros. O que acontece é:</p>
+                        <ol>
+                            <li><strong><code>fork()</code>:</strong> O shell invoca a chamada de sistema (system call) <code>fork()</code>, criando um processo-filho que é uma cópia exata de si mesmo.</li>
+                            <li><strong><code>exec()</code>:</strong> No processo-filho, o shell invoca a chamada de sistema <code>exec()</code>, que substitui completamente o código do processo-filho pelo código do programa <code>/bin/ls</code>.</li>
+                            <li><strong>Execução:</strong> O programa <code>ls</code> agora corre no seu próprio processo, usando outras system calls para pedir ao kernel informações sobre os ficheiros.</li>
+                            <li><strong><code>wait()</code>:</strong> O processo-pai (o shell) geralmente invoca a system call <code>wait()</code>, que o põe a "dormir" até que o processo-filho termine.</li>
+                        </ol>
+                    </div>
                     <p><strong>Dominando os File Descriptors:</strong> Todo o I/O (Input/Output) em sistemas Unix-like é tratado como ficheiros. Cada processo tem, por defeito, três file descriptors abertos:</p>
                     <ul>
                         <li><code>0</code>: stdin (entrada padrão)</li>
@@ -292,61 +361,75 @@
                         <li><code>2</code>: stderr (saída de erro padrão)</li>
                     </ul>
                     <p>O redirecionamento é a manipulação destes descritores:</p>
-                    <pre><code><span class="code-prompt">~ $</span> comando_que_funciona > output.txt <span class="code-comment"># Redireciona stdout (1) para o ficheiro. É um atalho para 'comando 1> output.txt'</span>
+                    <pre><code><span class="code-prompt">~ $</span> comando_que_funciona > output.txt <span class="code-comment"># Redireciona stdout (1) para o ficheiro.</span>
 <span class="code-prompt">~ $</span> comando_que_falha 2> error.log <span class="code-comment"># Redireciona stderr (2) para o ficheiro.</span>
 <span class="code-prompt">~ $</span> comando_completo &> tudo.log <span class="code-comment"># Redireciona stdout E stderr para o mesmo ficheiro.</span>
-<span class="code-prompt">~ $</span> comando_barulhento 2> /dev/null <span class="code-comment"># Envia todos os erros para o "buraco negro" do sistema, silenciando-os.</span>
 </code></pre>
                 </div>
+
                 <div class="task-block">
                     <h4>1.2: O Ecossistema de Desenvolvimento: Compilação, Isolamento e Qualidade</h4>
                     <p><strong>Filosofia:</strong> Um ambiente de desenvolvimento não é uma coleção de programas, mas um pipeline de transformação de código-fonte em software funcional. Compreender cada etapa desse pipeline é o que define um engenheiro.</p>
+                    
+                    <div class="architect-tip">
+                        <h5>Dica de Arquiteto: O Princípio do Ambiente Limpo e o `venv`</h5>
+                        <p>Um projeto profissional NUNCA deve depender das ferramentas ou bibliotecas instaladas "globalmente". Cada projeto é uma entidade autónoma e deve ter as suas próprias dependências isoladas. A ferramenta para alcançar o isolamento em Python é o <code>venv</code>. Ele cria uma subpasta dentro do seu projeto que contém uma cópia do interpretador Python e um local isolado para instalar pacotes. É uma prática <strong>não negociável</strong>.</p>
+                        <pre><code><span class="code-comment"># 1. Dentro da pasta do seu projeto, crie o ambiente:</span>
+<span class="code-prompt">~/Projetos/meu-projeto $</span> python -m venv venv
 
-                    <div class="dem-insight">
-                        <h5>DEUS EX MACHINA INSIGHT: O Interpretador Python e a PVM</h5>
-                        <p>Python é chamado de "linguagem interpretada", mas isso é uma simplificação. O que realmente acontece (no CPython, a implementação padrão) é um processo de compilação para um formato intermediário chamado <strong>bytecode</strong>.</p>
-                        <ol>
-                            <li><strong>Compilação para Bytecode:</strong> Quando você executa <code>python meu_script.py</code>, o Python primeiro compila o seu código-fonte para bytecode. Este bytecode é um conjunto de instruções de baixo nível, independente de plataforma, desenhado para ser executado por um programa, não por um CPU físico. Ele é guardado em ficheiros <code>.pyc</code> na pasta <code>__pycache__</code>.</li>
-                            <li><strong>A Python Virtual Machine (PVM):</strong> O bytecode é então executado pela PVM. A PVM é o verdadeiro "interpretador". É um programa que simula um CPU e executa cada instrução do bytecode.</li>
-                        </ol>
-                        <p>É por isso que o Python é portátil: desde que exista uma PVM para uma arquitetura (Windows, Mac, Linux, ARM), o mesmo bytecode pode ser executado. O <code>venv</code> funciona criando uma cópia isolada deste ecossistema (a PVM e as suas bibliotecas associadas).</p>
+<span class="code-comment"># 2. Ative o ambiente (o prompt mudará):</span>
+<span class="code-prompt">~/Projetos/meu-projeto $</span> source venv/bin/activate
+<span class="code-prompt">(venv) ~/Projetos/meu-projeto $</span> 
+
+<span class="code-comment"># 3. Instale dependências. Elas só existirão aqui dentro.</span>
+<span class="code-prompt">(venv) ~/Projetos/meu-projeto $</span> pip install flask
+
+<span class="code-comment"># 4. Para sair:</span>
+<span class="code-prompt">(venv) ~/Projetos/meu-projeto $</span> deactivate</code></pre>
                     </div>
 
                     <div class="dem-insight">
-                        <h5>DEUS EX MACHINA INSIGHT: O Language Server Protocol (LSP)</h5>
-                        <p>Como é que o VS Code "sabe" tanto sobre Python, Go, Rust, etc.? No passado, cada editor tinha de implementar a sua própria lógica de análise para cada linguagem. Era um pesadelo.</p>
-                        <p>O LSP, criado pela Microsoft, resolveu isto. É um protocolo de comunicação padrão. Agora, a comunidade de uma linguagem cria <strong>um único "Language Server"</strong> (ex: Pylance para Python). Este servidor é um processo separado que contém toda a inteligência da linguagem. O editor (VS Code, Sublime Text, Vim) simplesmente comunica com o servidor através do LSP, pedindo coisas como "dá-me as conclusões possíveis na linha X, coluna Y" ou "formata este bloco de código". Isto desacoplou os editores das linguagens, levando a uma explosão de ferramentas de alta qualidade.</p>
+                        <h5>DEUS EX MACHINA INSIGHT: O Interpretador Python, a PVM e o LSP</h5>
+                        <p><strong>Compilação para Bytecode:</strong> Quando você executa <code>python meu_script.py</code>, o Python primeiro compila o seu código-fonte para <strong>bytecode</strong>. Este bytecode é um conjunto de instruções de baixo nível, independente de plataforma, guardado em ficheiros <code>.pyc</code> na pasta <code>__pycache__</code>.</p>
+                        <p><strong>A Python Virtual Machine (PVM):</strong> O bytecode é então executado pela PVM. A PVM é o verdadeiro "interpretador". É um programa que simula um CPU e executa cada instrução do bytecode. É por isso que o Python é portátil.</p>
+                        <p><strong>Language Server Protocol (LSP):</strong> A "inteligência" do seu editor (autocompletar, análise de erros) vem de um Language Server (ex: Pylance). O editor comunica com este servidor através do protocolo LSP, desacoplando o editor da lógica da linguagem e permitindo ferramentas muito mais poderosas.</p>
                     </div>
                 </div>
+
                 <div class="task-block">
                     <h4>1.3: Git e GitHub: Manipulando o Grafo Acíclico Dirigido</h4>
-                    <p><strong>Filosofia:</strong> Esqueça a ideia de "histórico linear". O Git não pensa em termos de uma linha do tempo. O Git pensa em termos de um <strong>Grafo Acíclico Dirigido (DAG)</strong>. Cada commit é um nó no grafo. Cada nó aponta para os seus "pais" (os commits que vieram antes dele). Um merge commit é simplesmente um nó com dois pais. Compreender isto é a chave para dominar o Git.</p>
-                    
+                    <p><strong>Filosofia:</strong> Esqueça a ideia de "histórico linear". O Git não pensa em termos de uma linha do tempo. O Git pensa em termos de um <strong>Grafo Acíclico Dirigido (DAG)</strong>. Cada commit é um nó no grafo. Cada nó aponta para os seus "pais" (os commits que vieram antes dele). Compreender isto é a chave para dominar o Git.</p>
+
+                    <div class="architect-tip">
+                        <h5>Dica de Arquiteto: O Fluxo de Trabalho com Ramos (GitHub Flow)</h5>
+                        <p>Nunca se trabalha diretamente no ramo principal (<code>main</code>). Todo o novo trabalho é feito num <strong>ramo separado</strong>. Isto permite trabalho paralelo e seguro.</p>
+                        <ol>
+                            <li><strong>Crie um ramo:</strong> <code>git checkout -b nome-do-ramo</code></li>
+                            <li><strong>Trabalhe e faça commits:</strong> <code>git add .</code> e <code>git commit -m "Mensagem"</code></li>
+                            <li><strong>Envie o ramo:</strong> <code>git push -u origin nome-do-ramo</code></li>
+                            <li><strong>Abra um Pull Request (PR) no GitHub:</strong> Peça para mesclar o seu ramo no <code>main</code>. É aqui que ocorre a revisão de código.</li>
+                            <li><strong>Mescle (Merge):</strong> Após a aprovação, o PR é mesclado.</li>
+                            <li><strong>Limpeza:</strong> <code>git checkout main</code>, <code>git pull</code>, <code>git branch -d nome-do-ramo</code>.</li>
+                        </ol>
+                    </div>
+
                     <div class="dem-insight">
                         <h5>DEUS EX MACHINA INSIGHT: Os Quatro Objetos Fundamentais do Git</h5>
-                        <p>Tudo no Git é um objeto armazenado na pasta <code>.git/objects</code>. Existem apenas quatro tipos de objetos. Se os entender, entende o Git.</p>
+                        <p>Tudo no Git é um objeto na pasta <code>.git/objects</code>, identificado por um hash SHA-1. Existem apenas quatro tipos:</p>
                         <ol>
-                            <li><strong><code>blob</code> (binary large object):</strong> Contém o <strong>conteúdo</strong> de um ficheiro. Apenas o conteúdo, sem nome, sem data, sem nada. O seu ID é o hash SHA-1 do seu conteúdo. Se dois ficheiros em qualquer parte do seu projeto tiverem exatamente o mesmo conteúdo, eles apontarão para o <strong>mesmo e único</strong> objeto blob.</li>
-                            <li><strong><code>tree</code>:</strong> Representa um <strong>diretório</strong>. É uma lista de ponteiros. Cada linha num objeto tree contém as permissões, o tipo (blob ou tree), o hash SHA-1 e o nome do ficheiro/subdiretório. Um tree pode apontar para blobs (ficheiros) e para outros trees (subdiretórios).</li>
-                            <li><strong><code>commit</code>:</strong> É um <strong>snapshot</strong>. Ele contém:
-                                <ul>
-                                    <li>Um ponteiro para um único objeto <strong>tree</strong> (a raiz do projeto naquele momento).</li>
-                                    <li>Ponteiros para um ou mais <strong>commits pais</strong> (o que cria o histórico/grafo).</li>
-                                    <li>Informação do autor e do committer (nome, email, data).</li>
-                                    <li>A mensagem do commit.</li>
-                                </ul>
-                            </li>
+                            <li><strong><code>blob</code>:</strong> Contém o <strong>conteúdo</strong> de um ficheiro. Apenas o conteúdo.</li>
+                            <li><strong><code>tree</code>:</strong> Representa um <strong>diretório</strong>. É uma lista de ponteiros para blobs e outros trees.</li>
+                            <li><strong><code>commit</code>:</strong> É um <strong>snapshot</strong>. Contém um ponteiro para um único objeto <strong>tree</strong> (a raiz do projeto), ponteiros para um ou mais <strong>commits pais</strong>, e metadados (autor, data, mensagem).</li>
                             <li><strong><code>tag</code>:</strong> Um ponteiro nomeado e imutável para um commit específico (ex: <code>v1.0</code>).</li>
                         </ol>
-                        <p><strong>O que é um ramo (branch) então?</strong> É chocantemente simples: um ramo (como <code>main</code>) é um ficheiro de 41 bytes (40 para o hash SHA-1 e 1 para uma nova linha) localizado em <code>.git/refs/heads/</code>. Este ficheiro contém <strong>apenas o hash do commit mais recente</strong> nesse ramo. Quando você faz um novo commit, o Git simplesmente atualiza este ficheiro para apontar para o novo hash. É por isso que criar e destruir ramos no Git é uma operação instantânea e trivial.</p>
+                        <p><strong>O que é um ramo (branch)?</strong> É um ficheiro de 41 bytes em <code>.git/refs/heads/</code> que contém <strong>apenas o hash do commit mais recente</strong> nesse ramo. Quando você faz um novo commit, o Git simplesmente atualiza este ficheiro. É por isso que criar e destruir ramos no Git é uma operação instantânea e trivial.</p>
                     </div>
-                     <p>Com este conhecimento, comandos como <code>git checkout</code>, <code>git reset</code>, e <code>git rebase</code> deixam de ser feitiços mágicos e tornam-se manipulações diretas e compreensíveis deste grafo de objetos.</p>
                 </div>
             </section>
         </main>
 
         <footer>
-            <p>Fim do Capítulo 1 (Nível DEUS EX MACHINA). A fundação está completa. Status do Protocolo: AGUARDANDO COMANDO DO DESENVOLVEDOR.</p>
+            <p>Fim do Capítulo 1. A fundação está completa. Status do Protocolo: AGUARDANDO COMANDO DO DESENVOLVEDOR.</p>
         </footer>
     </div>
     <script>
@@ -380,4 +463,5 @@
         });
     </script>
 </body>
+</html>
 </html>
