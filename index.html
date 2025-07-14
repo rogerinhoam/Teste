@@ -1,24 +1,401 @@
-
-<!DOCTYPE html>
-<html lang="pt-br">
+ <!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>R.M. Estética Automotiva</title>
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="app.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa Titã: Manual Definitivo - Capítulo 1 (Nível Arquitecto)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00ff9d;
+            --secondary-color: #00aaff;
+            --warning-color: #ffd700;
+            --background-color: #0d1117;
+            --text-color: #c9d1d9;
+            --header-color: #ffffff;
+            --container-bg: #161b22;
+            --border-color: #30363d;
+            --code-bg: #010409;
+            --code-text-color: #79c0ff;
+            --highlight-bg: rgba(0, 170, 255, 0.1);
+            --architect-tip-bg: rgba(255, 215, 0, 0.1);
+            --architect-tip-border: #ffd700;
+        }
+
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 25px rgba(0, 255, 157, 0.08);
+            padding: 20px 40px;
+            border-radius: 8px;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-family: 'Teko', sans-serif;
+            font-size: 4.5em;
+            color: var(--header-color);
+            margin: 0;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        header h2 {
+            font-family: 'Teko', sans-serif;
+            font-size: 2.2em;
+            color: var(--secondary-color);
+            margin: 0;
+            font-weight: 400;
+        }
+
+        main {
+            width: 100%;
+        }
+
+        .mission-module {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            margin-bottom: 50px;
+            border-radius: 8px;
+        }
+        
+        .mission-module h2 {
+            font-family: 'Teko', sans-serif;
+            font-size: 3.5em;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 15px;
+        }
+        
+        .mission-module h3 {
+            font-size: 1.2em;
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .mission-objective {
+            background-color: var(--highlight-bg);
+            border: 1px dashed var(--secondary-color);
+            padding: 25px;
+            margin: 30px 0;
+            font-size: 1.1em;
+            border-radius: 4px;
+        }
+        
+        .architect-tip {
+            background-color: var(--architect-tip-bg);
+            border: 1px solid var(--architect-tip-border);
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 4px;
+        }
+        
+        .architect-tip h5 {
+            margin: 0 0 10px 0;
+            color: var(--architect-tip-border);
+            font-size: 1.2em;
+            font-family: 'Teko', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .task-block {
+            background-color: rgba(48, 54, 61, 0.3);
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid #2a2f36;
+            border-radius: 6px;
+        }
+
+        .task-block h4 {
+            font-family: 'Teko', sans-serif;
+            font-size: 2.5em;
+            color: var(--primary-color);
+            margin-top: 0;
+            border-bottom: 1px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+
+        ul, ol {
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin-bottom: 1.2em;
+        }
+
+        strong {
+            color: var(--primary-color);
+        }
+
+        code {
+            background-color: var(--code-bg);
+            color: var(--code-text-color);
+            padding: 4px 7px;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.95em;
+            border: 1px solid var(--border-color);
+        }
+        
+        pre {
+            background-color: var(--code-bg);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: var(--text-color);
+            font-size: 1em;
+        }
+
+        pre code {
+            padding: 0;
+            background-color: transparent;
+            border: none;
+        }
+        
+        .code-comment { color: #8b949e; }
+        .code-keyword { color: #ff7b72; }
+        .code-string { color: #a5d6ff; }
+        .code-prompt { color: #d2a8ff; }
+        .code-output { color: #7ee787; }
+        .code-path { color: #e0c587; }
+
+        .controls-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .control-button {
+            background-color: var(--secondary-color);
+            color: var(--background-color);
+            border: none;
+            padding: 15px 30px;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 700;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            border-radius: 5px;
+        }
+        
+        .control-button.copy-button {
+            background-color: var(--primary-color);
+        }
+
+        .control-button:hover {
+            background-color: var(--header-color);
+            color: var(--container-bg);
+            box-shadow: 0 0 15px rgba(0, 170, 255, 0.5);
+        }
+        
+        .control-button.copy-button:hover {
+             box-shadow: 0 0 15px rgba(0, 255, 157, 0.5);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9em;
+            color: #888;
+        }
+    </style>
 </head>
 <body>
-  <h1>✨ R.M. Estética Automotiva ✨</h1>
-  <div class="menu">
-    <button onclick="mostrarAba('clientes')">👤 Clientes</button>
-    <button onclick="mostrarAba('servicos')">🛠️ Serviços</button>
-    <button onclick="mostrarAba('orcamentos')">🧾 Orçamento</button>
-    <button onclick="mostrarAba('historico')">📦 Histórico</button>
-  </div>
+    <div class="container">
+        <header>
+            <h1>PROTOCOLO TITÃ</h1>
+            <h2>Manual Definitivo - Capítulo 1 (Nível Arquitecto)</h2>
+        </header>
 
-  <div id="clientes" class="aba ativa">...</div>
-  <div id="servicos" class="aba">...</div>
-  <div id="orcamentos" class="aba">...</div>
-  <div id="historico" class="aba">...</div>
+        <div class="controls-container">
+            <button class="control-button copy-button" id="copyButton">Copiar Conteúdo</button>
+            <button class="control-button" onclick="window.print()">Imprimir / Salvar PDF</button>
+        </div>
+
+        <main id="journey-log">
+            
+            <section class="mission-module" id="mission-1">
+                <h3>Módulo de Treinamento 1</h3>
+                <h2>SETUP DE CAMPO E CONTROLE DE TERRITÓRIO</h2>
+                <div class="mission-objective">
+                    <p><strong>Objetivo do Módulo:</strong> Construir a fundação de todo o seu trabalho. Isso envolve dominar a ferramenta mais fundamental (o terminal), instalar seu ambiente de desenvolvimento e implementar um sistema para controlar cada versão do seu código. Um erro nesta fase compromete todas as missões futuras.</p>
+                </div>
+                <div class="task-block">
+                    <h4>1.1: O Terminal: A Interface com a Alma da Máquina</h4>
+                    <p><strong>Filosofia: A Filosofia Unix e o Poder da Composição</strong></p>
+                    <p>O poder do terminal não reside em comandos individuais, mas na sua capacidade de serem compostos. A Filosofia Unix dita: 1. Faça uma coisa e faça-a bem. 2. Espere que a saída de um programa seja a entrada de outro. Isto é alcançado através de três fluxos de dados padrão (standard streams) e do operador "pipe" (<code>|</code>).</p>
+                    <ul>
+                        <li><code>stdin</code> (Standard Input): O fluxo de entrada de dados de um programa. Por defeito, é o seu teclado.</li>
+                        <li><code>stdout</code> (Standard Output): O fluxo de saída principal. Por defeito, é a sua tela.</li>
+                        <li><code>stderr</code> (Standard Error): Um fluxo de saída separado para mensagens de erro. Por defeito, também é a sua tela.</li>
+                        <li><strong>Pipe <code>|</code>:</strong> O operador mais poderoso. Ele "conecta" o <code>stdout</code> do comando à sua esquerda ao <code>stdin</code> do comando à sua direita.</li>
+                    </ul>
+                    <pre><code><span class="code-comment"># Exemplo de composição: Encontrar todas as menções à palavra "error" nos últimos 100 logs do sistema.</span>
+<span class="code-prompt">~ $</span> cat /var/log/system.log | grep "error" | tail -n 100
+
+<span class="code-comment"># Dissecando o comando:</span>
+<span class="code-comment"># 1. 'cat /var/log/system.log': Lê o conteúdo do ficheiro de log e envia-o para o stdout.</span>
+<span class="code-comment"># 2. '|': O pipe pega essa saída e, em vez de a mostrar na tela, envia-a como entrada para o próximo comando.</span>
+<span class="code-comment"># 3. 'grep "error"': O comando 'grep' filtra a sua entrada (que veio do 'cat'), e só deixa passar as linhas que contêm a palavra "error". A sua saída (as linhas filtradas) é enviada para o stdout.</span>
+<span class="code-comment"># 4. '|': Outro pipe. Pega as linhas com "error" e envia-as para o próximo comando.</span>
+<span class="code-comment"># 5. 'tail -n 100': O comando 'tail' olha para a sua entrada e só mostra as últimas 100 linhas.</span>
+</code></pre>
+                    <p><strong>Comandos Avançados para o Arquitecto:</strong></p>
+                    <ul>
+                        <li><code>find . -name "*.py"</code>: Encontra (<code>find</code>) a partir do diretório atual (<code>.</code>) todos os ficheiros cujo nome (<code>-name</code>) termina com <code>.py</code>.</li>
+                        <li><code>grep -r "minha_funcao" .</code>: Procura recursivamente (<code>-r</code>) pela string "minha_funcao" em todos os ficheiros a partir do diretório atual (<code>.</code>). Indispensável para navegar em grandes bases de código.</li>
+                        <li><code>chmod +x meu_script.py</code>: Altera as permissões (<code>chmod</code>) de um ficheiro para o tornar executável (<code>+x</code>).</li>
+                        <li><code>alias ll='ls -la'</code>: Cria um atalho (<code>alias</code>) chamado <code>ll</code> que executa o comando <code>ls -la</code>. Adicione isto ao seu ficheiro de configuração do shell (<code>~/.bashrc</code> ou <code>~/.zshrc</code>) para o tornar permanente.</li>
+                    </ul>
+                </div>
+                <div class="task-block">
+                    <h4>1.2: O Ecossistema de Desenvolvimento: Isolamento e Qualidade</h4>
+                    <p><strong>Filosofia: O Princípio do Ambiente Limpo</strong></p>
+                    <p>Um projeto profissional NUNCA deve depender das ferramentas ou bibliotecas instaladas "globalmente" no sistema. Cada projeto é uma entidade autónoma e deve ter as suas próprias dependências isoladas. Isto garante a reprodutibilidade (o projeto funciona noutra máquina) e evita conflitos de versão (Projeto A precisa da biblioteca X versão 1.0, enquanto o Projeto B precisa da versão 2.0).</p>
+                    <p><strong>Ambientes Virtuais (`venv`): A Sua Caixa de Areia Pessoal</strong></p>
+                    <p>A ferramenta para alcançar o isolamento em Python é o <code>venv</code>. Ele cria uma subpasta dentro do seu projeto que contém uma cópia do interpretador Python e um local isolado para instalar pacotes. É uma prática <strong>não negociável</strong>.</p>
+                    <p><strong>Fluxo de Trabalho com `venv`:</strong></p>
+                    <pre><code><span class="code-comment"># 1. Dentro da pasta do seu projeto (ex: ~/Projetos/titan-journal)</span>
+<span class="code-prompt">~/Projetos/titan-journal $</span> python -m venv venv
+<span class="code-comment"># 'python -m venv' executa o módulo venv. O segundo 'venv' é o nome que damos à pasta do ambiente. É uma convenção.</span>
+
+<span class="code-comment"># 2. Ative o ambiente. O seu prompt de terminal mudará para indicar que está ativo.</span>
+<span class="code-comment"># No Linux/macOS:</span>
+<span class="code-prompt">~/Projetos/titan-journal $</span> source venv/bin/activate
+<span class="code-prompt">(venv) ~/Projetos/titan-journal $</span> 
+
+<span class="code-comment"># No Windows (PowerShell):</span>
+<span class="code-prompt">PS C:\...\titan-journal></span> venv\Scripts\Activate.ps1
+<span class="code-prompt">(venv) PS C:\...\titan-journal></span> 
+
+<span class="code-comment"># 3. Agora, qualquer 'pip install' só afeta este ambiente.</span>
+<span class="code-prompt">(venv) ~/Projetos/titan-journal $</span> pip install flask
+
+<span class="code-comment"># 4. Para sair do ambiente virtual:</span>
+<span class="code-prompt">(venv) ~/Projetos/titan-journal $</span> deactivate
+<span class="code-prompt">~/Projetos/titan-journal $</span> 
+</code></pre>
+                    <div class="architect-tip">
+                        <h5>Dica de Arquitecto: Automatizando a Qualidade</h5>
+                        <p>Profissionais não garantem a qualidade do código manualmente. Eles automatizam-na. Um <strong>Linter</strong> (como <code>flake8</code>) analisa o seu código em busca de erros e violações de estilo. Um <strong>Formatter</strong> (como <code>black</code>) reformata automaticamente o seu código para seguir um padrão consistente. Instale-os no seu ambiente virtual (<code>pip install flake8 black</code>) e configure o VS Code para os usar sempre que guardar um ficheiro. Isto impõe disciplina e legibilidade ao seu trabalho.</p>
+                    </div>
+                </div>
+                <div class="task-block">
+                    <h4>1.3: Git e GitHub: Dominando o Fluxo de Trabalho Colaborativo</h4>
+                    <p><strong>Filosofia: O Ramo (Branch) como um Universo Paralelo Seguro</strong></p>
+                    <p>Nunca, em ambiente profissional, se trabalha diretamente no ramo principal (<code>main</code> ou <code>master</code>). O ramo <code>main</code> é considerado sagrado; ele deve conter sempre uma versão estável e funcional do projeto. Todo o novo trabalho — seja uma nova funcionalidade, uma correção de bug ou uma experiência — é feito num <strong>ramo separado</strong>. Um ramo é, efetivamente, uma cópia do seu projeto num determinado ponto no tempo, que pode evoluir de forma independente. Isto permite que várias pessoas trabalhem em paralelo sem interferir umas com as outras.</p>
+                    <p><strong>O Fluxo de Trabalho com Ramos (GitHub Flow):</strong></p>
+                    <ol>
+                        <li><strong>Crie um novo ramo:</strong> Antes de começar a trabalhar, crie um ramo descritivo a partir do <code>main</code>.
+                            <pre><code><span class="code-prompt">(main) $</span> git checkout -b feature/adicionar-login
+<span class="code-comment"># 'checkout -b' cria um novo ramo ('-b') e muda para ele ('checkout') numa só operação.</span>
+<span class="code-prompt">(feature/adicionar-login) $</span> </code></pre>
+                        </li>
+                        <li><strong>Trabalhe e faça commits:</strong> Faça as suas alterações no novo ramo. Faça quantos commits forem necessários.
+                             <pre><code><span class="code-prompt">(feature/adicionar-login) $</span> <span class="code-comment"># ... escreve código ...</span>
+<span class="code-prompt">(feature/adicionar-login) $</span> git add .
+<span class="code-prompt">(feature/adicionar-login) $</span> git commit -m "Adiciona formulário de login HTML"
+<span class="code-prompt">(feature/adicionar-login) $</span> <span class="code-comment"># ... escreve mais código ...</span>
+<span class="code-prompt">(feature/adicionar-login) $</span> git commit -m "Implementa validação de senha"</code></pre>
+                        </li>
+                        <li><strong>Envie o seu ramo para o GitHub:</strong>
+                             <pre><code><span class="code-prompt">(feature/adicionar-login) $</span> git push -u origin feature/adicionar-login</code></pre>
+                        </li>
+                        <li><strong>Abra um Pull Request (PR):</strong> No GitHub, abra um "Pull Request". Este é um pedido formal para "puxar" as alterações do seu ramo e mesclá-las (<code>merge</code>) no ramo <code>main</code>. É aqui que ocorre a revisão de código (code review), onde outros membros da equipa podem comentar e sugerir melhorias.</li>
+                        <li><strong>Mescle (Merge):</strong> Após a aprovação do PR, o GitHub mescla as suas alterações no <code>main</code>. O seu trabalho está agora integrado na linha principal do projeto.</li>
+                        <li><strong>Limpeza:</strong> Volte para o <code>main</code>, atualize-o e apague o ramo que já não é necessário.
+                             <pre><code><span class="code-prompt">(feature/adicionar-login) $</span> git checkout main
+<span class="code-prompt">(main) $</span> git pull origin main
+<span class="code-prompt">(main) $</span> git branch -d feature/adicionar-login</code></pre>
+                        </li>
+                    </ol>
+                    <div class="architect-tip">
+                        <h5>Dica de Arquitecto: O Ficheiro <code>.gitignore</code></h5>
+                        <p>O seu repositório Git só deve conter código-fonte e ficheiros essenciais. Ficheiros gerados automaticamente, segredos, dependências e ficheiros de configuração do seu editor não devem ser versionados. Crie um ficheiro chamado <code>.gitignore</code> na raiz do seu projeto e liste tudo o que o Git deve ignorar.</p>
+                        <pre><code><span class="code-comment"># Exemplo de .gitignore para um projeto Python</span>
+<span class="code-comment"># Pasta do ambiente virtual</span>
+venv/
+
+<span class="code-comment"># Ficheiros de cache do Python</span>
+__pycache__/
+*.pyc
+
+<span class="code-comment"># Pasta de configuração do VSCode</span>
+.vscode/
+</code></pre>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Fim do Capítulo 1 (Nível Arquitecto). A fundação está completa. Status do Protocolo: AGUARDANDO COMANDO DO DESENVOLVEDOR.</p>
+        </footer>
+    </div>
+    <script>
+        // Lógica para o botão de copiar
+        const copyButton = document.getElementById('copyButton');
+        copyButton.addEventListener('click', () => {
+            const mainContent = document.getElementById('journey-log');
+            const contentToCopy = mainContent.innerText;
+
+            const textArea = document.createElement('textarea');
+            textArea.value = contentToCopy;
+            textArea.style.position = 'fixed';
+            textArea.style.top = '0';
+            textArea.style.left = '0';
+            textArea.style.opacity = '0';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                const msg = successful ? 'Copiado!' : 'Falha ao copiar';
+                const originalText = copyButton.innerText;
+                copyButton.innerText = msg;
+                setTimeout(() => {
+                    copyButton.innerText = originalText;
+                }, 2000);
+            } catch (err) {
+                console.error('Erro ao copiar:', err);
+            }
+            document.body.removeChild(textArea);
+        });
+    </script>
 </body>
 </html>
