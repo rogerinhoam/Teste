@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programa Titã: Manual Definitivo - Capítulo 1</title>
+    <title>Programa Titã: O Manual Definitivo - A Compilação Completa (Capítulos 1-8)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
@@ -195,8 +195,9 @@
         .code-comment { color: #8b949e; }
         .code-keyword { color: #ff7b72; }
         .code-string { color: #a5d6ff; }
-        .code-prompt { color: #d2a8ff; }
-        .code-output { color: #7ee787; }
+        .code-function { color: #d2a8ff; }
+        .code-number { color: #79c0ff; }
+        .code-boolean { color: #ffab70; }
         
         .controls-container {
             display: flex;
@@ -292,7 +293,7 @@
                 color: #000 !important;
             }
 
-            .code-comment, .code-keyword, .code-string, .code-prompt, .code-output {
+            .code-comment, .code-keyword, .code-string, .code-function, .code-number, .code-boolean {
                 color: #000 !important; /* Simplifica cores para impressão */
             }
             
@@ -307,7 +308,7 @@
     <div class="container">
         <header>
             <h1>Programa Titã</h1>
-            <h2>Manual Definitivo - Capítulo 1</h2>
+            <h2>O Manual Definitivo - A Compilação Completa</h2>
         </header>
 
         <div class="controls-container">
@@ -317,6 +318,7 @@
 
         <main id="journey-log">
             
+            <!-- INÍCIO DO CAPÍTULO 1 -->
             <section class="mission-module" id="mission-1">
                 <h3>Módulo de Treinamento 1</h3>
                 <h2>SETUP DE CAMPO E CONTROLE DE TERRITÓRIO</h2>
@@ -326,14 +328,7 @@
                 <div class="task-block">
                     <h4>1.1: O Terminal: A Interface com a Alma da Máquina</h4>
                     <p><strong>Filosofia:</strong> O terminal não é uma ferramenta; é uma exposição da arquitetura fundamental de um sistema operativo. Cada comando que você digita inicia uma conversa complexa entre o "espaço do utilizador" (onde os seus programas vivem) e o "espaço do kernel" (o núcleo protegido do sistema operativo).</p>
-                    <p><strong>Anatomia de um Comando:</strong></p>
-                    <p><code>ls -la /home/rogeriomendonca/Projetos</code></p>
-                    <ul>
-                        <li><code>ls</code>: O <strong>comando</strong> em si. O programa a ser executado.</li>
-                        <li><code>-la</code>: As <strong>flags</strong> (ou opções). Modificam o comportamento do comando. O hífen único precede flags de uma só letra, que podem ser combinadas (<code>-l -a</code> é o mesmo que <code>-la</code>). Flags de palavra inteira usam dois hífens (ex: <code>--version</code>).</li>
-                        <li><code>/home/rogeriomendonca/Projetos</code>: O <strong>argumento</strong>. É o "alvo" sobre o qual o comando irá operar. Neste caso, o caminho do diretório a ser listado.</li>
-                    </ul>
-
+                    
                     <div class="architect-tip">
                         <h5>Dica de Arquiteto: A Filosofia Unix e o Poder da Composição</h5>
                         <p>O poder do terminal não reside em comandos individuais, mas na sua capacidade de serem compostos. A Filosofia Unix dita: 1. Faça uma coisa e faça-a bem. 2. Espere que a saída de um programa seja a entrada de outro. Isto é alcançado através de três fluxos de dados padrão (standard streams) e do operador "pipe" (<code>|</code>).</p>
@@ -426,10 +421,300 @@
                     </div>
                 </div>
             </section>
+            <!-- FIM DO CAPÍTULO 1 -->
+
+            <!-- INÍCIO DO CAPÍTULO 2 -->
+            <section class="mission-module" id="mission-2">
+                <h3>Módulo de Treinamento 2</h3>
+                <h2>A FERRAMENTA UNIVERSAL: LÓGICA E SCRIPTS EM PYTHON</h2>
+                <div class="mission-objective">
+                    <p><strong>Objetivo do Módulo:</strong> Transcender a sintaxe e dominar a <strong>lógica</strong>. A linguagem de programação é apenas o vocabulário; a lógica é a gramática do pensamento computacional. Neste capítulo, você aprenderá a representar dados, tomar decisões e automatizar a repetição, construindo seu primeiro programa autônomo e útil.</p>
+                </div>
+                <div class="task-block">
+                    <h4>2.1: Representação de Dados - A Matéria-Prima da Lógica</h4>
+                    <p><strong>Filosofia:</strong> Um programa de computador, em sua essência, é um manipulador de dados. Ele ingere dados, processa-os de acordo com uma lógica e produz novos dados. A sua primeira tarefa como programador é entender as diferentes formas (tipos) que os dados podem assumir e como representá-los eficientemente na memória.</p>
+                    
+                    <div class="dem-insight">
+                        <h5>DEUS EX MACHINA INSIGHT: Stack, Heap e a Gestão de Memória em Python</h5>
+                        <p>A memória do seu programa é dividida em duas áreas principais: a <strong>Stack (Pilha)</strong> e o <strong>Heap (Monte)</strong>.</p>
+                        <ul>
+                            <li><strong>Stack:</strong> É uma área de memória altamente organizada e rápida, usada para guardar "stack frames" - um para cada chamada de função ativa.</li>
+                            <li><strong>Heap:</strong> É uma grande área de memória menos organizada, usada para alocação dinâmica. É aqui que os seus objetos Python (listas, dicionários, etc.) realmente vivem.</li>
+                        </ul>
+                        <p>Quando você escreve <code>x = [1, 2, 3]</code>, o objeto lista é criado no Heap. Na Stack, a variável <code>x</code> é criada e armazena um <strong>ponteiro</strong> (o endereço de memória) para o local no Heap onde a lista está. Python gere a memória do Heap automaticamente usando um mecanismo chamado <strong>reference counting</strong>. Cada objeto no Heap tem um contador de quantas variáveis apontam para ele. Quando este contador chega a zero, o <strong>Garbage Collector</strong> do Python pode libertar essa memória.</p>
+                    </div>
+
+                    <div class="architect-tip">
+                        <h5>Dica de Arquiteto: Escolhendo a Estrutura de Dados Certa (Análise de Complexidade)</h5>
+                        <p>A escolha da estrutura de dados afeta diretamente a performance. A <strong>Notação Big O</strong> descreve como o tempo de execução cresce com o tamanho da entrada (N).</p>
+                        <ul>
+                            <li><strong>List/Tuple:</strong> Acesso por índice é <strong>O(1)</strong> (rápido). Verificar se um item existe é <strong>O(N)</strong> (lento).</li>
+                            <li><strong>Dict/Set:</strong> Adicionar, remover e verificar existência é, em média, <strong>O(1)</strong> (super rápido), devido ao uso de "hash tables".</li>
+                        </ul>
+                        <p><strong>Regra de ouro:</strong> Precisa de ordem? Use <code>list</code>. Dados imutáveis? Use <code>tuple</code>. Precisa de pesquisas rápidas? Use <code>dict</code> ou <code>set</code>.</p>
+                    </div>
+                </div>
+
+                <div class="task-block">
+                    <h4>2.2: Controle de Fluxo - Direcionando a Execução</h4>
+                    <p><strong>Filosofia:</strong> O controlo de fluxo é o que permite que um programa reaja a diferentes entradas, repita tarefas e exiba comportamento complexo. É aqui que a "lógica" realmente ganha vida.</p>
+                    
+                    <div class="dem-insight">
+                        <h5>DEUS EX MACHINA INSIGHT: Iteradores, Geradores e a Avaliação Preguiçosa (Lazy Evaluation)</h5>
+                        <p>Um loop <code>for</code> em Python funciona com qualquer objeto que seja um <strong>iterável</strong>. Um iterável retorna um <strong>iterador</strong>, que tem um método <code>__next__()</code>. Isto permite a <strong>avaliação preguiçosa (lazy evaluation)</strong>. Em vez de criar uma lista gigante na memória, podemos criar um <strong>gerador</strong> que "sabe" como gerar o próximo valor apenas quando ele é solicitado.</p>
+                        <p>A palavra-chave <code>yield</code> transforma uma função normal numa função geradora. Quando chamada, ela retorna um objeto gerador. Cada vez que <code>next()</code> é chamado no gerador, o código da função executa até encontrar um <code>yield</code>, devolve o valor, e depois <strong>pausa a sua execução nesse exato ponto</strong>.</p>
+                    </div>
+
+                    <div class="architect-tip">
+                        <h5>Dica de Arquiteto: O Poder das "Comprehensions"</h5>
+                        <p>A forma "Pythónica" de criar coleções a partir de outras é através de "comprehensions". São mais concisas, legíveis e rápidas.</p>
+                        <pre><code><span class="code-comment"># List Comprehension com condicional</span>
+quadrados_pares = [x**<span class="code-number">2</span> <span class="code-keyword">for</span> x <span class="code-keyword">in</span> range(<span class="code-number">10</span>) <span class="code-keyword">if</span> x % <span class="code-number">2</span> == <span class="code-number">0</span>]
+
+<span class="code-comment"># Dict e Set comprehensions</span>
+mapa_quadrados = {x: x**<span class="code-number">2</span> <span class="code-keyword">for</span> x <span class="code-keyword">in</span> range(<span class="code-number">5</span>)}
+set_quadrados = {x**<span class="code-number">2</span> <span class="code-keyword">for</span> x <span class="code-keyword">in</span> range(<span class="code-number">5</span>)}
+</code></pre>
+                    </div>
+                </div>
+                
+                <div class="task-block">
+                    <h4>2.3: Funções - A Unidade Fundamental da Abstração</h4>
+                    <p><strong>Filosofia:</strong> O princípio mais importante da engenharia de software é <strong>DRY (Don't Repeat Yourself)</strong> - Não se Repita. Se você se vir a copiar e colar um bloco de código, esse bloco deveria ser uma função.</p>
+                    
+                    <div class="dem-insight">
+                        <h5>DEUS EX MACHINA INSIGHT: A Call Stack e as Funções como Cidadãos de Primeira Classe</h5>
+                        <p><strong>A Call Stack (Pilha de Chamadas):</strong> É a estrutura de dados na Stack que gere as chamadas de função. Quando uma função <code>A</code> chama uma função <code>B</code>, um novo "stack frame" para <code>B</code> é empurrado para o topo da pilha. Quando <code>B</code> retorna, o seu frame é retirado.</p>
+                        <p><strong>Funções como Cidadãos de Primeira Classe:</strong> Em Python, as funções são objetos. Elas podem ser atribuídas a variáveis, passadas como argumentos para outras funções e retornadas de outras funções. Esta propriedade é a base de padrões de programação muito poderosos, como decoradores e programação funcional.</p>
+                    </div>
+
+                    <div class="architect-tip">
+                        <h5>Dica de Arquiteto: Assinaturas de Funções Flexíveis com `*args` e `**kwargs`</h5>
+                        <p>Use <code>*args</code> e <code>**kwargs</code> para criar funções que aceitem um número variável de argumentos.</p>
+                        <ul>
+                            <li><code>*args</code>: Agrupa todos os argumentos posicionais extras numa <strong>tuple</strong>.</li>
+                            <li><code>**kwargs</code>: Agrupa todos os argumentos nomeados extras num <strong>dicionário</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <!-- FIM DO CAPÍTULO 2 -->
+
+            <!-- INÍCIO DO CAPÍTULO 3 -->
+            <section class="mission-module" id="mission-3">
+                <h3>Módulo de Treinamento 3</h3>
+                <h2>O ARMAZENAMENTO CENTRAL: BASES DE DADOS E SQL</h2>
+                <div class="mission-objective">
+                    <p><strong>Objetivo do Módulo:</strong> Dominar a teoria e a prática da persistência de dados. Vamos dissecar o modelo relacional, a linguagem SQL e a arquitetura interna de um Sistema de Gestão de Bases de Dados (SGBD). Ao final, você não apenas escreverá queries, mas entenderá como o SGBD as executa, garantindo performance e integridade dos dados.</p>
+                </div>
+                <div class="task-block">
+                    <h4>3.1: A Necessidade da Persistência e o Modelo Relacional</h4>
+                    <p><strong>Filosofia:</strong> A memória RAM é volátil. Um SGBD é a solução de engenharia para armazenar dados de forma duradoura, garantindo consistência, segurança e eficiência.</p>
+                    
+                    <div class="dem-insight">
+                        <h5>DEUS EX MACHINA INSIGHT: Ficheiros Simples vs. SGBD</h5>
+                        <p>Um SGBD não é um simples escritor de ficheiros. Ele é uma camada de abstração complexa que oferece garantias de <strong>Controlo de Concorrência</strong> (evitando que dois utilizadores modifiquem o mesmo dado ao mesmo tempo) e <strong>Recuperação de Falhas</strong> (usando um transaction log para reverter operações incompletas em caso de falha de energia).</p>
+                    </div>
+
+                    <div class="architect-tip">
+                        <h5>Dica de Arquiteto: Normalização de Dados</h5>
+                        <p>A normalização é o processo de organizar as tabelas para minimizar a redundância de dados e evitar anomalias. Para a maioria dos sistemas, alcançar a <strong>Terceira Forma Normal (3FN)</strong> é o objetivo. Ela garante que todos os atributos de uma tabela dependam apenas da chave primária, e nada mais.</p>
+                    </div>
+                </div>
+
+                <div class="task-block">
+                    <h4>3.2: SQL - A Linguagem Universal dos Dados</h4>
+                    <p>SQL (Structured Query Language) é declarativa. Você descreve <strong>o que</strong> quer, não <strong>como</strong> o obter. O SGBD (através do seu query planner) descobre a forma mais eficiente de executar o seu pedido.</p>
+                    <p><strong>DDL (Data Definition Language) - Definir a Estrutura</strong></p>
+                    <p>Comandos que definem e gerem a estrutura da base de dados. As <strong>constraints</strong> (<code>PRIMARY KEY</code>, <code>FOREIGN KEY</code>, <code>NOT NULL</code>, <code>UNIQUE</code>, <code>CHECK</code>) são as regras que garantem a integridade dos dados.</p>
+                    
+                    <p><strong>DML (Data Manipulation Language) - Manipular os Dados</strong></p>
+                    <p>Comandos como <code>INSERT</code>, <code>UPDATE</code>, e <code>DELETE</code>. Devem sempre ser usados com cuidado, especialmente em produção.</p>
+                    
+                    <p><strong>DQL (Data Query Language) - Consultar os Dados</strong></p>
+                    <p>A cláusula <code>SELECT</code> é a sua porta de entrada para a informação. A ordem de execução lógica de uma query é: <code>FROM</code> -> <code>WHERE</code> -> <code>GROUP BY</code> -> <code>HAVING</code> -> <code>SELECT</code> -> <code>ORDER BY</code> -> <code>LIMIT</code>.</p>
+                </div>
+
+                <div class="task-block">
+                    <h4>3.3: A Arte da Consulta - Agregações e Junções</h4>
+                    <p><strong>Funções de Agregação</strong> (<code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, etc.) operam sobre um conjunto de linhas e retornam um único valor, frequentemente usadas com <code>GROUP BY</code>.</p>
+                    <p><strong>Junções (JOINs)</strong> combinam dados de múltiplas tabelas. <code>INNER JOIN</code> retorna apenas correspondências. <code>LEFT JOIN</code> retorna tudo da tabela da esquerda, preenchendo com <code>NULL</code> onde não há correspondência na direita.</p>
+                </div>
+
+                <div class="task-block">
+                    <h4>3.4: O Coração da Base de Dados - Transações e Índices</h4>
+                    <div class="dem-insight">
+                        <h5>DEUS EX MACHINA INSIGHT: As Propriedades ACID</h5>
+                        <p>Uma <strong>Transação</strong> é uma sequência de operações executadas como uma única unidade lógica de trabalho. Elas garantem a integridade dos dados através das propriedades ACID:</p>
+                        <ul>
+                            <li><strong>Atomicidade:</strong> Ou todas as operações são concluídas (<code>COMMIT</code>), ou nenhuma delas é (<code>ROLLBACK</code>).</li>
+                            <li><strong>Consistência:</strong> A transação leva a base de dados de um estado válido para outro.</li>
+                            <li><strong>Isolamento:</strong> Transações concorrentes são isoladas umas das outras.</li>
+                            <li><strong>Durabilidade:</strong> Uma vez "commitada", uma transação permanecerá, mesmo em caso de falha.</li>
+                        </ul>
+                    </div>
+
+                    <div class="dem-insight">
+                        <h5>DEUS EX MACHINA INSIGHT: Como um Índice Funciona (B-Tree)</h5>
+                        <p>Sem um índice, para encontrar uma linha, o SGBD tem de fazer um "full table scan" (lento, O(N)). Um <strong>índice</strong> é uma estrutura de dados separada, tipicamente uma <strong>B-Tree</strong>, que armazena os valores da coluna indexada e um ponteiro para a localização física da linha. Ela permite encontrar qualquer valor num tempo logarítmico (<strong>O(log N)</strong>), que é drasticamente mais rápido.</p>
+                        <p><strong>O Custo:</strong> Índices aceleram leituras (<code>SELECT</code>), mas penalizam escritas (<code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>), pois a estrutura do índice também precisa de ser atualizada. A arte está em indexar apenas as colunas usadas frequentemente em cláusulas <code>WHERE</code> e <code>JOIN</code>.</p>
+                    </div>
+                </div>
+            </section>
+            <!-- FIM DO CAPÍTULO 3 -->
+
+            <!-- INÍCIO DO CAPÍTULO 4 -->
+            <section class="mission-module" id="mission-4">
+                <h3>Módulo de Treinamento 4</h3>
+                <h2>A CONEXÃO GLOBAL: DESENVOLVIMENTO DE APIS COM BACKEND</h2>
+                <div class="mission-objective">
+                    <p><strong>Objetivo do Módulo:</strong> Construir o "cérebro" da sua aplicação: um serviço backend que expõe a sua lógica e os seus dados ao mundo através de uma API (Application Programming Interface). Vamos dominar o protocolo HTTP, a arquitetura REST e as ferramentas para construir um serviço robusto e escalável.</p>
+                </div>
+                <div class="task-block">
+                    <h4>4.1: A Arquitetura Cliente-Servidor e o Protocolo HTTP</h4>
+                    <p><strong>Filosofia:</strong> Aplicações modernas são sistemas distribuídos. A lógica que gere a interface do utilizador (o cliente, ou frontend) está fisicamente separada da lógica que gere os dados e as regras de negócio (o servidor, ou backend). A comunicação entre eles é feita através de uma rede, usando um protocolo padronizado: o HTTP.</p>
+                    
+                    <div class="dem-insight">
+                        <h5>DEUS EX MACHINA INSIGHT: Anatomia de uma Requisição HTTP</h5>
+                        <p>Uma requisição HTTP é um ficheiro de texto com uma estrutura rígida. Ela contém: <strong>Start-Line</strong> (<code>GET /api/livros HTTP/1.1</code>), <strong>Headers</strong> (metadados como <code>Host</code>, <code>Accept</code>, <code>Authorization</code>), uma <strong>linha em branco</strong>, e um <strong>Body</strong> opcional com os dados.</p>
+                    </div>
+
+                    <div class="architect-tip">
+                        <h5>Dica de Arquiteto: A Arquitetura REST (Representational State Transfer)</h5>
+                        <p>REST não é um protocolo, mas um conjunto de restrições arquitetónicas. As principais são: <strong>Interface Uniforme</strong> (usar os padrões do HTTP, com recursos identificados por URIs e manipulados por verbos), <strong>Stateless</strong> (o servidor não armazena estado do cliente entre requisições), e <strong>Cliente-Servidor</strong> (separação de responsabilidades).</p>
+                    </div>
+                </div>
+
+                <div class="task-block">
+                    <h4>4.2: PROJETO: Construindo uma API com Flask</h4>
+                    <p><strong>Filosofia:</strong> Usaremos o Flask, um "micro-framework" Python. "Micro" não significa fraco; significa que ele fornece o núcleo essencial e deixa que você escolha as suas ferramentas para o resto.</p>
+                    
+                    <div class="dem-insight">
+                        <h5>DEUS EX MACHINA INSIGHT: WSGI - A Ponte entre Servidor e Aplicação</h5>
+                        <p>Em produção, você usa um <strong>Servidor de Aplicação WSGI</strong> como o Gunicorn. O WSGI (Web Server Gateway Interface) é uma especificação que define uma interface padrão entre o servidor web e a sua aplicação Python. O servidor (Gunicorn) lida com as conexões de rede e o HTTP. Para cada requisição, ele invoca a sua aplicação Flask, permitindo que o seu código se foque na lógica da aplicação, sem se preocupar com os detalhes da rede.</p>
+                    </div>
+                </div>
+            </section>
+            <!-- FIM DO CAPÍTULO 4 -->
+
+            <!-- INÍCIO DO CAPÍTULO 5 -->
+            <section class="mission-module" id="mission-5">
+                <h3>Módulo de Treinamento 5</h3>
+                <h2>A FACE DO SISTEMA: DESENVOLVIMENTO FRONTEND INTERATIVO</h2>
+                <div class="mission-objective">
+                    <p><strong>Objetivo do Módulo:</strong> Construir a interface com a qual o utilizador interage. Vamos dominar as três linguagens do browser (HTML, CSS, JavaScript) e entender como elas colaboram para criar experiências de utilizador dinâmicas e responsivas que consomem a nossa API backend.</p>
+                </div>
+                <div class="task-block">
+                    <h4>5.1: As Três Linguagens do Browser</h4>
+                    <p><strong>Filosofia:</strong> O frontend é uma sinfonia de três tecnologias: <strong>HTML</strong> (a estrutura), <strong>CSS</strong> (a apresentação) e <strong>JavaScript</strong> (a interatividade).</p>
+                    
+                    <div class="dem-insight">
+                        <h5>DEUS EX MACHINA INSIGHT: O Pipeline de Renderização do Browser</h5>
+                        <p>O browser segue o "Critical Rendering Path": <strong>1. Parsing:</strong> Constrói o DOM (árvore de estrutura do HTML) e o CSSOM (árvore de estilos do CSS). <strong>2. Style:</strong> Combina os dois para calcular os estilos finais de cada elemento. <strong>3. Layout:</strong> Calcula a geometria (tamanho e posição) de cada elemento. <strong>4. Paint:</strong> Pinta os pixéis de cada elemento em camadas. <strong>5. Composite:</strong> Combina as camadas para exibir a página. Manipular o DOM com JavaScript pode desencadear este processo novamente (um "reflow"), o que pode ser caro.</p>
+                    </div>
+                </div>
+                <div class="task-block">
+                    <h4>5.2: JavaScript, o DOM e a Comunicação Assíncrona</h4>
+                    <p><strong>Filosofia:</strong> O JavaScript é uma linguagem de thread única com um modelo de concorrência baseado num <strong>event loop</strong>. Isto permite que operações demoradas (como uma chamada de rede) sejam executadas de forma <strong>assíncrona</strong>, sem bloquear a interface.</p>
+                    
+                    <div class="dem-insight">
+                        <h5>DEUS EX MACHINA INSIGHT: O Event Loop</h5>
+                        <p>O ambiente de execução do JS tem: a <strong>Call Stack</strong> (para código síncrono), as <strong>Web APIs</strong> (onde operações como <code>fetch</code> são executadas pelo browser), a <strong>Callback Queue</strong> (para onde as funções de callback vão quando a operação termina), e o <strong>Event Loop</strong>, que move callbacks da queue para a stack quando esta está vazia.</p>
+                    </div>
+                </div>
+            </section>
+            <!-- FIM DO CAPÍTULO 5 -->
+
+            <!-- INÍCIO DO CAPÍTULO 6 -->
+            <section class="mission-module" id="mission-6">
+                <h3>Módulo de Treinamento 6</h3>
+                <h2>O PROJETO CAPSTONE: APLICAÇÃO FULL-STACK E DEPLOYMENT</h2>
+                <div class="mission-objective">
+                    <p><strong>Objetivo do Módulo:</strong> Integrar o backend e o frontend numa aplicação coesa e, mais importante, fazer o seu "deployment" - publicá-la na internet para que seja acessível publicamente. Vamos explorar os desafios práticos da transição de um ambiente de desenvolvimento local para um ambiente de produção.</p>
+                </div>
+                <div class="task-block">
+                    <h4>6.1: Integrando as Peças e Gerindo a Configuração</h4>
+                    <div class="architect-tip">
+                        <h5>Dica de Arquiteto: CORS e Variáveis de Ambiente</h5>
+                        <p><strong>CORS (Cross-Origin Resource Sharing):</strong> Por segurança, os browsers bloqueiam requisições para uma "origem" diferente. Você precisa de configurar a sua API (backend) para enviar o header <code>Access-Control-Allow-Origin</code>, dizendo ao browser que ele tem permissão para aceitar a requisição.</p>
+                        <p><strong>Variáveis de Ambiente:</strong> Nunca coloque dados sensíveis (como senhas de base de dados) diretamente no seu código. Use variáveis de ambiente para configurar a sua aplicação para diferentes ambientes (desenvolvimento, produção).</p>
+                    </div>
+                </div>
+                <div class="task-block">
+                    <h4>6.2: Deployment - Do Local para o Global</h4>
+                    <div class="dem-insight">
+                        <h5>DEUS EX MACHINA INSIGHT: Virtualização vs. Contentorização (Docker)</h5>
+                        <p><strong>Máquinas Virtuais (VMs)</strong> emulam um computador inteiro (pesado). <strong>Contentores (Docker)</strong> partilham o kernel do sistema anfitrião e isolam apenas os processos e o sistema de ficheiros da aplicação (leve e portátil). Um <strong>Dockerfile</strong> é a "receita" para construir uma imagem Docker, que empacota a sua aplicação e as suas dependências, garantindo que ela corre da mesma forma em qualquer lugar.</p>
+                    </div>
+                </div>
+            </section>
+            <!-- FIM DO CAPÍTULO 6 -->
+
+            <!-- INÍCIO DO CAPÍTULO 7 -->
+            <section class="mission-module" id="mission-7">
+                <h3>Módulo de Treinamento 7</h3>
+                <h2>A FORTALEZA: SEGURANÇA, CLOUD E DEVOPS</h2>
+                <div class="mission-objective">
+                    <p><strong>Objetivo do Módulo:</strong> Transformar um programador num engenheiro. Vamos aprender os princípios para construir software que não é apenas funcional, mas também seguro, escalável e mantível, usando práticas modernas de DevOps e os serviços fundamentais da nuvem.</p>
+                </div>
+                <div class="task-block">
+                    <h4>7.1: Segurança de Aplicações Web (OWASP Top 10)</h4>
+                    <div class="architect-tip">
+                        <h5>Dica de Arquiteto: Os Três Pilares da Segurança de Dados</h5>
+                        <ul>
+                            <li><strong>Prevenção de Injeção:</strong> Use sempre queries parametrizadas para SQL e escape sempre a saída HTML para prevenir Cross-Site Scripting (XSS).</li>
+                            <li><strong>Gestão de Autenticação e Sessão:</strong> Use bibliotecas robustas e testadas.</li>
+                            <li><strong>Armazenamento Criptográfico de Senhas:</strong> Nunca guarde senhas em texto plano. Use um algoritmo de hashing forte e lento como <strong>bcrypt</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="task-block">
+                    <h4>7.2: DevOps e a Cultura da Automação (CI/CD)</h4>
+                    <div class="dem-insight">
+                        <h5>DEUS EX MACHINA INSIGHT: O Pipeline de CI/CD</h5>
+                        <p><strong>CI (Continuous Integration - Integração Contínua):</strong> Cada <code>push</code> para o repositório despoleta um processo automatizado que compila, testa e verifica a qualidade do código. Isto garante que o ramo principal está sempre funcional.</p>
+                        <p><strong>CD (Continuous Deployment/Delivery - Entrega/Deployment Contínuo):</strong> Se a CI for bem-sucedida, o pipeline de CD empacota a aplicação e a "deploya" automaticamente para um ambiente. <strong>GitHub Actions</strong> é uma ferramenta de CI/CD integrada no GitHub para automatizar este fluxo.</p>
+                    </div>
+                </div>
+            </section>
+            <!-- FIM DO CAPÍTULO 7 -->
+
+            <!-- INÍCIO DO CAPÍTULO 8 -->
+            <section class="mission-module" id="mission-8">
+                <h3>Módulo de Treinamento 8</h3>
+                <h2>PREPARAÇÃO FINAL DE ELITE: DOMINANDO O CAMPO DE BATALHA</h2>
+                <div class="mission-objective">
+                    <p><strong>Objetivo do Módulo:</strong> Consolidar todo o conhecimento adquirido e focá-lo na aplicação prática exigida em cenários de alta pressão, como concursos públicos e entrevistas técnicas. Vamos rever os tópicos teóricos essenciais e treinar a resolução de problemas algorítmicos.</p>
+                </div>
+                <div class="task-block">
+                    <h4>8.1: Tópicos Teóricos Essenciais para Concursos</h4>
+                    <ul>
+                        <li><strong>Redes de Computadores:</strong> Domine o <strong>Modelo OSI</strong> e o <strong>Modelo TCP/IP</strong>. Entenda o papel de cada camada e os protocolos principais (HTTP, TCP, IP, DNS).</li>
+                        <li><strong>Sistemas Operativos:</strong> Entenda os conceitos de processo, thread, concorrência, deadlocks e gestão de memória.</li>
+                        <li><strong>Engenharia de Software:</strong> Conheça os modelos de ciclo de vida de software e as metodologias <strong>Ágeis</strong> (Scrum, Kanban).</li>
+                        <li><strong>Governança de TI:</strong> Tenha familiaridade com <strong>ITIL</strong> e <strong>COBIT</strong>.</li>
+                    </ul>
+                </div>
+                <div class="task-block">
+                    <h4>8.2: A Mentalidade Algorítmica e a Análise de Complexidade</h4>
+                    <div class="dem-insight">
+                        <h5>DEUS EX MACHINA INSIGHT: Como Abordar um Problema Algorítmico</h5>
+                        <ol>
+                            <li><strong>Entenda o Problema:</strong> Repita o problema com as suas próprias palavras. Esclareça todas as ambiguidades. Pense em casos extremos (edge cases).</li>
+                            <li><strong>Solução Força Bruta:</strong> Pense na solução mais simples e óbvia, mesmo que seja ineficiente.</li>
+                            <li><strong>Analise a Complexidade:</strong> Analise o Big O da sua solução força bruta. Identifique o "bottleneck".</li>
+                            <li><strong>Otimize:</strong> Pergunte-se: "Posso usar uma estrutura de dados diferente (como um hash map) para acelerar as pesquisas?". Tente melhorar a complexidade.</li>
+                            <li><strong>Implemente e Teste:</strong> Escreva o código para a solução otimizada e teste-o.</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+            <!-- FIM DO CAPÍTULO 8 -->
+
         </main>
 
         <footer>
-            <p>Fim do Capítulo 1. A fundação está completa. Status do Protocolo: AGUARDANDO COMANDO DO DESENVOLVEDOR.</p>
+            <p>Fim da Compilação. O manual está completo. O seu treino está completo. O seu sucesso depende agora da sua execução. Status do Protocolo: CONCLUÍDO.</p>
         </footer>
     </div>
     <script>
@@ -463,5 +748,4 @@
         });
     </script>
 </body>
-</html>
 </html>
