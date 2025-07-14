@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa Titã: O Manual Definitivo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0d1117;
+            --secondary-bg: #161b22;
+            --tertiary-bg: #1c2128;
+            --primary-text: #e6edf3;
+            --secondary-text: #8b949e;
+            --accent-blue: #2f81f7;
+            --accent-green: #3fb950;
+            --accent-orange: #f85149;
+            --accent-purple: #a5a5ff;
+            --border-color: #30363d;
+            --code-bg: #0d1117;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--secondary-bg), var(--tertiary-bg));
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--secondary-text);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .toc {
+            background: var(--secondary-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+        }
+
+        .toc h2 {
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            border-left: 3px solid var(--accent-blue);
+            transition: all 0.3s ease;
+        }
+
+        .toc li:hover {
+            border-left-color: var(--accent-green);
+            transform: translateX(5px);
+        }
+
+        .toc a {
+            color: var(--primary-text);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .chapter {
+            margin-bottom: 4rem;
+            background: var(--secondary-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .chapter h2 {
+            color: var(--accent-blue);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid var(--accent-blue);
+            padding-bottom: 0.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background: var(--tertiary-bg);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-green);
+        }
+
+        .section h3 {
+            color: var(--accent-green);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section h4 {
+            color: var(--accent-purple);
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .architect-tip {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            border: 1px solid var(--accent-blue);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .architect-tip::before {
+            content: "🏗️ DICA DO ARQUITETO";
+            display: block;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .deus-ex-machina {
+            background: linear-gradient(135deg, #7c2d12, #ea580c);
+            border: 1px solid var(--accent-orange);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .deus-ex-machina::before {
+            content: "⚡ DEUS EX MACHINA";
+            display: block;
+            font-weight: 700;
+            color: #fcd34d;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: var(--primary-text);
+        }
+
+        .inline-code {
+            background: var(--tertiary-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+            color: var(--accent-purple);
+        }
+
+        .project-box {
+            background: var(--primary-bg);
+            border: 2px solid var(--accent-green);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .project-box h4 {
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+        }
+
+        .warning {
+            background: #7f1d1d;
+            border: 1px solid #dc2626;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #dc2626;
+        }
+
+        .warning::before {
+            content: "⚠️ ATENÇÃO";
+            display: block;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        ul, ol {
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: var(--accent-blue);
+        }
+
+        em {
+            color: var(--accent-purple);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: var(--tertiary-bg);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--secondary-bg);
+            font-weight: 600;
+            color: var(--accent-blue);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--secondary-text);
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+
+        /* Print Styles */
+        @media print {
+            :root {
+                --primary-bg: #ffffff;
+                --secondary-bg: #f8f9fa;
+                --tertiary-bg: #e9ecef;
+                --primary-text: #000000;
+                --secondary-text: #666666;
+                --accent-blue: #0066cc;
+                --accent-green: #28a745;
+                --accent-orange: #dc3545;
+                --accent-purple: #6f42c1;
+                --border-color: #cccccc;
+                --code-bg: #f1f3f4;
+                --shadow: none;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            body {
+                font-size: 12pt;
+                line-height: 1.4;
+            }
+
+            .container {
+                max-width: none;
+                padding: 0;
+            }
+
+            .controls {
+                display: none;
+            }
+
+            .header {
+                page-break-inside: avoid;
+                background: var(--secondary-bg) !important;
+                border: 1px solid var(--border-color);
+                margin-bottom: 2rem;
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 24pt;
+                color: var(--primary-text) !important;
+                -webkit-text-fill-color: initial !important;
+                background: none !important;
+            }
+
+            .toc {
+                page-break-inside: avoid;
+                background: var(--secondary-bg) !important;
+                border: 1px solid var(--border-color);
+                margin-bottom: 2rem;
+                padding: 1rem;
+            }
+
+            .chapter {
+                page-break-before: always;
+                background: var(--secondary-bg) !important;
+                border: 1px solid var(--border-color);
+                margin-bottom: 2rem;
+                padding: 1rem;
+            }
+
+            .chapter h2 {
+                color: var(--accent-blue) !important;
+                font-size: 18pt;
+                page-break-after: avoid;
+            }
+
+            .section {
+                page-break-inside: avoid;
+                background: var(--tertiary-bg) !important;
+                border: 1px solid var(--border-color);
+                margin-bottom: 1rem;
+                padding: 1rem;
+            }
+
+            .architect-tip, .deus-ex-machina {
+                page-break-inside: avoid;
+                background: var(--secondary-bg) !important;
+                border: 2px solid var(--border-color);
+                margin: 1rem 0;
+                padding: 1rem;
+            }
+
+            .code-block {
+                page-break-inside: avoid;
+                background: var(--code-bg) !important;
+                border: 1px solid var(--border-color);
+                font-size: 10pt;
+            }
+
+            .project-box {
+                page-break-inside: avoid;
+                background: var(--secondary-bg) !important;
+                border: 2px solid var(--border-color);
+                padding: 1rem;
+            }
+
+            .warning {
+                page-break-inside: avoid;
+                background: #f8f9fa !important;
+                border: 2px solid var(--border-color);
+                padding: 1rem;
+            }
+
+            .footer {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Programa Titã: O Manual Definitivo</h1>
+            <p>O caminho completo do iniciante ao desenvolvedor master: da teoria fundamental à aplicação prática</p>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="copyContent()">📋 Copiar Conteúdo</button>
+            <button class="btn btn-secondary" onclick="printDocument()">🖨️ Imprimir / Salvar PDF</button>
+        </div>
+
+        <div class="toc">
+            <h2>📚 Índice</h2>
+            <ul>
+                <li><a href="#capitulo1">Capítulo 1: Setup de Campo e Controle de Território</a></li>
+                <li><a href="#capitulo2">Capítulo 2: A Ferramenta Universal</a></li>
+                <li><a href="#capitulo3">Capítulo 3: O Armazenamento Central</a></li>
+                <li><a href="#capitulo4">Capítulo 4: A Conexão Global</a></li>
+                <li><a href="#capitulo5">Capítulo 5: A Face do Sistema</a></li>
+                <li><a href="#capitulo6">Capítulo 6: O Projeto Capstone</a></li>
+                <li><a href="#capitulo7">Capítulo 7: A Fortaleza</a></li>
+                <li><a href="#capitulo8">Capítulo 8: Preparação Final de Elite</a></li>
+            </ul>
+        </div>
+
+        <div class="chapter" id="capitulo1">
+            <h2>Capítulo 1: Setup de Campo e Controle de Território</h2>
+            <p><em>O Terminal, o Ecossistema e o Git</em></p>
+
+            <div class="section">
+                <h3>1.1 Dominando o Terminal</h3>
+                
+                <h4>Conceitos Fundamentais</h4>
+                <p>O terminal é a interface direta com o sistema operacional. Enquanto interfaces gráficas abstraem operações, o terminal oferece <strong>controle granular</strong> e <strong>automação completa</strong>.</p>
+
+                <div class="architect-tip">
+                    <p><strong>Por que o terminal é fundamental:</strong> Desenvolvedores profissionais trabalham em ambientes distribuídos, servidores remotos e sistemas de CI/CD. O terminal é a única interface consistente entre todos esses ambientes.</p>
+                </div>
+
+                <div class="deus-ex-machina">
+                    <p><strong>Como o shell funciona:</strong> O shell é um interpretador que traduz comandos em chamadas de sistema. Ele mantém um processo pai que spawna processos filhos para cada comando, gerenciando streams de entrada (stdin), saída (stdout) e erro (stderr).</p>
+                </div>
+
+                <h4>Comandos Essenciais</h4>
+                <div class="code-block">
+                    <pre>
+# Navegação e listagem
+ls -la                    # Lista arquivos com detalhes
+cd /path/to/directory     # Navega para diretório
+pwd                       # Mostra diretório atual
+find . -name "*.py"       # Busca arquivos por padrão
+
+# Manipulação de arquivos
+cp source dest            # Copia arquivo
+mv source dest            # Move/renomeia arquivo
+rm -rf directory          # Remove diretório recursivamente
+mkdir -p path/to/dir      # Cria diretório e pais
+
+# Visualização de conteúdo
+cat file.txt              # Exibe conteúdo completo
+less file.txt             # Visualiza com paginação
+head -n 10 file.txt       # Primeiras 10 linhas
+tail -f log.txt           # Últimas linhas em tempo real
+
+# Processamento de texto
+grep "pattern" file.txt   # Busca padrão no arquivo
+sed 's/old/new/g' file    # Substitui texto
+awk '{print $1}' file     # Extrai coluna específica
+sort file.txt             # Ordena linhas
+uniq sorted_file          # Remove duplicatas
+                    </pre>
+                </div>
+
+                <div class="project-box">
+                    <h4>🎯 Projeto Prático: Organizador de Arquivos</h4>
+                    <p>Crie um script que organiza downloads por extensão:</p>
+                    <div class="code-block">
+                        <pre>
+#!/bin/bash
+# organize_downloads.sh
+
+DOWNLOADS_DIR="$HOME/Downloads"
+TARGET_DIR="$HOME/OrganizedFiles"
+
+# Cria diretórios por tipo
+mkdir -p "$TARGET_DIR"/{images,documents,videos,audio,code,other}
+
+# Organiza por extensão
+find "$DOWNLOADS_DIR" -type f -name "*.jpg" -o -name "*.png" -o -name "*.gif" | \
+    xargs -I {} mv {} "$TARGET_DIR/images/"
+
+find "$DOWNLOADS_DIR" -type f -name "*.pdf" -o -name "*.doc" -o -name "*.docx" | \
+    xargs -I {} mv {} "$TARGET_DIR/documents/"
+
+find "$DOWNLOADS_DIR" -type f -name "*.mp4" -o -name "*.avi" -o -name "*.mkv" | \
+    xargs -I {} mv {} "$TARGET_DIR/videos/"
+
+echo "Organização concluída!"
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>1.2 Gerenciamento de Ambientes</h3>
+                
+                <h4>Variáveis de Ambiente</h4>
+                <p>Variáveis de ambiente controlam comportamentos de programas sem modificar código fonte.</p>
+
+                <div class="code-block">
+                    <pre>
+# Visualizar variáveis
+env                       # Lista todas as variáveis
+echo $PATH               # Mostra variável específica
+export VAR="value"       # Define variável
+
+# Configuração permanente (.bashrc/.zshrc)
+export PATH="$PATH:/usr/local/bin"
+export EDITOR="code"
+export PYTHONPATH="/path/to/modules"
+                    </pre>
+                </div>
+
+                <div class="deus-ex-machina">
+                    <p><strong>Como o PATH funciona:</strong> O sistema operacional mantém uma lista ordenada de diretórios no PATH. Quando você executa um comando, o SO percorre cada diretório até encontrar o executável correspondente. É por isso que a ordem importa.</p>
+                </div>
+
+                <h4>Gerenciadores de Versão</h4>
+                <div class="code-block">
+                    <pre>
+# Node Version Manager (NVM)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+nvm install node         # Instala última versão
+nvm use 18.0.0           # Usa versão específica
+
+# Python Version Manager (pyenv)
+curl https://pyenv.run | bash
+pyenv install 3.11.0    # Instala Python 3.11
+pyenv global 3.11.0     # Define como padrão
+                    </pre>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>1.3 Controle de Versão com Git</h3>
+                
+                <h4>Arquitetura do Git</h4>
+                <p>Git é um sistema de controle de versão <strong>distribuído</strong> baseado em snapshots, não diferenças.</p>
+
+                <div class="deus-ex-machina">
+                    <p><strong>Modelo de objetos do Git:</strong> Git armazena quatro tipos de objetos: blob (conteúdo de arquivo), tree (estrutura de diretório), commit (snapshot com metadados) e tag (referência nomeada). Cada objeto é identificado por um hash SHA-1 de seu conteúdo.</p>
+                </div>
+
+                <h4>Comandos Fundamentais</h4>
+                <div class="code-block">
+                    <pre>
+# Configuração inicial
+git config --global user.name "Seu Nome"
+git config --global user.email "seu@email.com"
+git config --global init.defaultBranch main
+
+# Inicialização e clonagem
+git init                          # Inicializa repositório
+git clone https://github.com/user/repo.git  # Clona repositório
+
+# Workflow básico
+git add .                         # Adiciona arquivos ao staging
+git commit -m "Mensagem descritiva"  # Cria commit
+git push origin main              # Envia para repositório remoto
+git pull origin main              # Atualiza do repositório remoto
+
+# Verificação de status
+git status                        # Mostra estado dos arquivos
+git log --oneline --graph         # Histórico visual
+git diff                          # Diferenças não commitadas
+git diff --staged                 # Diferenças no staging
+                    </pre>
+                </div>
+
+                <div class="architect-tip">
+                    <p><strong>Mensagens de commit profissionais:</strong> Use o formato "tipo(escopo): descrição". Exemplos: "feat(auth): adiciona login OAuth", "fix(db): corrige leak de conexão", "docs(readme): atualiza instruções de instalação".</p>
+                </div>
+
+                <h4>Branches e Merging</h4>
+                <div class="code-block">
+                    <pre>
+# Gerenciamento de branches
+git branch                        # Lista branches
+git branch feature/nova-funcionalidade  # Cria branch
+git checkout feature/nova-funcionalidade  # Muda para branch
+git checkout -b feature/login     # Cria e muda para branch
+
+# Merging e resolução de conflitos
+git merge feature/nova-funcionalidade  # Merge para branch atual
+git rebase main                   # Reaplica commits sobre main
+git cherry-pick abc123            # Aplica commit específico
+
+# Resolução de conflitos
+git status                        # Identifica arquivos em conflito
+# Editar arquivos manualmente
+git add arquivo_resolvido.py
+git commit -m "resolve: conflito em arquivo_resolvido.py"
+                    </pre>
+                </div>
+
+                <div class="project-box">
+                    <h4>🎯 Projeto Prático: Workflow Git Profissional</h4>
+                    <p>Implemente um workflow completo:</p>
+                    <div class="code-block">
+                        <pre>
+# 1. Crie repositório para projeto de portfólio
+git init meu-portfolio
+cd meu-portfolio
+
+# 2. Estrutura inicial
+mkdir -p {src,docs,tests}
+echo "# Meu Portfólio" > README.md
+echo "node_modules/" > .gitignore
+git add .
+git commit -m "initial: estrutura básica do projeto"
+
+# 3. Feature branch para seção "sobre"
+git checkout -b feature/sobre
+echo "Informações sobre mim" > src/sobre.html
+git add .
+git commit -m "feat(sobre): adiciona página sobre"
+
+# 4. Simule colaboração
+git checkout main
+git checkout -b feature/contato
+echo "Formulário de contato" > src/contato.html
+git add .
+git commit -m "feat(contato): adiciona formulário de contato"
+
+# 5. Merge das features
+git checkout main
+git merge feature/sobre
+git merge feature/contato
+git branch -d feature/sobre feature/contato
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="warning">
+                    <p><strong>Nunca faça commit direto na main/master em projetos colaborativos.</strong> Sempre use pull requests para revisão de código.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>1.4 Automação com Shell Scripts</h3>
+                
+                <h4>Estrutura de Scripts</h4>
+                <div class="code-block">
+                    <pre>
+#!/bin/bash
+# Script de backup automatizado
+
+# Configurações
+BACKUP_DIR="/backup"
+SOURCE_DIR="/home/user/projects"
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_FILE="backup_$DATE.tar.gz"
+
+# Função para logging
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a /var/log/backup.log
+}
+
+# Verifica se diretório existe
+if [ ! -d "$SOURCE_DIR" ]; then
+    log "ERRO: Diretório $SOURCE_DIR não encontrado"
+    exit 1
+fi
+
+# Cria backup
+log "Iniciando backup de $SOURCE_DIR"
+tar -czf "$BACKUP_DIR/$BACKUP_FILE" "$SOURCE_DIR"
+
+if [ $? -eq 0 ]; then
+    log "Backup concluído: $BACKUP_FILE"
+else
+    log "ERRO: Falha no backup"
+    exit 1
+fi
+
+# Remove backups antigos (mantém últimos 7 dias)
+find "$BACKUP_DIR" -name "backup_*.tar.gz" -mtime +7 -delete
+log "Limpeza de backups antigos concluída"
+                    </pre>
+                </div>
+
+                <div class="deus-ex-machina">
+                    <p><strong>Como o shell executa scripts:</strong> O kernel identifica o shebang (#!), carrega o interpretador especificado e passa o script como argumento. O interpretador então tokeniza, parseia e executa o código linha por linha.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="chapter" id="capitulo2">
+            <h2>Capítulo 2: A Ferramenta Universal</h2>
+            <p><em>Lógica e Scripts em Python</em></p>
+
+            <div class="section">
+                <h3>2.1 Fundamentos da Linguagem</h3>
+                
+                <h4>Filosofia Python</h4>
+                <p>Python segue o princípio "Pythônico" - código deve ser <strong>legível</strong>, <strong>explícito</strong> e <strong>simples</strong>.</p>
+
+                <div class="code-block">
+                    <pre>
+import this  # The Zen of Python
+
+# Exemplos de código Pythônico
+# ❌ Não Pythônico
+result = []
+for i in range(10):
+    if i % 2 == 0:
+        result.append(i * 2)
+
+# ✅ Pythônico
+result = [i * 2 for i in range(10) if i % 2 == 0]
+
+# ❌ Não Pythônico
+def process_data(data):
+    if data is not None:
+        if len(data) > 0:
+            return data.upper()
+    return None
+
+# ✅ Pythônico
+def process_data(data):
+    return data.upper() if data else None
+                    </pre>
+                </div>
+
+                <div class="deus-ex-machina">
+                    <p><strong>CPython e execução:</strong> Python compila código para bytecode (arquivo .pyc), que é executado pela Python Virtual Machine (PVM). A PVM é uma stack machine que executa instruções bytecode uma por vez.</p>
+                </div>
+
+                <h4>Tipos de Dados e Estruturas</h4>
+                <div class="code-block">
+                    <pre>
+# Tipos básicos
+numero = 42                    # int
+preco = 19.99                 # float
+nome = "Python"               # str
+ativo = True                  # bool
+vazio = None                  # NoneType
+
+# Coleções
+lista = [1, 2, 3, 4, 5]       # list - mutável, ordenada
+tupla = (1, 2, 3)             # tuple - imutável, ordenada
+conjunto = {1, 2, 3}          # set - mutável, não ordenada, únicos
+dicionario = {"a": 1, "b": 2} # dict - mutável, ordenada (Python 3.7+)
+
+# Operações avançadas
+# List comprehension
+quadrados = [x**2 for x in range(10)]
+filtrados = [x for x in range(20) if x % 2 == 0]
+
+# Dict comprehension
+char_count = {char: nome.count(char) for char in set(nome)}
+
+# Set comprehension
+vogais = {char for char in "programming" if char in "aeiou"}
+                    </pre>
+                </div>
+
+                <div class="architect-tip">
+                    <p><strong>Escolha de estruturas:</strong> Use list para sequências mutáveis, tuple para dados imutáveis, set para operações matemáticas de conjuntos, e dict para mapeamentos chave-valor. A escolha correta impacta performance e legibilidade.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>2.2 Programação Orientada a Objetos</h3>
+                
+                <h4>Classes e Objetos</h4>
+                <div class="code-block">
+                    <pre>
+class ContaBancaria:
+    def __init__(self, titular, saldo_inicial=0):
+        self.titular = titular
+        self._saldo = saldo_inicial  # Atributo "privado"
+        self._historico = []
+        
+    @property
+    def saldo(self):
+        """Getter para saldo"""
+        return self._saldo
+    
+    def depositar(self, valor):
+        if valor > 0:
+            self._saldo += valor
+            self._historico.append(f"Depósito: +R$ {valor}")
+            return True
+        return False
+    
+    def sacar(self, valor):
+        if 0 < valor <= self._saldo:
+            self._saldo -= valor
+            self._historico.append(f"Saque: -R$ {valor}")
+            return True
+        return False
+    
+    def __str__(self):
+        return f"Conta de {self.titular}: R$ {self._saldo}"
+    
+    def __repr__(self):
+        return f"ContaBancaria('{self.titular}', {self._saldo})"
+
+# Herança
+class ContaPoupanca(ContaBancaria):
+    def __init__(self, titular, saldo_inicial=0, taxa_juros=0.01):
+        super().__init__(titular, saldo_inicial)
+        self.taxa_juros = taxa_juros
+    
+    def aplicar_juros(self):
+        juros = self._saldo * self.taxa_juros
+        self._saldo += juros
+        self._historico.append(f"Juros: +R$ {juros:.2f}")
+                    </pre>
+                </div>
+
+                <div class="deus-ex-machina">
+                    <p><strong>Method Resolution Order (MRO):</strong> Python usa o algoritmo C3 linearization para determinar a ordem de resolução de métodos em herança múltipla. Você pode ver a MRO com <code>Classe.__mro__</code>.</p>
+                </div>
+
+                <h4>Decoradores e Metaclasses</h4>
+                <div class="code-block">
+                    <pre>
+import time
+from functools import wraps
+
+# Decorador para medir tempo
+def medir_tempo(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        inicio = time.time()
+        resultado = func(*args, **kwargs)
+        fim = time.time()
+        print(f"{func.__name__} executou em {fim - inicio:.4f}s")
+        return resultado
+    return wrapper
+
+# Decorador de cache
+def cache(func):
+    cache_dict = {}
+    
+    @wraps(func)
+    def wrapper(*args):
+        if args in cache_dict:
+            return cache_dict[args]
+        resultado = func(*args)
+        cache_dict[args] = resultado
+        return resultado
+    return wrapper
+
+# Uso dos decoradores
+@medir_tempo
+@cache
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+# Context manager personalizado
+class GerenciadorArquivo:
+    def __init__(self, nome_arquivo, modo):
+        self.nome_arquivo = nome_arquivo
+        self.modo = modo
+        self.arquivo = None
+    
+    def __enter__(self):
+        self.arquivo = open(self.nome_arquivo, self.modo)
+        return self.arquivo
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.arquivo:
+            self.arquivo.close()
+        # Retorna False para propagar exceções
+        return False
+
+# Uso
+with GerenciadorArquivo("teste.txt", "w") as arquivo:
+    arquivo.write("Hello World")
+                    </pre>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>2.3 Manipulação de Arquivos e Dados</h3>
+                
+                <h4>Processamento de Arquivos</h4>
+                <div class="code-block">
+                    <pre>
+import json
+import csv
+import os
+from pathlib import Path
+
+# Trabalhando com JSON
+def salvar_json(dados, arquivo):
+    with open(arquivo, 'w', encoding='utf-8') as f:
+        json.dump(dados, f, ensure_ascii=False, indent=2)
+
+def carregar_json(arquivo):
+    with open(arquivo, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+# Trabalhando com CSV
+def processar_csv(arquivo_entrada, arquivo_saida):
+    with open(arquivo_entrada, 'r', encoding='utf-8') as entrada:
+        reader = csv.DictReader(entrada)
+        
+        with open(arquivo_saida, 'w', encoding='utf-8', newline='') as saida:
+            fieldnames = reader.fieldnames + ['status']
+            writer = csv.DictWriter(saida, fieldnames=fieldnames)
+            writer.writeheader()
+            
+            for linha in reader:
+                # Processa cada linha
+                if float(linha['preco']) > 100:
+                    linha['status'] = 'caro'
+                else:
+                    linha['status'] = 'barato'
+                writer.writerow(linha)
+
+# Manipulação de diretórios com pathlib
+def organizar_arquivos(diretorio):
+    pasta = Path(diretorio)
+    
+    for arquivo in pasta.iterdir():
+        if arquivo.is_file():
+            # Cria pasta por extensão
+            extensao = arquivo.suffix[1:] if arquivo.suffix else 'sem_extensao'
+            pasta_destino = pasta / extensao
+            pasta_destino.mkdir(exist_ok=True)
+            
+            # Move arquivo
+            arquivo.rename(pasta_destino / arquivo.name)
+                    </pre>
+                </div>
+
+                <div class="project-box">
+                    <h4>🎯 Projeto Prático: Analisador de Logs</h4>
+                    <p>Crie um analisador de logs de servidor web:</p>
+                    <div class="code-block">
+                        <pre>
+import re
+from collections import defaultdict, Counter
+from datetime import datetime
+
+class AnalisadorLog:
+    def __init__(self, arquivo_log):
+        self.arquivo_log = arquivo_log
+        self.estatisticas = defaultdict(int)
+        self.ips = Counter()
+        self.status_codes = Counter()
+        self.urls = Counter()
+        
+    def processar(self):
+        # Regex para log formato Apache Common
+        padrao = r'(\d+\.\d+\.\d+\.\d+) - - \[(.*?)\] "(.*?)" (\d+) (\d+)'
+        
+        with open(self.arquivo_log, 'r') as arquivo:
+            for linha in arquivo:
+                match = re.match(padrao, linha)
+                if match:
+                    ip, timestamp, request, status, size = match.groups()
+                    
+                    # Extrai método e URL
+                    try:
+                        metodo, url, protocolo = request.split()
+                    except ValueError:
+                        continue
+                    
+                    # Atualiza estatísticas
+                    self.ips[ip] += 1
+                    self.status_codes[status] += 1
+                    self.urls[url] += 1
+                    self.estatisticas['total_requests'] += 1
+                    self.estatisticas['total_bytes'] += int(size)
+    
+    def gerar_relatorio(self):
+        print("=== RELATÓRIO DE ANÁLISE DE LOGS ===")
+        print(f"Total de requisições: {self.estatisticas['total_requests']}")
+        print(f"Total de bytes transferidos: {self.estatisticas['total_bytes']}")
+        
+        print("\n=== TOP 10 IPs ===")
+        for ip, count in self.ips.most_common(10):
+            print(f"{ip}: {count} requisições")
+        
+        print("\n=== STATUS CODES ===")
+        for status, count in self.status_codes.most_common():
+            print(f"{status}: {count}")
+        
+        print("\n=== TOP 10 URLs ===")
+        for url, count in self.urls.most_common(10):
+            print(f"{url}: {count}")
+
+# Uso
+analisador = AnalisadorLog('access.log')
+analisador.processar()
+analisador.gerar_relatorio()
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>2.4 APIs e Requisições HTTP</h3>
+                
+                <h4>Biblioteca Requests</h4>
+                <div class="code-block">
+                    <pre>
+import requests
+import json
+from typing import Dict, List, Optional
+
+class APIClient:
+    def __init__(self, base_url: str, api_key: Optional[str] = None):
+        self.base_url = base_url.rstrip('/')
+        self.session = requests.Session()
+        
+        if api_key:
+            self.session.headers.update({'Authorization': f'Bearer {api_key}'})
+    
+    def get(self, endpoint: str, params: Optional[Dict] = None) -> Dict:
+        """Realiza requisição GET"""
+        url = f"{self.base_url}/{endpoint.lstrip('/')}"
+        response = self.session.get(url, params=params)
+        response.raise_for_status()
+        return response.json()
+    
+    def post(self, endpoint: str, data: Dict) -> Dict:
+        """Realiza requisição POST"""
+        url = f"{self.base_url}/{endpoint.lstrip('/')}"
+        response = self.session.post(url, json=data)
+        response.raise_for_status()
+        return response.json()
+    
+    def put(self, endpoint: str, data: Dict) -> Dict:
+        """Realiza requisição PUT"""
+        url = f"{self.base_url}/{endpoint.lstrip('/')}"
+        response = self.session.put(url, json=data)
+        response.raise_for_status()
+        return response.json()
+    
+    def delete(self, endpoint: str) -> bool:
+        """Realiza requisição DELETE"""
+        url = f"{self.base_url}/{endpoint.lstrip('/')}"
+        response = self.session.delete(url)
+        response.raise_for_status()
+        return response.status_code == 204
+
+# Exemplo de uso com API do GitHub
+class GitHubAPI:
+    def __init__(self, token: str):
+        self.client = APIClient('https://api.github.com', token)
+    
+    def get_user_repos(self, username: str) -> List[Dict]:
+        """Obtém repositórios de um usuário"""
+        return self.client.get(f'users/{username}/repos')
+    
+    def create_repo(self, name: str, description: str = '', private: bool = False) -> Dict:
+        """Cria novo repositório"""
+        data = {
+            'name': name,
+            'description': description,
+            'private': private
+        }
+        return self.client.post('user/repos', data)
+
+# Cliente para consumir dados de CEP
+def buscar_cep(cep: str) -> Dict:
+    """Busca informações de CEP na API ViaCEP"""
+    cep_limpo = re.sub(r'\D', '', cep)
+    if len(cep_limpo) != 8:
+        raise ValueError("CEP deve ter 8 dígitos")
+    
+    url = f"https://viacep.com.br/ws/{cep_limpo}/json/"
+    response = requests.get(url)
+    response.raise_for_status()
+    
+    dados = response.json()
+    if 'erro' in dados:
+        raise ValueError("CEP não encontrado")
+    
+    return dados
+                    </pre>
+                </div>
+
+                <div class="deus-ex-machina">
+                    <p><strong>Como o HTTP funciona:</strong> HTTP é um protocolo stateless sobre TCP/IP. Cada requisição contém headers (metadados) e opcionalmente um body (dados). O servidor responde com status code, headers e body. Cookies mantêm estado entre requisições.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>2.5 Testes e Debugging</h3>
+                
+                <h4>Testes Unitários</h4>
+                <div class="code-block">
+                    <pre>
+import unittest
+from unittest.mock import patch, MagicMock
+import pytest
+
+class TestContaBancaria(unittest.TestCase):
+    def setUp(self):
+        """Executado antes de cada teste"""
+        self.conta = ContaBancaria("João", 1000)
+    
+    def test_deposito_valido(self):
+        """Testa depósito com valor válido"""
+        resultado = self.conta.depositar(500)
+        self.assertTrue(resultado)
+        self.assertEqual(self.conta.saldo, 1500)
+    
+    def test_deposito_invalido(self):
+        """Testa depósito com valor inválido"""
+        resultado = self.conta.depositar(-100)
+        self.assertFalse(resultado)
+        self.assertEqual(self.conta.saldo, 1000)
+    
+    def test_saque_valido(self):
+        """Testa saque com valor válido"""
+        resultado = self.conta.sacar(300)
+        self.assertTrue(resultado)
+        self.assertEqual(self.conta.saldo, 700)
+    
+    def test_saque_insuficiente(self):
+        """Testa saque maior que o saldo"""
+        resultado = self.conta.sacar(1500)
+        self.assertFalse(resultado)
+        self.assertEqual(self.conta.saldo, 1000)
+
+# Testes com pytest (mais pythônico)
+def test_buscar_cep_valido():
+    """Testa busca de CEP válido"""
+    resultado = buscar_cep('01310-100')
+    assert resultado['localidade'] == 'São Paulo'
+    assert resultado['uf'] == 'SP'
+
+def test_buscar_cep_invalido():
+    """Testa busca de CEP inválido"""
+    with pytest.raises(ValueError):
+        buscar_cep('00000-000')
+
+# Mock para testes de API
+@patch('requests.get')
+def test_api_github_mock(mock_get):
+    """Testa API do GitHub com mock"""
+    # Configura mock
+    mock_response = MagicMock()
+    mock_response.json.return_value = [{'name': 'repo1'}, {'name': 'repo2'}]
+    mock_response.status_code = 200
+    mock_get.return_value = mock_response
+    
+    # Testa função
+    github = GitHubAPI('fake_token')
+    repos = github.get_user_repos('testuser')
+    
+    assert len(repos) == 2
+    assert repos[0]['name'] == 'repo1'
+                    </pre>
+                </div>
+
+                <div class="architect-tip">
+                    <p><strong>Estratégia de testes:</strong> Siga a pirâmide de testes: muitos testes unitários (rápidos, isolados), alguns testes de integração (testam componentes juntos) e poucos testes end-to-end (simulam usuário real).</p>
+                </div>
+
+                <h4>Debugging e Profiling</h4>
+                <div class="code-block">
+                    <pre>
+import logging
+import pdb
+import cProfile
+import timeit
+
+# Configuração de logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('app.log'),
+        logging.StreamHandler()
+    ]
+)
+
+logger = logging.getLogger(__name__)
+
+def processar_dados(dados):
+    """Função com logging e debugging"""
+    logger.info(f"Processando {len(dados)} registros")
+    
+    resultado = []
+    for i, item in enumerate(dados):
+        try:
+            # Ponto de breakpoint para debugging
+            # pdb.set_trace()  # Descomente para debug
+            
+            processado = item.upper().strip()
+            resultado.append(processado)
+            
+            if i % 1000 == 0:
+                logger.info(f"Processados {i} registros")
+                
+        except Exception as e:
+            logger.error(f"Erro ao processar item {i}: {e}")
+            continue
+    
+    logger.info("Processamento concluído")
+    return resultado
+
+# Profiling de performance
+def benchmark_funcao():
+    """Benchmarks de diferentes implementações"""
+    dados = list(range(100000))
+    
+    # Método 1: Loop tradicional
+    def metodo1():
+        resultado = []
+        for x in dados:
+            resultado.append(x * 2)
+        return resultado
+    
+    # Método 2: List comprehension
+    def metodo2():
+        return [x * 2 for x in dados]
+    
+    # Método 3: Map
+    def metodo3():
+        return list(map(lambda x: x * 2, dados))
+    
+    # Testa performance
+    t1 = timeit.timeit(metodo1, number=10)
+    t2 = timeit.timeit(metodo2, number=10)
+    t3 = timeit.timeit(metodo3, number=10)
+    
+    print(f"Loop tradicional: {t1:.4f}s")
+    print(f"List comprehension: {t2:.4f}s")
+    print(f"Map: {t3:.4f}s")
+
+# Profiling detalhado
+def profile_funcao():
+    """Profile detalhado de função"""
+    cProfile.run('processar_dados(["test"] * 10000)')
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="chapter" id="capitulo3">
+            <h2>Capítulo 3: O Armazenamento Central</h2>
+            <p><em>Bases de Dados e SQL</em></p>
+
+            <div class="section">
+                <h3>3.1 Fundamentos de Bancos de Dados</h3>
+                
+                <h4>Conceitos Essenciais</h4>
+                <p>Bancos de dados são sistemas para <strong>armazenar</strong>, <strong>organizar</strong> e <strong>recuperar</strong> informações de forma eficiente e consistente.</p>
+
+                <div class="deus-ex-machina">
+                    <p><strong>Como SGBDs funcionam:</strong> Um SGBD possui múltiplas camadas: parser SQL (analisa sintaxe), otimizador (escolhe plano de execução), buffer manager (gerencia memória), lock manager (controla concorrência) e storage engine (acesso físico aos dados).</p>
+                </div>
+
+                <h4>Tipos de Bancos de Dados</h4>
+                <table>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Características</th>
+                        <th>Casos de Uso</th>
+                        <th>Exemplos</th>
+                    </tr>
+                    <tr>
+                        <td>Relacional</td>
+                        <td>Estrutura em tabelas, ACID, SQL</td>
+                        <td>Transações, consistência forte</td>
+                        <td>PostgreSQL, MySQL</td>
+                    </tr>
+                    <tr>
+                        <td>NoSQL Documento</td>
+                        <td>Esquema flexível, JSON</td>
+                        <td>APIs, aplicações web</td>
+                        <td>MongoDB, CouchDB</td>
+                    </tr>
+                    <tr>
+                        <td>Chave-Valor</td>
+                        <td>Estrutura simples, alta performance</td>
+                        <td>Cache, sessões</td>
+                        <td>Redis, DynamoDB</td>
+                    </tr>
+                    <tr>
+                        <td>Colunar</td>
+                        <td>Armazena por coluna</td>
+                        <td>Analytics, Big Data</td>
+                        <td>Cassandra, HBase</td>
+                    </tr>
+                    <tr>
+                        <td>Grafo</td>
+                        <td>Nós e relacionamentos</td>
+                        <td>Redes sociais, recomendações</td>
+                        <td>Neo4j, Amazon Neptune</td>
+                    </tr>
+                </table>
+
+                <div class="architect-tip">
+                    <p><strong>Escolha do tipo de banco:</strong> Use relacional para dados estruturados com relacionamentos complexos, NoSQL para escalabilidade horizontal e esquemas flexíveis, e especializados (grafo, colunar) para casos específicos.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>3.2 SQL Fundamental</h3>
+                
+                <h4>Estrutura e Sintaxe</h4>
+                <div class="code-block">
+                    <pre>
+-- Criação de tabelas
+CREATE TABLE usuarios (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    senha_hash VARCHAR(255) NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ativo BOOLEAN DEFAULT TRUE,
+    perfil_id INTEGER REFERENCES perfis(id)
+);
+
+CREATE TABLE perfis (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    descricao TEXT,
+    permissoes JSONB
+);
+
+CREATE TABLE posts (
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    conteudo TEXT,
+    usuario_id INTEGER REFERENCES usuarios(id) ON DELETE CASCADE,
+    categoria_id INTEGER REFERENCES categorias(id),
+    data_publicacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    visualizacoes INTEGER DEFAULT 0,
+    tags TEXT[]
+);
+
+-- Índices para performance
+CREATE INDEX idx_usuarios_email ON usuarios(email);
+CREATE INDEX idx_posts_usuario ON posts(usuario_id);
+CREATE INDEX idx_posts_categoria ON posts(categoria_id);
+CREATE INDEX idx_posts_data ON posts(data_publicacao);
+                    </pre>
+                </div>
+
+                <h4>Consultas Básicas</h4>
+                <div class="code-block">
+                    <pre>
+-- SELECT básico
+SELECT id, nome, email FROM usuarios;
+
+-- WHERE com condições
+SELECT * FROM usuarios 
+WHERE ativo = TRUE 
+  AND data_criacao >= '2023-01-01';
+
+-- ORDER BY e LIMIT
+SELECT titulo, visualizacoes 
+FROM posts 
+ORDER BY visualizacoes DESC 
+LIMIT 10;
+
+-- DISTINCT para valores únicos
+SELECT DISTINCT categoria_id FROM posts;
+
+-- LIKE para busca de padrões
+SELECT * FROM usuarios 
+WHERE nome LIKE '%João%';
+
+-- IN para múltiplos valores
+SELECT * FROM posts 
+WHERE categoria_id IN (1, 2, 3);
+
+-- BETWEEN para intervalos
+SELECT * FROM posts 
+WHERE data_publicacao BETWEEN '2023-01-01' AND '2023-12-31';
+
+-- NULL checks
+SELECT * FROM usuarios 
+WHERE perfil_id IS NOT NULL;
+                    </pre>
+                </div>
+
+                <h4>JOINs e Relacionamentos</h4>
+                <div class="code-block">
+                    <pre>
+-- INNER JOIN - apenas registros com correspondência
+SELECT u.nome, p.titulo, p.data_publicacao
+FROM usuarios u
+INNER JOIN posts p ON u.id = p.usuario_id
+WHERE u.ativo = TRUE;
+
+-- LEFT JOIN - todos os registros da tabela esquerda
+SELECT u.nome, COUNT(p.id) as total_posts
+FROM usuarios u
+LEFT JOIN posts p ON u.id = p.usuario_id
+GROUP BY u.id, u.nome;
+
+-- RIGHT JOIN - todos os registros da tabela direita
+SELECT c.nome as categoria, COUNT(p.id) as total_posts
+FROM posts p
+RIGHT JOIN categorias c ON p.categoria_id = c.id
+GROUP BY c.id, c.nome;
+
+-- FULL OUTER JOIN - todos os registros de ambas as tabelas
+SELECT u.nome, p.titulo
+FROM usuarios u
+FULL OUTER JOIN posts p ON u.id = p.usuario_id;
+
+-- SELF JOIN - junção da tabela com ela mesma
+SELECT 
+    u1.nome as usuario,
+    u2.nome as referenciado_por
+FROM usuarios u1
+LEFT JOIN usuarios u2 ON u1.referenciado_por = u2.id;
+
+-- Múltiplos JOINs
+SELECT 
+    u.nome as autor,
+    p.titulo,
+    c.nome as categoria,
+    COUNT(co.id) as comentarios
+FROM usuarios u
+INNER JOIN posts p ON u.id = p.usuario_id
+LEFT JOIN categorias c ON p.categoria_id = c.id
+LEFT JOIN comentarios co ON p.id = co.post_id
+GROUP BY u.id, p.id, c.id;
+                    </pre>
+                </div>
+
+                <div class="deus-ex-machina">
+                    <p><strong>Como JOINs funcionam:</strong> O otimizador escolhe algoritmos como nested loop (força bruta), hash join (hash table) ou merge join (sorted merge). A escolha depende do tamanho das tabelas, índices disponíveis e estatísticas do sistema.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>3.3 Funções e Agregações</h3>
+                
+                <h4>Funções de Agregação</h4>
+                <div class="code-block">
+                    <pre>
+-- Funções básicas de agregação
+SELECT 
+    COUNT(*) as total_usuarios,
+    COUNT(DISTINCT perfil_id) as perfis_ativos,
+    MIN(data_criacao) as primeiro_usuario,
+    MAX(data_criacao) as ultimo_usuario
+FROM usuarios;
+
+-- Agregações com GROUP BY
+SELECT 
+    categoria_id,
+    COUNT(*) as total_posts,
+    AVG(visualizacoes) as media_visualizacoes,
+    SUM(visualizacoes) as total_visualizacoes,
+    MIN(data_publicacao) as primeiro_post,
+    MAX(data_publicacao) as ultimo_post
+FROM posts
+GROUP BY categoria_id;
+
+-- HAVING para filtrar grupos
+SELECT 
+    usuario_id,
+    COUNT(*) as total_posts
+FROM posts
+GROUP BY usuario_id
+HAVING COUNT(*) > 5;
+
+-- Funções de janela (Window Functions)
+SELECT 
+    titulo,
+    visualizacoes,
+    ROW_NUMBER() OVER (ORDER BY visualizacoes DESC) as ranking,
+    RANK() OVER (ORDER BY visualizacoes DESC) as rank_com_empate,
+    DENSE_RANK() OVER (ORDER BY visualizacoes DESC) as rank_denso
+FROM posts;
+
+-- Particionamento com OVER
+SELECT 
+    categoria_id,
+    titulo,
+    visualizacoes,
+    ROW_NUMBER() OVER (PARTITION BY categoria_id ORDER BY visualizacoes DESC) as rank_na_categoria,
+    LAG(visualizacoes, 1) OVER (PARTITION BY categoria_id ORDER BY visualizacoes) as anterior,
+    LEAD(visualizacoes, 1) OVER (PARTITION BY categoria_id ORDER BY visualizacoes) as proximo
+FROM posts;
+                    </pre>
+                </div>
+
+                <h4>Funções de String e Data</h4>
+                <div class="code-block">
+                    <pre>
+-- Funções de string
+SELECT 
+    nome,
+    UPPER(nome) as nome_maiusculo,
+    LOWER(nome) as nome_minusculo,
+    LENGTH(nome) as tamanho,
+    SUBSTRING(nome, 1, 3) as iniciais,
+    CONCAT(nome, ' - ', email) as nome_completo,
+    REPLACE(email, '@', ' [at] ') as email_mascarado
+FROM usuarios;
+
+-- Funções de data
+SELECT 
+    data_publicacao,
+    EXTRACT(YEAR FROM data_publicacao) as ano,
+    EXTRACT(MONTH FROM data_publicacao) as mes,
+    EXTRACT(DOW FROM data_publicacao) as dia_semana,
+    DATE_TRUNC('month', data_publicacao) as inicio_mes,
+    AGE(CURRENT_DATE, data_publicacao) as idade_post,
+    data_publicacao + INTERVAL '30 days' as expiracao
+FROM posts;
+
+-- Formatação de data
+SELECT 
+    TO_CHAR(data_publicacao, 'DD/MM/YYYY HH24:MI') as data_formatada,
+    TO_CHAR(data_publicacao, 'Month DD, YYYY') as data_por_extenso,
+    TO_TIMESTAMP('2023-12-25 15:30:00', 'YYYY-MM-DD HH24:MI:SS') as timestamp_convertido
+FROM posts;
+                    </pre>
+                </div>
+
+                <h4>Subconsultas e CTEs</h4>
+                <div class="code-block">
+                    <pre>
+-- Subconsulta no SELECT
+SELECT 
+    u.nome,
+    (SELECT COUNT(*) FROM posts p WHERE p.usuario_id = u.id) as total_posts
+FROM usuarios u;
+
+-- Subconsulta no WHERE
+SELECT nome, email
+FROM usuarios
+WHERE id IN (
+    SELECT usuario_id 
+    FROM posts 
+    WHERE visualizacoes > 1000
+);
+
+-- EXISTS para verificar existência
+SELECT nome, email
+FROM usuarios u
+WHERE EXISTS (
+    SELECT 1 
+    FROM posts p 
+    WHERE p.usuario_id = u.id 
+    AND p.visualizacoes > 5000
+);
+
+-- Common Table Expressions (CTEs)
+WITH posts_populares AS (
+    SELECT 
+        usuario_id,
+        COUNT(*) as posts_count,
+        AVG(visualizacoes) as avg_views
+    FROM posts
+    WHERE visualizacoes > 1000
+    GROUP BY usuario_id
+),
+usuarios_ativos AS (
+    SELECT id, nome, email
+    FROM usuarios
+    WHERE ativo = TRUE
+)
+SELECT 
+    ua.nome,
+    ua.email,
+    pp.posts_count,
+    pp.avg_views
+FROM usuarios_ativos ua
+JOIN posts_populares pp ON ua.id = pp.usuario_id;
+
+-- CTE recursiva para hierarquias
+WITH RECURSIVE categoria_hierarquia AS (
+    -- Caso base: categorias raiz
+    SELECT id, nome, parent_id, 0 as nivel
+    FROM categorias
+    WHERE parent_id IS NULL
+    
+    UNION ALL
+    
+    -- Caso recursivo: subcategorias
+    SELECT c.id, c.nome, c.parent_id, ch.nivel + 1
+    FROM categorias c
+    JOIN categoria_hierarquia ch ON c.parent_id = ch.id
+)
+SELECT * FROM categoria_hierarquia ORDER BY nivel, nome;
+                    </pre>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>3.4 Otimização e Performance</h3>
+                
+                <h4>Índices Estratégicos</h4>
+                <div class="code-block">
+                    <pre>
+-- Índices básicos
+CREATE INDEX idx_posts_titulo ON posts(titulo);
+CREATE INDEX idx_posts_data_usuario ON posts(data_publicacao, usuario_id);
+
+-- Índice composto (ordem importa)
+CREATE INDEX idx_posts_status_data ON posts(status, data_publicacao);
+
+-- Índice parcial (apenas subset dos dados)
+CREATE INDEX idx_usuarios_ativos ON usuarios(email) WHERE ativo = TRUE;
+
+-- Índice de expressão
+CREATE INDEX idx_usuarios_nome_lower ON usuarios(LOWER(nome));
+
+-- Índice para busca textual
+CREATE INDEX idx_posts_conteudo_gin ON posts USING gin(to_tsvector('portuguese', conteudo));
+
+-- Verificar uso de índices
+EXPLAIN (ANALYZE, BUFFERS) 
+SELECT * FROM posts 
+WHERE titulo LIKE '%Python%' 
+  AND data_publicacao > '2023-01-01';
+
+-- Estatísticas de índices
+SELECT 
+    schemaname,
+    tablename,
+    indexname,
+    idx_scan,
+    idx_tup_read,
+    idx_tup_fetch
+FROM pg_stat_user_indexes
+ORDER BY idx_scan DESC;
+                    </pre>
+                </div>
+
+                <div class="architect-tip">
+                    <p><strong>Estratégia de índices:</strong> Crie índices nas colunas mais consultadas em WHERE, JOIN e ORDER BY. Monitore o uso com pg_stat_user_indexes. Índices compostos devem seguir a ordem: igualdade → desigualdade → ordenação.</p>
+                </div>
+
+                <h4>Otimização de Consultas</h4>
+                <div class="code-block">
+                    <pre>
+-- Análise de plano de execução
+EXPLAIN (ANALYZE, BUFFERS, VERBOSE) 
+SELECT 
+    u.nome,
+    p.titulo,
+    c.nome as categoria
+FROM usuarios u
+JOIN posts p ON u.id = p.usuario_id
+JOIN categorias c ON p.categoria_id = c.id
+WHERE u.ativo = TRUE
+  AND p.data_publicacao > CURRENT_DATE - INTERVAL '30 days'
+ORDER BY p.visualizacoes DESC
+LIMIT 10;
+
+-- Otimização com LIMIT
+-- ❌ Ineficiente
+SELECT * FROM posts ORDER BY data_publicacao DESC LIMIT 10;
+
+-- ✅ Eficiente com índice
+CREATE INDEX idx_posts_data_desc ON posts(data_publicacao DESC);
+SELECT * FROM posts ORDER BY data_publicacao DESC LIMIT 10;
+
+-- Evitar SELECT *
+-- ❌ Ineficiente
+SELECT * FROM posts WHERE usuario_id = 1;
+
+-- ✅ Eficiente
+SELECT id, titulo, data_publicacao FROM posts WHERE usuario_id = 1;
+
+-- Usar EXISTS instead of IN para grandes datasets
+-- ❌ Potencialmente lento
+SELECT * FROM usuarios 
+WHERE id IN (SELECT usuario_id FROM posts WHERE visualizacoes > 1000);
+
+-- ✅ Mais eficiente
+SELECT * FROM usuarios u
+WHERE EXISTS (
+    SELECT 1 FROM posts p 
+    WHERE p.usuario_id = u.id 
+    AND p.visualizacoes > 1000
+);
+                    </pre>
+                </div>
+
+                <div class="project-box">
+                    <h4>🎯 Projeto Prático: Sistema de Blog</h4>
+                    <p>Implemente um sistema de blog completo:</p>
+                    <div class="code-block">
+                        <pre>
+-- Estrutura completa do banco
+CREATE TABLE usuarios (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    senha_hash VARCHAR(255) NOT NULL,
+    bio TEXT,
+    avatar_url VARCHAR(500),
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultimo_login TIMESTAMP,
+    ativo BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE categorias (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    slug VARCHAR(100) UNIQUE NOT NULL,
+    descricao TEXT,
+    parent_id INTEGER REFERENCES categorias(id),
+    ordem INTEGER DEFAULT 0
+);
+
+CREATE TABLE posts (
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    resumo TEXT,
+    conteudo TEXT NOT NULL,
+    usuario_id INTEGER REFERENCES usuarios(id) ON DELETE CASCADE,
+    categoria_id INTEGER REFERENCES categorias(id),
+    status VARCHAR(20) DEFAULT 'draft',
+    data_publicacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_edicao TIMESTAMP,
+    visualizacoes INTEGER DEFAULT 0,
+    curtidas INTEGER DEFAULT 0,
+    tags TEXT[],
+    meta_description VARCHAR(160),
+    featured_image VARCHAR(500)
+);
+
+CREATE TABLE comentarios (
+    id SERIAL PRIMARY KEY,
+    conteudo TEXT NOT NULL,
+    usuario_id INTEGER REFERENCES usuarios(id) ON DELETE CASCADE,
+    post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+    parent_id INTEGER REFERENCES comentarios(id),
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    aprovado BOOLEAN DEFAULT FALSE
+);
+
+-- Índices para performance
+CREATE INDEX idx_posts_status_data ON posts(status, data_publicacao);
+CREATE INDEX idx_posts_categoria ON posts(categoria_id);
+CREATE INDEX idx_posts_usuario ON posts(usuario_id);
+CREATE INDEX idx_posts_slug ON posts(slug);
+CREATE INDEX idx_comentarios_post ON comentarios(post_id);
+CREATE INDEX idx_comentarios_usuario ON comentarios(usuario_id);
+
+-- Consultas complexas para o blog
+-- 1. Posts mais populares por categoria
+SELECT 
+    c.nome as categoria,
+    p.titulo,
+    p.visualizacoes,
+    p.curtidas,
+    u.nome as autor,
+    RANK() OVER (PARTITION BY c.id ORDER BY p.visualizacoes DESC) as ranking
+FROM posts p
+JOIN categorias c ON p.categoria_id = c.id
+JOIN usuarios u ON p.usuario_id = u.id
+WHERE p.status = 'published'
+ORDER BY c.nome, ranking;
+
+-- 2. Estatísticas por usuário
+SELECT 
+    u.nome,
+    COUNT(p.id) as total_posts,
+    AVG(p.visualizacoes) as media_visualizacoes,
+    SUM(p.visualizacoes) as total_visualizacoes,
+    COUNT(DISTINCT p.categoria_id) as categorias_escritas,
+    MAX(p.data_publicacao) as ultimo_post
+FROM usuarios u
+LEFT JOIN posts p ON u.id = p.usuario_id AND p.status = 'published'
+GROUP BY u.id, u.nome
+ORDER BY total_posts DESC;
+
+-- 3. Comentários por post com thread
+WITH comentarios_thread AS (
+    SELECT 
+        c.*,
+        CASE 
+            WHEN c.parent_id IS NULL THEN c.id
+            ELSE c.parent_id
+        END as thread_id
+    FROM comentarios c
+    WHERE c.aprovado = TRUE
+)
+SELECT 
+    p.titulo,
+    ct.conteudo,
+    u.nome as autor_comentario,
+    ct.data_criacao,
+    ct.thread_id,
+    ct.parent_id
+FROM posts p
+JOIN comentarios_thread ct ON p.id = ct.post_id
+JOIN usuarios u ON ct.usuario_id = u.id
+WHERE p.id = 1
+ORDER BY ct.thread_id, ct.data_criacao;
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="deus-ex-machina">
+                    <p><strong>Como o otimizador funciona:</strong> O query planner estima custos baseado em estatísticas (pg_stats), considera múltiplos planos de execução e escolhe o de menor custo. Usa algoritmos como dynamic programming para encontrar a melhor ordem de JOINs.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>3.5 Transações e Concorrência</h3>
+                
+                <h4>Propriedades ACID</h4>
+                <div class="code-block">
+                    <pre>
+-- Transação básica
+BEGIN;
+    UPDATE usuarios SET nome = 'João Silva' WHERE id = 1;
+    INSERT INTO log_alteracoes (usuario_id, acao, data) 
+    VALUES (1, 'alteracao_nome', NOW());
+COMMIT;
+
+-- Transação com rollback
+BEGIN;
+    UPDATE posts SET visualizacoes = visualizacoes + 1 WHERE id = 1;
+    -- Simula erro
+    UPDATE posts SET usuario_id = 999 WHERE id = 1; -- FK violation
+ROLLBACK; -- Desfaz todas as alterações
+
+-- Savepoints para controle granular
+BEGIN;
+    INSERT INTO categorias (nome, slug) VALUES ('Tech', 'tech');
+    SAVEPOINT sp1;
+    
+    INSERT INTO categorias (nome, slug) VALUES ('Invalid', 'tech'); -- Duplicate
+    ROLLBACK TO sp1; -- Volta para savepoint
+    
+    INSERT INTO categorias (nome, slug) VALUES ('Science', 'science');
+COMMIT;
+
+-- Transação com isolation level
+BEGIN ISOLATION LEVEL REPEATABLE READ;
+    SELECT COUNT(*) FROM posts WHERE status = 'published';
+    -- Outras transações não afetam este resultado
+    SELECT COUNT(*) FROM posts WHERE status = 'published';
+COMMIT;
+                    </pre>
+                </div>
+
+                <h4>Níveis de Isolamento</h4>
+                <table>
+                    <tr>
+                        <th>Nível</th>
+                        <th>Dirty Read</th>
+                        <th>Non-Repeatable Read</th>
+                        <th>Phantom Read</th>
+                        <th>Uso</th>
+                    </tr>
+                    <tr>
+                        <td>READ UNCOMMITTED</td>
+                        <td>Sim</td>
+                        <td>Sim</td>
+                        <td>Sim</td>
+                        <td>Relatórios aproximados</td>
+                    </tr>
+                    <tr>
+                        <td>READ COMMITTED</td>
+                        <td>Não</td>
+                        <td>Sim</td>
+                        <td>Sim</td>
+                        <td>Padrão PostgreSQL</td>
+                    </tr>
+                    <tr>
+                        <td>REPEATABLE READ</td>
+                        <td>Não</td>
+                        <td>Não</td>
+                        <td>Sim</td>
+                        <td>Análises consistentes</td>
+                    </tr>
+                    <tr>
+                        <td>SERIALIZABLE</td>
+                        <td>Não</td>
+                        <td>Não</td>
+                        <td>Não</td>
+                        <td>Transações críticas</td>
+                    </tr>
+                </table>
+
+                <h4>Controle de Concorrência</h4>
+                <div class="code-block">
+                    <pre>
+-- Locks explícitos
+BEGIN;
+    SELECT * FROM posts WHERE id = 1 FOR UPDATE; -- Row-level lock
+    UPDATE posts SET visualizacoes = visualizacoes + 1 WHERE id = 1;
+COMMIT;
+
+-- Lock timeout
+SET lock_timeout = '5s';
+BEGIN;
+    SELECT * FROM posts WHERE id = 1 FOR UPDATE NOWAIT; -- Falha imediatamente
+COMMIT;
+
+-- Controle de versão otimista
+-- Adiciona coluna version
+ALTER TABLE posts ADD COLUMN version INTEGER DEFAULT 1;
+
+-- Update com version check
+UPDATE posts 
+SET titulo = 'Novo Título', version = version + 1
+WHERE id = 1 AND version = 1; -- Só atualiza se version não mudou
+
+-- Deadlock prevention
+-- Sempre adquire locks na mesma ordem
+BEGIN;
+    SELECT * FROM usuarios WHERE id = 1 FOR UPDATE;
+    SELECT * FROM posts WHERE id = 1 FOR UPDATE;
+    -- Processa...
+COMMIT;
+                    </pre>
+                </div>
+
+                <div class="warning">
+                    <p><strong>Cuidado com deadlocks:</strong> Sempre adquira locks na mesma ordem em diferentes transações. Use timeouts apropriados e implemente retry logic para deadlocks inevitáveis.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="chapter" id="capitulo4">
+            <h2>Capítulo 4: A Conexão Global</h2>
+            <p><em>Desenvolvimento de APIs com Backend</em></p>
+
+            <div class="section">
+                <h3>4.1 Arquitetura de APIs REST</h3>
+                
+                <h4>Princípios REST</h4>
+                <p>REST (Representational State Transfer) é um estilo arquitetural para sistemas distribuídos baseado em <strong>recursos</strong>, <strong>HTTP</strong> e <strong>stateless</strong>.</p>
+
+                <div class="architect-tip">
+                    <p><strong>Princípios REST:</strong> Stateless (sem estado), Cacheable (cacheável), Uniform Interface (interface uniforme), Layered System (sistema em camadas), Code on Demand (código sob demanda - opcional).</p>
+                </div>
+
+                <h4>Design de URLs e Métodos HTTP</h4>
+                <div class="code-block">
+                    <pre>
+# Estrutura de URLs RESTful
+GET    /api/v1/users              # Lista usuários
+POST   /api/v1/users              # Cria usuário
+GET    /api/v1/users/123          # Obtém usuário específico
+PUT    /api/v1/users/123          # Atualiza usuário completo
+PATCH  /api/v1/users/123          # Atualiza usuário parcial
+DELETE /api/v1/users/123          # Remove usuário
+
+# Recursos aninhados
+GET    /api/v1/users/123/posts    # Posts do usuário 123
+POST   /api/v1/users/123/posts    # Cria post para usuário 123
+GET    /api/v1/posts/456/comments # Comentários do post 456
+
+# Filtros e paginação
+GET    /api/v1/posts?category=tech&limit=10&offset=20
+GET    /api/v1/posts?author=123&published=true&sort=created_at:desc
+
+# Busca
+GET    /api/v1/search/posts?q=python&category=tech
+                    </pre>
+                </div>
+
+                <div class="deus-ex-machina">
+                    <p><strong>Como HTTP funciona:</strong> Cliente envia requisição (método, URL, headers, body) via TCP/IP. Servidor processa, acessa recursos, aplica lógica de negócio e retorna resposta (status, headers, body). Keep-alive mantém conexão para múltiplas requisições.</p>
+                </div>
+
+                <h4>Códigos de Status HTTP</h4>
+                <table>
+                    <tr>
+                        <th>Código</th>
+                        <th>Significado</th>
+                        <th>Uso</th>
+                    </tr>
+                    <tr>
+                        <td>200</td>
+                        <td>OK</td>
+                        <td>Requisição bem-sucedida</td>
+                    </tr>
+                    <tr>
+                        <td>201</td>
+                        <td>Created</td>
+                        <td>Recurso criado com sucesso</td>
+                    </tr>
+                    <tr>
+                        <td>204</td>
+                        <td>No Content</td>
+                        <td>Sucesso sem conteúdo (DELETE)</td>
+                    </tr>
+                    <tr>
+                        <td>400</td>
+                        <td>Bad Request</td>
+                        <td>Dados inválidos</td>
+                    </tr>
+                    <tr>
+                        <td>401</td>
+                        <td>Unauthorized</td>
+                        <td>Não autenticado</td>
+                    </tr>
+                    <tr>
+                        <td>403</td>
+                        <td>Forbidden</td>
+                        <td>Sem permissão</td>
