@@ -3,1101 +3,632 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Codex Platinum: Manual Mestre de Produção</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>Protocolo 350: Manual do Negócio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
+        /* --- ESTILO GERAL (TELA) --- */
         :root {
-            --primary: #1b5e20;       /* Verde Floresta Nobre */
-            --primary-light: #e8f5e9;
-            --accent: #f9a825;        /* Dourado Gastronômico */
-            --sales-bg: #e3f2fd;      /* Azul Estratégico */
-            --sales-text: #0d47a1;
-            --label-bg: #f5f5f5;      /* Cinza Técnico */
-            --text-dark: #212121;
-            --border-color: #cfd8dc;
+            --primary: #104a28; /* Verde Profundo (Dinheiro/Saúde) */
+            --secondary: #e8f5e9;
+            --accent: #bf9000;  /* Dourado Metálico */
+            --text: #333;
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #eeeeee;
-            color: var(--text-dark);
+            font-family: 'Open Sans', sans-serif;
+            background: #cdcdcd;
             margin: 0;
-            padding: 20px;
-            line-height: 1.5;
+            padding: 20px 0;
+            color: var(--text);
         }
 
-        /* --- BOTÃO DE AÇÃO --- */
-        .fab-container {
+        /* Botão Flutuante para Gerar o PDF */
+        .fab-btn {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            z-index: 1000;
-        }
-
-        .btn-action {
-            background-color: var(--primary);
+            background: var(--primary);
             color: white;
-            border: none;
-            padding: 15px 30px;
+            padding: 15px 35px;
             border-radius: 50px;
-            font-weight: bold;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            font-weight: 800;
+            font-family: 'Montserrat', sans-serif;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
             cursor: pointer;
+            border: 2px solid white;
+            z-index: 9999;
+            font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
             transition: transform 0.2s;
         }
-        .btn-action:hover { transform: scale(1.05); }
+        .fab-btn:hover { transform: scale(1.05); }
 
-        /* --- ESTRUTURA DA PÁGINA --- */
-        .page-container {
-            max-width: 210mm;
-            margin: 0 auto;
-            background: white;
-            box-shadow: 0 0 25px rgba(0,0,0,0.1);
-            padding: 50px;
-        }
-
-        .cover {
-            text-align: center;
-            padding: 50px 0;
-            border-bottom: 4px double var(--primary);
-            margin-bottom: 50px;
-        }
-
-        .brand-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            color: var(--primary);
+        /* --- CONFIGURAÇÃO DE PÁGINA A4 (O Segredo da Impressão) --- */
+        @page {
+            size: A4;
             margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
         }
 
-        .brand-subtitle {
-            font-size: 1.1rem;
-            color: #555;
-            margin-top: 10px;
-            font-weight: 300;
-        }
-
-        /* --- BLOCO DE RECEITA --- */
-        .recipe-block {
-            border: 1px solid var(--border-color);
-            margin-bottom: 40px;
-            border-radius: 8px;
+        /* Estrutura da Folha */
+        .sheet {
+            width: 210mm;
+            height: 296mm; /* A4 Exato */
             background: white;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        /* Cabeçalho */
-        .recipe-header {
-            background-color: var(--primary);
-            color: white;
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .recipe-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-        }
-
-        .recipe-badge {
-            background: rgba(255,255,255,0.2);
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Corpo (Ingredientes + Preparo) */
-        .recipe-body {
-            display: flex;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .ingredients-col {
-            flex: 0.8;
-            padding: 20px;
-            background-color: #fafafa;
-            border-right: 1px solid var(--border-color);
-            font-size: 0.85rem;
-        }
-
-        .method-col {
-            flex: 1.2;
-            padding: 20px;
-            font-size: 0.9rem;
-        }
-
-        table.ing-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th { 
-            text-align: left; 
-            border-bottom: 2px solid var(--accent); 
-            color: var(--primary); 
-            font-size: 0.8rem; 
-            padding-bottom: 5px;
-            text-transform: uppercase;
-        }
-        
-        td { 
-            padding: 6px 4px; 
-            border-bottom: 1px dotted #e0e0e0; 
-        }
-        
-        .highlight-qty { font-weight: 700; color: #000; }
-        
-        h4.section-title {
-            color: var(--accent);
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1.5px;
-            border-bottom: 1px solid #eee;
-            margin: 0 0 15px 0;
-            padding-bottom: 5px;
-        }
-
-        .method-step { 
-            margin-bottom: 12px; 
-            text-align: justify; 
-            line-height: 1.6;
-        }
-        
-        .method-step strong { 
-            color: var(--primary); 
-            font-weight: 700;
-        }
-
-        /* --- RODAPÉ DE GESTÃO --- */
-        .recipe-footer {
+            margin: 0 auto 30px auto;
+            position: relative;
+            box-sizing: border-box;
+            padding: 15mm; /* Margem interna de segurança */
             display: flex;
             flex-direction: column;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            page-break-after: always; /* FORÇA NOVA PÁGINA */
         }
 
-        .macro-bar {
-            background-color: var(--primary-light);
-            padding: 10px 20px;
+        @media print {
+            body { background: white; padding: 0; -webkit-print-color-adjust: exact; }
+            .sheet { margin: 0; box-shadow: none; page-break-after: always; }
+            .fab-btn { display: none; }
+        }
+
+        /* --- DESIGN INTERNO --- */
+        
+        /* Cabeçalho */
+        header.recipe-header {
+            border-bottom: 4px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
             display: flex;
-            justify-content: space-around;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: var(--primary);
-            border-bottom: 1px solid #ddd;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
+            justify-content: space-between;
+            align-items: flex-end;
         }
 
+        h1.title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 22pt;
+            margin: 0;
+            color: var(--primary);
+            text-transform: uppercase;
+            line-height: 0.9;
+        }
+
+        .tag {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--primary);
+            color: white;
+            padding: 6px 18px;
+            font-weight: 600;
+            font-size: 9pt;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Corpo Principal */
+        .content-grid {
+            display: flex;
+            gap: 25px;
+            flex-grow: 1;
+        }
+
+        /* Coluna Esquerda: Ingredientes */
+        .col-left {
+            width: 42%;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        /* Coluna Direita: Preparo */
+        .col-right {
+            width: 58%;
+        }
+
+        /* Tabelas */
+        table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+        th { text-align: left; border-bottom: 2px solid var(--accent); color: var(--primary); padding: 6px 0; font-family: 'Montserrat', sans-serif; }
+        td { border-bottom: 1px dashed #ccc; padding: 8px 0; }
+        .qty { font-weight: 800; color: black; font-size: 10pt; }
+        .sub-header { background: #eee; font-weight: bold; font-size: 8pt; padding: 4px; text-align: center; margin-top: 10px; }
+
+        /* Texto de Preparo */
+        h3.section-title {
+            color: var(--accent);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11pt;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #eee;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .step { margin-bottom: 12px; text-align: justify; font-size: 10pt; line-height: 1.5; }
+        .step strong { color: var(--primary); font-weight: 700; }
+
+        /* Box Segredo do Chef */
+        .chef-secret {
+            background: #fff8e1; /* Amarelo suave */
+            border-left: 4px solid var(--accent);
+            padding: 10px 15px;
+            font-size: 9pt;
+            font-style: italic;
+            margin-top: 20px;
+            color: #555;
+        }
+        .chef-secret strong { color: var(--accent); text-transform: uppercase; font-style: normal; font-family: 'Montserrat', sans-serif; font-weight: 800; }
+
+        /* Rodapé de Gestão */
+        .footer-manager {
+            margin-top: auto;
+            border-top: 2px solid #ccc;
+            padding-top: 15px;
+        }
+
+        /* Barra Nutricional */
+        .nutrition-bar {
+            display: flex;
+            justify-content: space-between;
+            background: var(--secondary);
+            padding: 8px 20px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9pt;
+            color: var(--primary);
+            font-weight: 700;
+            border: 1px solid #c8e6c9;
+        }
+
+        /* Grid de Negócios */
         .biz-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
 
-        .marketing-box {
-            background-color: var(--sales-bg);
-            padding: 20px;
-            border-right: 1px solid white;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
-
-        .label-box {
-            background-color: var(--label-bg);
-            padding: 20px;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
+        .biz-box {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 12px;
+            font-size: 8.5pt;
         }
 
         .biz-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            font-weight: 800;
             display: block;
-            margin-bottom: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
             color: #555;
-            letter-spacing: 0.5px;
+            font-size: 8pt;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 2px;
         }
 
-        .copy-text {
-            font-style: italic;
-            color: var(--sales-text);
-            font-size: 0.9rem;
-            line-height: 1.4;
+        .script-text { font-style: italic; color: #0277bd; }
+        .label-text { line-height: 1.3; color: #444; }
+
+        /* CAPA */
+        .cover-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+            border: 10px double var(--primary);
+            background: linear-gradient(135deg, #ffffff 0%, #f1f8e9 100%);
         }
+        .cover-logo { font-size: 50pt; margin-bottom: 20px; }
+        .cover-main { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 42pt; color: var(--primary); line-height: 1; margin: 0; }
+        .cover-sub { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 16pt; color: #666; letter-spacing: 3px; margin-top: 10px; text-transform: uppercase; }
+        .cover-footer { margin-top: 80px; font-size: 11pt; color: #444; max-width: 80%; }
 
-        .label-text {
-            font-size: 0.8rem;
-            color: #444;
-            line-height: 1.4;
-        }
-
-        /* --- AJUSTES DE IMPRESSÃO (O SEGREDO DO LAYOUT) --- */
-        @media print {
-            @page {
-                size: A4;
-                margin: 1.5cm; /* Margem segura para não cortar */
-            }
-
-            body { 
-                background: white; 
-                padding: 0; 
-                margin: 0;
-            }
-
-            .fab-container { display: none; }
-            
-            .page-container { 
-                box-shadow: none; 
-                width: 100%; 
-                margin: 0; 
-                padding: 0; 
-                max-width: none;
-            }
-
-            /* Forçar a Capa em uma página sozinha */
-            .cover {
-                page-break-after: always; 
-                height: 80vh; /* Centraliza verticalmente na primeira folha */
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                border: none;
-                margin-bottom: 0;
-            }
-
-            /* Forçar cada receita em uma nova página */
-            .recipe-block { 
-                border: 2px solid #333; /* Borda mais forte para leitura */
-                page-break-inside: avoid; /* Não quebrar a receita ao meio */
-                break-inside: avoid;
-                page-break-after: always; /* Pula para próxima página ao fim de CADA receita */
-                margin-bottom: 0;
-                display: block;
-            }
-
-            /* Ajustes de cor para economia e contraste */
-            .recipe-header { 
-                background-color: #222 !important; 
-                color: white !important; 
-                -webkit-print-color-adjust: exact; 
-                print-color-adjust: exact;
-            }
-            
-            .macro-bar { 
-                background-color: #eee !important; 
-                color: black !important; 
-                border-top: 1px solid #000; 
-                border-bottom: 1px solid #000; 
-            }
-            
-            .marketing-box, .label-box { 
-                border: 1px solid #ccc; 
-            } 
-        }
     </style>
 </head>
 <body>
 
-    <div class="fab-container">
-        <button class="btn-action" onclick="window.print()">🖨️ Imprimir Manual (1 Receita por Pág)</button>
+    <button class="fab-btn" onclick="window.print()">🖨️ Imprimir Ebook (PDF)</button>
+
+    <!-- PÁGINA 1: CAPA -->
+    <div class="sheet">
+        <div class="cover-page">
+            <div class="cover-logo">🥗</div>
+            <h1 class="cover-main">PROTOCOLO<br>350</h1>
+            <div class="cover-sub">A Ciência da Marmita Fit</div>
+            
+            <div class="cover-footer">
+                <p><strong>MANUAL TÉCNICO DE PRODUÇÃO & VENDAS</strong></p>
+                <hr style="width: 50px; border: 2px solid var(--accent);">
+                <p>O Guia Definitivo para Produzir, Padronizar e Lucrar com Marmitas de 350g.</p>
+            </div>
+        </div>
     </div>
 
-    <div class="page-container">
-        
-        <div class="cover">
-            <h1 class="brand-title">Codex Platinum</h1>
-            <div class="brand-subtitle">Manual Técnico de Produção & Estratégia de Vendas</div>
-            <p style="margin-top: 20px; font-size: 0.9rem; color: #777;">
-                <strong>Padrão de Qualidade:</strong> Otimização de Processos, Pesagem de Precisão e Segurança Alimentar.
-            </p>
-        </div>
+    <!-- PÁGINA 2: RECEITA 01 -->
+    <div class="sheet">
+        <header class="recipe-header">
+            <h1 class="title">01. O Clássico</h1>
+            <span class="tag">Frango & Batata Doce</span>
+        </header>
 
-        <!-- ================= RECEITA 01 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">01. O Clássico (Frango & Batata Doce)</span>
-                <span class="recipe-badge">Líder de Vendas</span>
-            </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Peito Frango (Cru)</td><td class="highlight-qty">170g</td><td class="highlight-qty">850g</td></tr>
-                        <tr><td>Batata Doce</td><td class="highlight-qty">140g</td><td class="highlight-qty">700g</td></tr>
-                        <tr><td>Brócolis Ninja</td><td class="highlight-qty">120g</td><td class="highlight-qty">600g</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
+        <div class="content-grid">
+            <div class="col-left">
+                <h3>INSUMOS & PESOS</h3>
+                <table>
+                    <thead><tr><th>ITEM</th><th>1 UN</th><th>5 UN</th></tr></thead>
+                    <tbody>
+                        <tr><td>Peito Frango (Cru)</td><td class="qty">170g</td><td class="qty">850g</td></tr>
+                        <tr><td>Batata Doce (Crua)</td><td class="qty">140g</td><td class="qty">700g</td></tr>
+                        <tr><td>Brócolis Ninja</td><td class="qty">120g</td><td class="qty">600g</td></tr>
+                        <tr><td colspan="3" class="sub-header">TEMPEROS E GORDURAS (Em Gramas)</td></tr>
                         <tr><td>Sal Refinado</td><td>2g</td><td>10g</td></tr>
                         <tr><td>Cúrcuma (Açafrão)</td><td>1g</td><td>5g</td></tr>
-                        <tr><td>Azeite de Oliva</td><td>5ml</td><td>25ml</td></tr>
+                        <tr><td>Azeite Oliva</td><td>5ml</td><td>25ml</td></tr>
                         <tr><td>Alho Triturado</td><td>3g</td><td>15g</td></tr>
-                    </table>
-                </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. Mise en Place e Marinada:</strong> Corte o peito de frango em cubos uniformes de 2cm. Em um bowl, misture o sal, o alho e a cúrcuma. Envolva o frango nesta mistura e deixe descansar por 10 minutos para absorção do sabor.</div>
-                    <div class="method-step"><strong>2. Selagem da Proteína:</strong> Aqueça a frigideira/chapa com o azeite até fumegar levemente. Disponha os cubos de frango sem sobrepor (faça em levas se necessário). Deixe dourar bem de um lado antes de mexer. O objetivo é criar uma crosta dourada e manter o suco interno. Não cozinhe na água que solta.</div>
-                    <div class="method-step"><strong>3. Cocção do Carboidrato:</strong> Lave bem as batatas. Cozinhe com a casca em água fervente (isso preserva os nutrientes e o sabor). O ponto correto é quando um garfo entra macio, mas a batata não desmancha. Descasque (opcional) e corte em rodelas grossas de 1,5cm.</div>
-                    <div class="method-step"><strong>4. Finalização dos Vegetais:</strong> Corte o brócolis em floretes médios. Cozinhe no vapor por exatos 4 minutos. Retire imediatamente e, se possível, mergulhe em água gelada (branqueamento) para parar o cozimento e manter a cor verde vibrante.</div>
-                </div>
+                    </tbody>
+                </table>
             </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 380 kcal</span>
-                    <span>🥩 P: 38g</span>
-                    <span>⚡ C: 40g</span>
-                    <span>🥑 G: 6g</span>
+
+            <div class="col-right">
+                <h3 class="section-title">Execução Técnica Detalhada</h3>
+                <div class="step">
+                    <strong>1. Técnica de Selagem (Proteína):</strong> Corte o frango em cubos simétricos de 2cm. Tempere e deixe descansar por 5 min. Aqueça a frigideira até sair fumaça leve. Adicione o azeite e disponha os cubos. NÃO MEXA por 2 minutos. Isso cria a "Reação de Maillard" (crosta dourada) que segura o suco dentro da carne. Se mexer antes, solta água e a carne endurece.
                 </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🥗 <strong>O Clássico que Funciona:</strong> Peito de frango grelhado com açafrão (poderoso anti-inflamatório natural), acompanhado de batata doce rústica e brócolis crocante no vapor. A escolha perfeita para seu emagrecimento limpo e saboroso. Garanta o seu!"</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Peito de frango, batata doce, brócolis ninja, azeite de oliva, cúrcuma, alho, cebola e sal refinado.<br>
-                            <strong>Alérgenos:</strong> NÃO CONTÉM GLÚTEN. NÃO CONTÉM LACTOSE.<br>
-                            <strong>Validade:</strong> 90 dias congelado (-12°C) ou 3 dias refrigerado.
-                        </div>
-                    </div>
+                <div class="step">
+                    <strong>2. Ponto do Carboidrato:</strong> Lave bem a batata doce. Cozinhe com casca em água fervente salgada. Teste com garfo: deve entrar com resistência leve. Se desmanchar, vira purê ao descongelar. Corte em rodelas de 1,5cm após cozida.
+                </div>
+                <div class="step">
+                    <strong>3. Branqueamento (Vegetais):</strong> Cozinhe o brócolis no vapor por exatos 4 minutos. Retire e mergulhe imediatamente em uma bacia com água e gelo. Isso trava o cozimento e mantém a cor verde vibrante na marmita do cliente.
+                </div>
+                
+                <div class="chef-secret">
+                    <strong>💡 Segredo do Chef:</strong> Salpique uma pitada de <em>Pimenta do Reino Branca</em> no frango junto com a cúrcuma. Ela realça o sabor terroso do açafrão sem arder.
                 </div>
             </div>
         </div>
 
-        <!-- ================= RECEITA 02 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">02. Patinho Moído & Purê de Abóbora</span>
-                <span class="recipe-badge">Comfort Food</span>
+        <div class="footer-manager">
+            <div class="nutrition-bar">
+                <span>🔥 380 KCAL</span><span>PROT: 38g</span><span>CARB: 40g</span><span>GORD: 6g</span>
             </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Patinho (Cru)</td><td class="highlight-qty">160g</td><td class="highlight-qty">800g</td></tr>
-                        <tr><td>Abóbora Cabotiá</td><td class="highlight-qty">250g</td><td class="highlight-qty">1.25kg</td></tr>
-                        <tr><td>Vagem Macarrão</td><td class="highlight-qty">90g</td><td class="highlight-qty">450g</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
+            <div class="biz-grid">
+                <div class="biz-box">
+                    <span class="biz-title">SCRIPT DE VENDAS (WHATSAPP)</span>
+                    <span class="script-text">"🥗 <strong>O Clássico que Funciona:</strong> Peito de frango grelhado com açafrão (anti-inflamatório natural), batata doce rústica e brócolis crocante. O básico perfeito para seu emagrecimento."</span>
+                </div>
+                <div class="biz-box">
+                    <span class="biz-title">RÓTULO TÉCNICO (ANVISA)</span>
+                    <div class="label-text">
+                        <strong>Ingredientes:</strong> Frango, batata doce, brócolis, azeite, cúrcuma, alho, sal.<br>
+                        <strong>Alérgicos:</strong> NÃO CONTÉM GLÚTEN.<br>
+                        <strong>Conservação:</strong> Freezer (-12°C): 90 dias | Geladeira (4°C): 3 dias.<br>
+                        <strong>Aquecimento:</strong> Micro-ondas: 5 min (Cong) / 2 min (Desc).
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 3: RECEITA 02 -->
+    <div class="sheet">
+        <header class="recipe-header">
+            <h1 class="title">02. O Conforto</h1>
+            <span class="tag">Patinho & Abóbora</span>
+        </header>
+
+        <div class="content-grid">
+            <div class="col-left">
+                <h3>INSUMOS & PESOS</h3>
+                <table>
+                    <thead><tr><th>ITEM</th><th>1 UN</th><th>5 UN</th></tr></thead>
+                    <tbody>
+                        <tr><td>Patinho (Cru)</td><td class="qty">160g</td><td class="qty">800g</td></tr>
+                        <tr><td>Abóbora Cabotiá</td><td class="qty">250g</td><td class="qty">1.25kg</td></tr>
+                        <tr><td>Vagem</td><td class="qty">90g</td><td class="qty">450g</td></tr>
+                        <tr><td colspan="3" class="sub-header">TEMPEROS E GORDURAS (Em Gramas)</td></tr>
                         <tr><td>Sal Refinado</td><td>2g</td><td>10g</td></tr>
                         <tr><td>Páprica Doce</td><td>2g</td><td>10g</td></tr>
-                        <tr><td>Alecrim Fresco</td><td>0.5g</td><td>2.5g</td></tr>
-                        <tr><td>Cebola Picada</td><td>20g</td><td>100g</td></tr>
-                    </table>
-                </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. Preparo do Purê (Técnica de Forno):</strong> Corte a abóbora cabotiá em gomos grandes, mantendo a casca. Tempere com um fio de azeite e o alecrim. Asse a 200°C até a polpa ficar macia. Retire do forno, raspe a polpa com uma colher (descartando a casca) e amasse com um garfo. Esta técnica garante um purê denso e doce, sem a aguada do cozimento em água.</div>
-                    <div class="method-step"><strong>2. Proteína:</strong> Refogue a cebola e o alho em fogo médio até dourarem levemente. Adicione a carne moída. O segredo é mexer constantemente no início para soltar todos os grumos. Deixe a água da carne secar completamente. Só então adicione o sal e a páprica. Finalize com cheiro verde fresco.</div>
-                    <div class="method-step"><strong>3. Vegetais:</strong> Corte a vagem em pedaços de 3cm. Refogue rapidamente (sautée) em frigideira quente com alho e um pingo de azeite. Deve ficar "al dente" (firme à mordida).</div>
-                </div>
+                        <tr><td>Alecrim Seco</td><td>0.5g</td><td>2.5g</td></tr>
+                        <tr><td>Cebola/Alho</td><td>20g</td><td>100g</td></tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 350 kcal</span>
-                    <span>🥩 P: 36g</span>
-                    <span>⚡ C: 28g</span>
-                    <span>🥑 G: 8g</span>
+
+            <div class="col-right">
+                <h3 class="section-title">Execução Técnica Detalhada</h3>
+                <div class="step">
+                    <strong>1. Técnica de Assamento (Purê):</strong> Jamais cozinhe a abóbora na água para fazer purê de marmita. Ela absorve água e solta líquido no congelamento, estragando a marmita. Asse a abóbora com casca a 200°C até amaciar. Raspe a polpa. O resultado é um purê denso, doce e seco.
                 </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🧡 <strong>Abraço no Estômago:</strong> Patinho moído magrinho super temperado, servido com nosso purê de abóbora cabotiá assada (doce natural e super cremoso) e vagem refogada. Baixa caloria com máxima saciedade."</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Carne bovina (patinho), abóbora cabotiá, vagem, cebola, alho, azeite, páprica doce, alecrim, sal e cheiro verde.<br>
-                            <strong>Alérgenos:</strong> NÃO CONTÉM GLÚTEN. NÃO CONTÉM LACTOSE.<br>
-                            <strong>Validade:</strong> 90 dias congelado (-12°C).
-                        </div>
-                    </div>
+                <div class="step">
+                    <strong>2. Refogado da Carne:</strong> Refogue cebola e alho primeiro. Adicione a carne. Mexa constantemente para quebrar todos os grumos. Deixe a água secar totalmente antes de colocar o sal. Carne moída úmida demais fermenta (azeda) mais rápido.
+                </div>
+                <div class="step">
+                    <strong>3. Ponto Sautée:</strong> Corte a vagem em 3cm. Passe rapidamente na frigideira com fio de azeite e alho laminado. Deve ficar crocante.
+                </div>
+
+                <div class="chef-secret">
+                    <strong>💡 Segredo do Chef:</strong> Adicione uma colher de café de <em>Canela em Pó</em> na carne moída junto com a páprica. Não fica doce, mas dá um aroma exótico que o cliente não identifica mas adora.
                 </div>
             </div>
         </div>
 
-        <!-- ================= RECEITA 03 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">03. Sobrecoxa Assada & Purê Inglês</span>
-                <span class="recipe-badge">Margem Alta</span>
+        <div class="footer-manager">
+            <div class="nutrition-bar">
+                <span>🔥 350 KCAL</span><span>PROT: 36g</span><span>CARB: 28g</span><span>GORD: 8g</span>
             </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Sobrecoxa (Crua)</td><td class="highlight-qty">160g</td><td class="highlight-qty">800g</td></tr>
-                        <tr><td>Batata Inglesa</td><td class="highlight-qty">150g</td><td class="highlight-qty">750g</td></tr>
-                        <tr><td>Mix (Cenoura/Chuchu)</td><td class="highlight-qty">130g</td><td class="highlight-qty">650g</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
-                        <tr><td>Sal Refinado</td><td>2g</td><td>10g</td></tr>
-                        <tr><td>Orégano Seco</td><td>1g</td><td>5g</td></tr>
-                        <tr><td>Colorau/Páprica</td><td>1g</td><td>5g</td></tr>
-                        <tr><td>Leite Desnatado</td><td>10ml</td><td>50ml</td></tr>
-                    </table>
+            <div class="biz-grid">
+                <div class="biz-box">
+                    <span class="biz-title">SCRIPT DE VENDAS (WHATSAPP)</span>
+                    <span class="script-text">"🧡 <strong>Abraço no Estômago:</strong> Patinho moído magrinho e temperado, purê de abóbora assada (cremoso e doce) e vagem crocante. Saciedade com baixas calorias."</span>
                 </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. Limpeza e Assado:</strong> Retire 100% da pele e gorduras visíveis da sobrecoxa. Tempere com sal, alho, vinagre (opcional), colorau (para cor) e orégano. Disponha em uma assadeira e cubra com papel alumínio. Asse a 180°C por 20 minutos. Retire o papel e deixe dourar por mais 15 minutos. Corte em iscas ou pedaços menores para a montagem.</div>
-                    <div class="method-step"><strong>2. Purê Cremoso:</strong> Cozinhe as batatas inglesas descascadas até desmancharem. Esprema ainda quentes. Volte a massa para a panela, adicione o sal e o leite desnatado aos poucos, mexendo vigorosamente com um fouet ou colher para incorporar ar e dar cremosidade sem usar manteiga.</div>
-                    <div class="method-step"><strong>3. Mix de Legumes:</strong> Corte cenoura e chuchu em cubos pequenos (brunoise médio). Cozinhe no método "pingo d'água": panela tampada, fogo baixo, com o mínimo de água possível, apenas para gerar vapor. Tempere com sal e salsinha no final.</div>
-                </div>
-            </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 410 kcal</span>
-                    <span>🥩 P: 30g</span>
-                    <span>⚡ C: 38g</span>
-                    <span>🥑 G: 14g</span>
-                </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🍗 <strong>Sabor de Domingo:</strong> Sobrecoxa assada suculenta (sem pele e sem gordura), acompanhada de purê de batatas cremoso e mix de legumes sautée. Comida de verdade com tempero caseiro."</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Sobrecoxa de frango, batata inglesa, cenoura, chuchu, leite desnatado, alho, orégano, colorau, sal.<br>
-                            <strong>Alérgenos:</strong> CONTÉM LACTOSE (Leite). NÃO CONTÉM GLÚTEN.<br>
-                            <strong>Validade:</strong> 90 dias congelado (-12°C).
-                        </div>
+                <div class="biz-box">
+                    <span class="biz-title">RÓTULO TÉCNICO (ANVISA)</span>
+                    <div class="label-text">
+                        <strong>Ingredientes:</strong> Patinho, abóbora cabotiá, vagem, cebola, alho, azeite, páprica, alecrim.<br>
+                        <strong>Alérgicos:</strong> NÃO CONTÉM GLÚTEN/LACTOSE.<br>
+                        <strong>Conservação:</strong> Freezer: 90 dias.<br>
+                        <strong>Aquecimento:</strong> Micro-ondas: 4-5 min.
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- ================= RECEITA 04 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">04. Bolonhesa Fit & Penne Integral</span>
-                <span class="recipe-badge">Pré-Treino</span>
-            </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Massa Integral</td><td class="highlight-qty">50g</td><td class="highlight-qty">250g</td></tr>
-                        <tr><td>Patinho Moído</td><td class="highlight-qty">100g</td><td class="highlight-qty">500g</td></tr>
-                        <tr><td>Tomate Pelado/Molho</td><td class="highlight-qty">80g</td><td class="highlight-qty">400g</td></tr>
-                        <tr><td>Espinafre (Maço)</td><td class="highlight-qty">1/4 mç</td><td class="highlight-qty">1 mç</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
-                        <tr><td>Manjericão Fresco</td><td>A gosto</td><td>A gosto</td></tr>
-                        <tr><td>Sal Refinado</td><td>2g</td><td>10g</td></tr>
-                        <tr><td>Cebola/Alho</td><td>15g</td><td>75g</td></tr>
-                    </table>
-                </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. Ponto da Massa:</strong> Ferva água abundante com sal. Adicione o macarrão integral. Cozinhe por 2 minutos a MENOS do que o tempo indicado na embalagem. Escorra e envolva imediatamente em um fio de azeite. Ele terminará de cozinhar no micro-ondas do cliente.</div>
-                    <div class="method-step"><strong>2. Molho Rico:</strong> Refogue a carne moída (patinho) até dourar bem. Acrescente o molho de tomate (prefira tomates pelados batidos para mais sabor e menos açúcar) e deixe apurar em fogo baixo por 10 minutos. O molho deve ficar encorpado, não aguado.</div>
-                    <div class="method-step"><strong>3. Enriquecimento:</strong> Pique o espinafre grosseiramente (lavado e seco). Desligue o fogo do molho e adicione o espinafre, misturando apenas para murchar com o calor residual. Adicione manjericão fresco.</div>
-                    <div class="method-step"><strong>4. Montagem Estratégica:</strong> Coloque a massa no fundo e cubra *completamente* com o molho. O molho protege a massa de ressecar no congelamento.</div>
-                </div>
-            </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 390 kcal</span>
-                    <span>🥩 P: 30g</span>
-                    <span>⚡ C: 50g</span>
-                    <span>🥑 G: 7g</span>
-                </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🍝 <strong>Energia Pura:</strong> Macarrão integral 'al dente' coberto com nosso molho à bolonhesa especial (carne magra e tomates frescos), enriquecido com ferro do espinafre. O combustível ideal para seu treino pesado."</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Macarrão integral, carne bovina (patinho), tomate, cebola, espinafre, manjericão, alho, azeite, sal.<br>
-                            <strong>Alérgenos:</strong> CONTÉM GLÚTEN (Trigo). PODE CONTER OVO.<br>
-                            <strong>Validade:</strong> 90 dias congelado (-12°C).
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= RECEITA 05 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">05. Picadinho da Vovó (Acém)</span>
-                <span class="recipe-badge">Caseiro</span>
-            </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Acém Magro (Cru)</td><td class="highlight-qty">170g</td><td class="highlight-qty">850g</td></tr>
-                        <tr><td>Arroz Parboilizado</td><td class="highlight-qty">45g</td><td class="highlight-qty">225g</td></tr>
-                        <tr><td>Abobrinha Italiana</td><td class="highlight-qty">120g</td><td class="highlight-qty">600g</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
-                        <tr><td>Cebola Roxa</td><td>30g</td><td>150g</td></tr>
-                        <tr><td>Louro</td><td>1 folha</td><td>3 fls</td></tr>
-                        <tr><td>Sal Refinado</td><td>2g</td><td>10g</td></tr>
-                        <tr><td>Cheiro Verde</td><td>A gosto</td><td>A gosto</td></tr>
-                    </table>
-                </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. Braseado da Carne:</strong> Corte o acém (retirando nervos excessivos) em cubos pequenos. Aqueça a panela de pressão com azeite. Sele a carne em fogo alto. Adicione a cebola roxa picada, alho, folha de louro e sal. Cubra com água quente (apenas o suficiente para cobrir a carne). Cozinhe na pressão por 30 a 35 minutos. Ao abrir, se o molho estiver ralo, deixe ferver com a panela aberta para reduzir e engrossar.</div>
-                    <div class="method-step"><strong>2. Arroz Soltinho:</strong> Refogue o arroz parboilizado com alho e cebola. Cozinhe normalmente. Adicione cenoura ralada nos últimos 5 minutos de cozimento para agregar valor nutricional (opcional).</div>
-                    <div class="method-step"><strong>3. Abobrinha Grelhada:</strong> Corte a abobrinha em meias-luas médias. Aqueça uma frigideira até ficar muito quente. Coloque um fio de azeite e disponha as abobrinhas. Deixe dourar (chamruscar) de um lado, vire e tempere com sal. Retire rápido. Ela deve ficar crocante, nunca mole.</div>
-                </div>
-            </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 380 kcal</span>
-                    <span>🥩 P: 35g</span>
-                    <span>⚡ C: 35g</span>
-                    <span>🥑 G: 9g</span>
-                </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🥩 <strong>Tempero de Casa:</strong> Picadinho de carne suculento cozido lentamente na pressão, servido com arroz soltinho e abobrinha grelhada no ponto certo. Simples, nutritivo e delicioso."</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Carne bovina (acém), arroz parboilizado, abobrinha, cebola roxa, alho, louro, cheiro verde, azeite, sal.<br>
-                            <strong>Alérgenos:</strong> NÃO CONTÉM GLÚTEN. NÃO CONTÉM LACTOSE.<br>
-                            <strong>Validade:</strong> 90 dias congelado (-12°C).
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= RECEITA 06 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">06. Strogonoff Fit (Sem Creme de Leite)</span>
-                <span class="recipe-badge">Favorito</span>
-            </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Peito Frango (Cru)</td><td class="highlight-qty">150g</td><td class="highlight-qty">750g</td></tr>
-                        <tr><td>Arroz Integral</td><td class="highlight-qty">40g</td><td class="highlight-qty">200g</td></tr>
-                        <tr><td>Batata Doce (Crua)</td><td class="highlight-qty">100g</td><td class="highlight-qty">500g</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
-                        <tr><td>Creme Ricota/Iogurte</td><td>30g</td><td>150g</td></tr>
-                        <tr><td>Molho Tomate</td><td>20g</td><td>100g</td></tr>
-                        <tr><td>Mostarda Amarela</td><td>5g</td><td>25g</td></tr>
-                        <tr><td>Champignon (Opc.)</td><td>10g</td><td>50g</td></tr>
-                    </table>
-                </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. Base de Sabor:</strong> Refogue os cubos de frango com cebola e alho até cozinharem completamente. Adicione o molho de tomate, a mostarda e os champignons fatiados. Acerte o sal.</div>
-                    <div class="method-step"><strong>2. O Pulo do Gato (Cremosidade):</strong> Desligue o fogo. Espere a temperatura baixar por 2 minutos. Adicione o Creme de Ricota Light (ou Iogurte Natural Desnatado) e misture até ficar homogêneo. Se adicionar com o fogo ligado e fervendo, o laticínio irá talhar e ficará com aspecto granulado.</div>
-                    <div class="method-step"><strong>3. Chips Artesanais:</strong> Fatie a batata doce bem fina (lâminas), preferencialmente com um mandolim. Disponha em uma assadeira untada com o mínimo de azeite. Asse em forno baixo até ficarem secas e crocantes. Tempere com sal após assar.</div>
-                </div>
-            </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 400 kcal</span>
-                    <span>🥩 P: 38g</span>
-                    <span>⚡ C: 45g</span>
-                    <span>🥑 G: 8g</span>
-                </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🥣 <strong>Strogonoff Sem Culpa:</strong> Nossa versão leve do prato favorito do Brasil. Creme fit proteico (sem creme de leite gordo), arroz integral e chips de batata doce assados artesanalmente."</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Frango, arroz integral, batata doce, creme de ricota (ou iogurte), tomate, mostarda, champignon, sal.<br>
-                            <strong>Alérgenos:</strong> CONTÉM LACTOSE (Leite).<br>
-                            <strong>Validade:</strong> 90 dias congelado (-12°C).
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= RECEITA 07 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">07. Frango Xadrez Adaptado</span>
-                <span class="recipe-badge">Oriental</span>
-            </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Frango (Cru)</td><td class="highlight-qty">160g</td><td class="highlight-qty">800g</td></tr>
-                        <tr><td>Pimentões (Ver/Vrm)</td><td class="highlight-qty">60g</td><td class="highlight-qty">300g</td></tr>
-                        <tr><td>Arroz Integral</td><td class="highlight-qty">45g</td><td class="highlight-qty">225g</td></tr>
-                        <tr><td>Repolho (Branco/Roxo)</td><td class="highlight-qty">100g</td><td class="highlight-qty">500g</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
-                        <tr><td>Shoyu Light</td><td>15ml</td><td>75ml</td></tr>
-                        <tr><td>Gengibre Ralado</td><td>1g</td><td>5g</td></tr>
-                        <tr><td>Amido de Milho</td><td>2g</td><td>10g</td></tr>
-                    </table>
-                </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. Preparo na Wok:</strong> Corte o frango, a cebola e os pimentões (vermelho e verde) em cubos grandes de 2 a 3cm. Aqueça muito bem uma panela grande ou Wok. Sele o frango. Adicione os vegetais e refogue por apenas 3 minutos (devem ficar crocantes).</div>
-                    <div class="method-step"><strong>2. Molho Oriental Fit:</strong> Em um copo à parte, misture o shoyu light, o gengibre ralado e o amido de milho dissolvido em um pouquinho de água fria. Despeje sobre o frango na panela quente. Mexa até o molho engrossar e ficar brilhante (ponto napê leve).</div>
-                    <div class="method-step"><strong>3. Acompanhamento:</strong> Fatie o repolho bem fino. Refogue rapidamente no alho e azeite por 2 minutos. Tempere com sal apenas no final para não soltar muita água.</div>
-                </div>
-            </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 360 kcal</span>
-                    <span>🥩 P: 35g</span>
-                    <span>⚡ C: 35g</span>
-                    <span>🥑 G: 8g</span>
-                </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🥢 <strong>Toque Asiático:</strong> Cubos de frango suculentos, mix de pimentões crocantes e molho shoyu light aromático com gengibre. Acompanha arroz integral e repolho refogado. Exótico e leve."</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Frango, arroz integral, pimentão, repolho, cebola, shoyu light, gengibre, amido de milho, azeite.<br>
-                            <strong>Alérgenos:</strong> CONTÉM SOJA E GLÚTEN (presente no Shoyu).<br>
-                            <strong>Validade:</strong> 90 dias congelado (-12°C).
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= RECEITA 08 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">08. Escondidinho Invertido</span>
-                <span class="recipe-badge">Low Carb</span>
-            </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Frango Desfiado</td><td class="highlight-qty">120g</td><td class="highlight-qty">600g</td></tr>
-                        <tr><td>Mandioca/Aipim</td><td class="highlight-qty">150g</td><td class="highlight-qty">750g</td></tr>
-                        <tr><td>Couve Manteiga</td><td class="highlight-qty">80g</td><td class="highlight-qty">400g</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
-                        <tr><td>Molho Tomate</td><td>20g</td><td>100g</td></tr>
-                        <tr><td>Alho (para Couve)</td><td>3g</td><td>15g</td></tr>
-                        <tr><td>Sal Refinado</td><td>2g</td><td>10g</td></tr>
-                    </table>
-                </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. Purê Raiz:</strong> Cozinhe a mandioca (aipim/macaxeira) até derreter. Retire o fio central fibroso. Bata no processador ou amasse, utilizando um pouco da própria água do cozimento para dar o ponto. O objetivo é um purê elástico ("ponto chiclete") e brilhante, sem adicionar leite.</div>
-                    <div class="method-step"><strong>2. Proteína Úmida:</strong> Utilize peito de frango cozido e desfiado. Refogue com alho, cebola e molho de tomate suficiente apenas para envolver o frango e deixá-lo úmido e avermelhado. Não deve ser um frango boiando em molho.</div>
-                    <div class="method-step"><strong>3. Couve Mineira:</strong> Corte a couve em tiras finíssimas (chiffonade). Aqueça azeite e alho laminado. Jogue a couve, salteie por 30 segundos e retire. Ela termina de cozinhar no vapor da própria marmita.</div>
-                    <div class="method-step"><strong>4. Montagem Invertida:</strong> Coloque o purê no fundo para criar uma cama. O frango vai por cima (para o cliente ver a proteína) e a couve na lateral.</div>
-                </div>
-            </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 340 kcal</span>
-                    <span>🥩 P: 35g</span>
-                    <span>⚡ C: 30g</span>
-                    <span>🥑 G: 8g</span>
-                </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🍲 <strong>Raiz Brasileira:</strong> Creme aveludado de mandioca coberto com frango desfiado suculento ao sugo e couve manteiga refogada no alho. Impossível comer um só."</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Mandioca, peito de frango, couve, tomate, cebola, alho, azeite, sal.<br>
-                            <strong>Alérgenos:</strong> NÃO CONTÉM GLÚTEN. NÃO CONTÉM LACTOSE.<br>
-                            <strong>Validade:</strong> 90 dias congelado (-12°C).
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= RECEITA 09 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">09. Almôndegas Funcionais</span>
-                <span class="recipe-badge">Prático</span>
-            </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Patinho (Cru)</td><td class="highlight-qty">150g</td><td class="highlight-qty">750g</td></tr>
-                        <tr><td>Aveia Flocos Finos</td><td class="highlight-qty">10g</td><td class="highlight-qty">50g</td></tr>
-                        <tr><td>Batata Doce</td><td class="highlight-qty">140g</td><td class="highlight-qty">700g</td></tr>
-                        <tr><td>Mix Legumes</td><td class="highlight-qty">110g</td><td class="highlight-qty">550g</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
-                        <tr><td>Hortelã Fresca</td><td>1g</td><td>5g</td></tr>
-                        <tr><td>Ovo (Liga)</td><td>1/2 uni</td><td>2 uni</td></tr>
-                        <tr><td>Sal Refinado</td><td>2g</td><td>10g</td></tr>
-                    </table>
-                </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. Massa da Almôndega:</strong> Em uma tigela grande, misture a carne moída, a aveia (que substitui a farinha de trigo e adiciona fibras), o ovo para dar liga, cebola picada bem pequena, alho, sal e hortelã picada (o segredo do frescor). Amasse bem com as mãos até a mistura ficar compacta e não esfarelar.</div>
-                    <div class="method-step"><strong>2. Assar (Não Fritar):</strong> Modele bolinhas de aproximadamente 30g a 40g. Disponha em uma assadeira untada com azeite ou papel manteiga. Leve ao forno pré-aquecido a 200°C por 15 a 20 minutos. Elas devem ficar douradas por fora e cozidas por dentro. Evite deixar tempo demais para não ressecar.</div>
-                    <div class="method-step"><strong>3. Acompanhamentos:</strong> Prepare o purê de batata doce simples (cozida e amassada) e legumes (vagem e cenoura) salteados na manteiga ou azeite para dar brilho.</div>
-                </div>
-            </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 380 kcal</span>
-                    <span>🥩 P: 34g</span>
-                    <span>⚡ C: 35g</span>
-                    <span>🥑 G: 10g</span>
-                </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🍛 <strong>Almôndegas Fit:</strong> Assadas (não fritas!), feitas com patinho magro, aveia e um toque especial de hortelã. Acompanha purê de batata doce e legumes. Leve para digerir, fácil de amar."</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Carne bovina (patinho), batata doce, vagem, cenoura, aveia, ovo, hortelã, cebola, alho, sal.<br>
-                            <strong>Alérgenos:</strong> CONTÉM OVO E GLÚTEN (devido à Aveia).<br>
-                            <strong>Validade:</strong> 90 dias congelado (-12°C).
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= RECEITA 10 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">10. Iscas de Carne Aceboladas</span>
-                <span class="recipe-badge">Força</span>
-            </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Coxão Mole (Iscas)</td><td class="highlight-qty">160g</td><td class="highlight-qty">800g</td></tr>
-                        <tr><td>Cebola (Rodelas)</td><td class="highlight-qty">50g</td><td class="highlight-qty">250g</td></tr>
-                        <tr><td>Arroz (Cru)</td><td class="highlight-qty">45g</td><td class="highlight-qty">225g</td></tr>
-                        <tr><td>Couve-Flor</td><td class="highlight-qty">120g</td><td class="highlight-qty">600g</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
-                        <tr><td>Cúrcuma (Arroz)</td><td>1g</td><td>5g</td></tr>
-                        <tr><td>Sal Refinado</td><td>2g</td><td>10g</td></tr>
-                        <tr><td>Azeite</td><td>5ml</td><td>25ml</td></tr>
-                    </table>
-                </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. Técnica de Iscas:</strong> Corte os bifes de Coxão Mole (ou Patinho) em tiras de 1cm de largura, cortando *contra* a fibra da carne para garantir maciez. Tempere com sal e pimenta apenas no momento de ir para o fogo.</div>
-                    <div class="method-step"><strong>2. Reação de Maillard:</strong> Aqueça uma frigideira de ferro ou fundo triplo até ficar extremamente quente. Coloque um fio de azeite e disponha as iscas. Não mexa por 1 minuto para selar. Vire e deixe dourar. Adicione a cebola em rodelas ou meia-lua no final, deixando-a murchar no suco que a carne soltou ("sujeira" da panela), absorvendo todo o sabor.</div>
-                    <div class="method-step"><strong>3. Arroz Dourado:</strong> Refogue o arroz cru com alho, cebola e uma colher de cúrcuma (açafrão da terra). Cozinhe normalmente. Ele ficará com uma cor amarela vibrante e aroma terroso.</div>
-                    <div class="method-step"><strong>4. Vegetais:</strong> Couve-flor cozida no vapor até ficar macia, mas firme.</div>
-                </div>
-            </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 390 kcal</span>
-                    <span>🥩 P: 38g</span>
-                    <span>⚡ C: 35g</span>
-                    <span>🥑 G: 10g</span>
-                </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🥘 <strong>Sabor Intenso:</strong> Iscas de carne macias e aceboladas, servidas com arroz de açafrão aromático e couve-flor no vapor. Refeição completa, rica em antioxidantes e sabor."</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Carne bovina (coxão mole), arroz branco, couve-flor, cebola, cúrcuma, azeite, sal, pimenta do reino.<br>
-                            <strong>Alérgenos:</strong> NÃO CONTÉM GLÚTEN. NÃO CONTÉM LACTOSE.<br>
-                            <strong>Validade:</strong> 90 dias congelado (-12°C).
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= RECEITA 11 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">11. Tilápia ao Limão & Purê de Ervilha</span>
-                <span class="recipe-badge">Premium Leve</span>
-            </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Tilápia (Filé)</td><td class="highlight-qty">150g</td><td class="highlight-qty">750g</td></tr>
-                        <tr><td>Ervilha (Seca)</td><td class="highlight-qty">50g</td><td class="highlight-qty">250g</td></tr>
-                        <tr><td>Cenoura</td><td class="highlight-qty">100g</td><td class="highlight-qty">500g</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
-                        <tr><td>Limão Siciliano (Raspas)</td><td>1un</td><td>5un</td></tr>
-                        <tr><td>Hortelã Fresca</td><td>1g</td><td>5g</td></tr>
-                        <tr><td>Pimenta Branca</td><td>0.5g</td><td>2.5g</td></tr>
-                        <tr><td>Azeite Extra Virgem</td><td>5ml</td><td>25ml</td></tr>
-                    </table>
-                </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. Preparo do Peixe:</strong> Seque bem os filés de tilápia com papel toalha. Disponha em uma assadeira. Tempere com sal, pimenta do reino branca moída e raspas da casca de limão (apenas a parte amarela/verde, não a branca que amarga). Não use suco de limão na marinada, pois o ácido "cozinha" o peixe cru e altera a textura. Asse a 180°C por 15 a 18 minutos.</div>
-                    <div class="method-step"><strong>2. Purê de Ervilha:</strong> Cozinhe a ervilha partida seca em água até que se desmanche quase completamente (como uma sopa grossa). Escorra o excesso de água se houver. Bata no processador ou liquidificador com folhas de hortelã fresca, sal e um fio generoso de azeite. O resultado é um creme verde vibrante e refrescante.</div>
-                    <div class="method-step"><strong>3. Cenouras:</strong> Corte em rodelas ou bastões. Cozinhe no vapor para manter a doçura natural.</div>
-                </div>
-            </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 320 kcal</span>
-                    <span>🥩 P: 30g</span>
-                    <span>⚡ C: 35g</span>
-                    <span>🥑 G: 6g</span>
-                </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🐟 <strong>Leveza Premium:</strong> Filé de tilápia assado delicadamente com raspas de limão siciliano, acompanhado de um purê de ervilhas com hortelã refrescante. Sofisticação na sua rotina."</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Filé de tilápia, ervilha partida, cenoura, azeite, limão, hortelã, sal, pimenta branca.<br>
-                            <strong>Alérgenos:</strong> CONTÉM PEIXE.<br>
-                            <strong>Validade:</strong> 60 dias congelado (Peixe é mais sensível).
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= RECEITA 12 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">12. Lombo Agridoce & Cabotiá</span>
-                <span class="recipe-badge">Gourmet</span>
-            </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Lombo Suíno</td><td class="highlight-qty">160g</td><td class="highlight-qty">800g</td></tr>
-                        <tr><td>Abóbora Cabotiá</td><td class="highlight-qty">250g</td><td class="highlight-qty">1.25kg</td></tr>
-                        <tr><td>Couve Manteiga</td><td class="highlight-qty">2 fls</td><td class="highlight-qty">1 mç</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
-                        <tr><td>Suco de Laranja</td><td>30ml</td><td>150ml</td></tr>
-                        <tr><td>Páprica Defumada</td><td>1g</td><td>5g</td></tr>
-                        <tr><td>Sal Refinado</td><td>2g</td><td>10g</td></tr>
-                    </table>
-                </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. Marinada Cítrica:</strong> Corte o lombo suíno limpo (sem a capa de gordura) em cubos médios. Em um saco plástico ou tigela, misture o suco de laranja natural, sal e a páprica defumada. Deixe a carne marinar nessa mistura por pelo menos 2 horas na geladeira para amaciar as fibras.</div>
-                    <div class="method-step"><strong>2. Caramelização:</strong> Aqueça a panela e doure a carne escorrida da marinada. Quando estiver dourada, acrescente o líquido da marinada que sobrou e deixe reduzir em fogo baixo até virar um molho grosso e brilhante que envolve a carne (glaceado).</div>
-                    <div class="method-step"><strong>3. Acompanhamentos:</strong> Sirva com o purê de abóbora cabotiá (receita 02) que contrasta com o ácido da laranja, e couve manteiga refogada rapidamente no alho para trazer frescor e textura.</div>
-                </div>
-            </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 360 kcal</span>
-                    <span>🥩 P: 35g</span>
-                    <span>⚡ C: 30g</span>
-                    <span>🥑 G: 12g</span>
-                </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🍊 <strong>Agridoce Sofisticado:</strong> Cubos de lombo suíno caramelizados na laranja e páprica defumada, servidos com purê de cabotiá denso. Uma explosão de sabor agridoce equilibrada."</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Lombo suíno, abóbora cabotiá, couve, suco de laranja, páprica defumada, alho, azeite, sal.<br>
-                            <strong>Alérgenos:</strong> NÃO CONTÉM GLÚTEN. NÃO CONTÉM LACTOSE.<br>
-                            <strong>Validade:</strong> 90 dias congelado (-12°C).
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= RECEITA 13 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">13. Curry Vegano (Grão de Bico)</span>
-                <span class="recipe-badge">Plant-Based</span>
-            </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Grão de Bico (Cozido)</td><td class="highlight-qty">150g</td><td class="highlight-qty">750g</td></tr>
-                        <tr><td>Cogumelos (Paris/Shit)</td><td class="highlight-qty">80g</td><td class="highlight-qty">400g</td></tr>
-                        <tr><td>Arroz 7 Grãos</td><td class="highlight-qty">45g</td><td class="highlight-qty">225g</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
-                        <tr><td>Leite de Coco Light</td><td>30ml</td><td>150ml</td></tr>
-                        <tr><td>Cominho em Pó</td><td>1g</td><td>5g</td></tr>
-                        <tr><td>Coentro Fresco</td><td>A gosto</td><td>A gosto</td></tr>
-                        <tr><td>Sal Refinado</td><td>2g</td><td>10g</td></tr>
-                    </table>
-                </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. Base Aromática:</strong> Em uma panela, refogue cebola e alho. Adicione o cominho e, se tiver, uma pitada de curry em pó para liberar os óleos essenciais das especiarias. Adicione os cogumelos fatiados e deixe dourar levemente.</div>
-                    <div class="method-step"><strong>2. O Curry:</strong> Acrescente o grão de bico já cozido (mas firme). Adicione o leite de coco light e deixe cozinhar em fogo baixo por 10 minutos para que o molho reduza e engrosse. O grão de bico deve absorver o sabor do coco. Finalize com coentro fresco picado na hora de desligar o fogo.</div>
-                    <div class="method-step"><strong>3. Complemento Proteico:</strong> Utilize arroz 7 grãos ou integral. A combinação de leguminosa (grão de bico) + cereal (arroz) garante uma proteína completa com todos os aminoácidos essenciais, vital para o público vegano.</div>
-                </div>
-            </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 340 kcal</span>
-                    <span>🥩 P: 18g (Veg)</span>
-                    <span>⚡ C: 45g</span>
-                    <span>🥑 G: 10g</span>
-                </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🌱 <strong>Energia Plant-Based:</strong> Curry aromático de grão de bico e cogumelos ao leite de coco, com arroz 7 grãos. 100% Vegano, cremoso e rico em proteínas vegetais."</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Grão de bico, cogumelos frescos, arroz 7 grãos, leite de coco, cominho, coentro, cebola, alho, sal.<br>
-                            <strong>Alérgenos:</strong> VEGANO. NÃO CONTÉM GLÚTEN/LACTOSE.<br>
-                            <strong>Validade:</strong> 90 dias congelado (-12°C).
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= RECEITA 14 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">14. Feijoada Fit</span>
-                <span class="recipe-badge">Venda Certa</span>
-            </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Feijão Preto (Cru)</td><td class="highlight-qty">40g</td><td class="highlight-qty">200g</td></tr>
-                        <tr><td>Lombo + Frango</td><td class="highlight-qty">120g</td><td class="highlight-qty">600g</td></tr>
-                        <tr><td>Couve Manteiga</td><td class="highlight-qty">50g</td><td class="highlight-qty">250g</td></tr>
-                        <tr><td>Arroz Branco/Integ</td><td class="highlight-qty">40g</td><td class="highlight-qty">200g</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
-                        <tr><td>Páprica Defumada</td><td>3g</td><td>15g</td></tr>
-                        <tr><td>Louro</td><td>2 fls</td><td>10 fls</td></tr>
-                        <tr><td>Alho (Muito)</td><td>5g</td><td>25g</td></tr>
-                        <tr><td>Sal Refinado</td><td>2g</td><td>10g</td></tr>
-                    </table>
-                </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. O Segredo do Defumado:</strong> Como não usamos paio ou calabresa (gordurosos), o segredo é temperar os cubos de lombo e peito de frango com MUITA páprica defumada e alho. Sele essas carnes na panela de pressão até criarem uma crosta escura no fundo.</div>
-                    <div class="method-step"><strong>2. Cozimento Conjunto:</strong> Adicione o feijão preto (que ficou de molho por 12h) e a água sobre as carnes seladas. Adicione folhas de louro. Cozinhe na pressão por 25 min. O amido do feijão vai engrossar o caldo e as carnes ficarão macias, impregnadas com o sabor do feijão.</div>
-                    <div class="method-step"><strong>3. Finalização:</strong> Abra a panela. Se necessário, amasse uma concha de grãos de feijão contra a parede da panela para engrossar mais o caldo. Sirva com arroz e couve refogada.</div>
-                </div>
-            </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 380 kcal</span>
-                    <span>🥩 P: 35g</span>
-                    <span>⚡ C: 40g</span>
-                    <span>🥑 G: 10g</span>
-                </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🇧🇷 <strong>Sabor Brasileiro:</strong> Nossa versão leve da Feijoada. Feijão preto cremoso, lombo magro e frango com toque defumado especial, arroz e couve. Mata a vontade sem pesar na balança."</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Feijão preto, lombo suíno, peito de frango, arroz, couve, páprica defumada, louro, alho, sal.<br>
-                            <strong>Alérgenos:</strong> NÃO CONTÉM GLÚTEN. NÃO CONTÉM LACTOSE.<br>
-                            <strong>Validade:</strong> 90 dias congelado (-12°C).
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= RECEITA 15 ================= -->
-        <div class="recipe-block">
-            <div class="recipe-header">
-                <span class="recipe-name">15. Risoto Fake (Couve-Flor)</span>
-                <span class="recipe-badge">Ultra Low Carb</span>
-            </div>
-            <div class="recipe-body">
-                <div class="ingredients-col">
-                    <table class="ing-table">
-                        <tr><th>Insumo Base</th><th>1 Unid.</th><th>5 Unid.</th></tr>
-                        <tr><td>Couve-Flor (Crua)</td><td class="highlight-qty">200g</td><td class="highlight-qty">1kg</td></tr>
-                        <tr><td>Frango Desfiado</td><td class="highlight-qty">120g</td><td class="highlight-qty">600g</td></tr>
-                        <tr><td>Creme Ricota Light</td><td class="highlight-qty">30g</td><td class="highlight-qty">150g</td></tr>
-                        <tr><td>Parmesão Ralado</td><td class="highlight-qty">10g</td><td class="highlight-qty">50g</td></tr>
-                        <tr><td colspan="3" style="padding-top:10px; font-weight:bold;">Tabela de Temperos:</td></tr>
-                        <tr><td>Noz Moscada</td><td>1 pitada</td><td>1g</td></tr>
-                        <tr><td>Cebola Branca</td><td>20g</td><td>100g</td></tr>
-                        <tr><td>Sal Refinado</td><td>1.5g</td><td>7.5g</td></tr>
-                    </table>
-                </div>
-                <div class="method-col">
-                    <h4 class="section-title">Detalhamento Técnico do Preparo</h4>
-                    <div class="method-step"><strong>1. Processamento (Arroz Fake):</strong> Lave a couve-flor crua e seque bem. Coloque os floretes em um processador de alimentos. Utilize a função "pulsar" repetidamente até que ela fique granulada, do tamanho de grãos de arroz. Cuidado para não processar demais e virar uma pasta.</div>
-                    <div class="method-step"><strong>2. Base do Risoto:</strong> Refogue a cebola picadinha na manteiga ou azeite até ficar translúcida. Adicione o "arroz" de couve-flor e refogue por 3 a 4 minutos. Ela cozinha muito rápido.</div>
-                    <div class="method-step"><strong>3. Mantecatura:</strong> Adicione o frango desfiado já cozido. Abaixe o fogo. Adicione o creme de ricota e o queijo parmesão. Mexa vigorosamente para dar liga e cremosidade. Desligue o fogo e rale noz moscada fresca por cima. O calor residual derrete o queijo e une os sabores.</div>
-                </div>
-            </div>
-            <div class="recipe-footer">
-                <div class="macro-bar">
-                    <span>🔥 290 kcal</span>
-                    <span>🥩 P: 30g</span>
-                    <span>⚡ C: 15g</span>
-                    <span>🥑 G: 12g</span>
-                </div>
-                <div class="biz-grid">
-                    <div class="marketing-box">
-                        <span class="biz-title">Texto para WhatsApp/Instagram</span>
-                        <div class="copy-text">"🍄 <strong>Risoto Ultra Low Carb:</strong> Cremoso e sofisticado, mas feito com 'arroz' de couve-flor, frango e toque de parmesão de verdade. Apenas 15g de carboidrato em todo o prato!"</div>
-                    </div>
-                    <div class="label-box">
-                        <span class="biz-title">Informações para Rótulo</span>
-                        <div class="label-text">
-                            <strong>Ingredientes:</strong> Couve-flor, peito de frango, creme de ricota, queijo parmesão, cebola, manteiga, noz moscada, sal.<br>
-                            <strong>Alérgenos:</strong> CONTÉM LEITE E DERIVADOS.<br>
-                            <strong>Validade:</strong> 90 dias congelado (-12°C).
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
+
+    <!-- PÁGINA 4: RECEITA 03 -->
+    <div class="sheet">
+        <header class="recipe-header">
+            <h1 class="title">03. Custo Benefício</h1>
+            <span class="tag">Sobrecoxa & Purê</span>
+        </header>
+
+        <div class="content-grid">
+            <div class="col-left">
+                <h3>INSUMOS & PESOS</h3>
+                <table>
+                    <thead><tr><th>ITEM</th><th>1 UN</th><th>5 UN</th></tr></thead>
+                    <tbody>
+                        <tr><td>Sobrecoxa (Crua)</td><td class="qty">160g</td><td class="qty">800g</td></tr>
+                        <tr><td>Batata Inglesa</td><td class="qty">150g</td><td class="qty">750g</td></tr>
+                        <tr><td>Cenoura/Chuchu</td><td class="qty">130g</td><td class="qty">650g</td></tr>
+                        <tr><td colspan="3" class="sub-header">TEMPEROS E GORDURAS (Em Gramas)</td></tr>
+                        <tr><td>Sal Refinado</td><td>2g</td><td>10g</td></tr>
+                        <tr><td>Colorau</td><td>1g</td><td>5g</td></tr>
+                        <tr><td>Orégano</td><td>1g</td><td>5g</td></tr>
+                        <tr><td>Leite Desnatado</td><td>10ml</td><td>50ml</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-right">
+                <h3 class="section-title">Execução Técnica Detalhada</h3>
+                <div class="step">
+                    <strong>1. Limpeza Radical:</strong> A sobrecoxa é barata e saborosa, mas o cliente "Fit" tem aversão a gordura. Retire 100% da pele e gordura visível. Tempere com colorau (para cor apetitosa), limão e orégano. Asse a 180°C até dourar bem.
+                </div>
+                <div class="step">
+                    <strong>2. Aeração do Purê:</strong> Cozinhe a batata até desmanchar. Esprema quente. Adicione o leite e bata vigorosamente com um fouet (batedor de arame). A entrada de ar deixa o purê leve e volumoso sem precisar de manteiga.
+                </div>
+                <div class="step">
+                    <strong>3. Mix Confeti:</strong> Corte cenoura e chuchu em cubos bem pequenos (brunoise). Cozinhe no vapor para manter as cores vivas.
+                </div>
+
+                <div class="chef-secret">
+                    <strong>💡 Segredo do Chef:</strong> Asse o frango sobre uma "cama" de rodelas de cebola. O frango não gruda na assadeira e absorve o aroma defumado da cebola assada.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-manager">
+            <div class="nutrition-bar">
+                <span>🔥 410 KCAL</span><span>PROT: 30g</span><span>CARB: 38g</span><span>GORD: 14g</span>
+            </div>
+            <div class="biz-grid">
+                <div class="biz-box">
+                    <span class="biz-title">SCRIPT DE VENDAS (WHATSAPP)</span>
+                    <span class="script-text">"🍗 <strong>Sabor de Domingo:</strong> Sobrecoxa assada suculenta (sem pele), purê de batatas aerado e mix de legumes. Comida de verdade com tempero de casa."</span>
+                </div>
+                <div class="biz-box">
+                    <span class="biz-title">RÓTULO TÉCNICO (ANVISA)</span>
+                    <div class="label-text">
+                        <strong>Ingredientes:</strong> Sobrecoxa, batata, cenoura, chuchu, leite, alho, colorau, orégano.<br>
+                        <strong>Alérgicos:</strong> CONTÉM LEITE.<br>
+                        <strong>Conservação:</strong> Freezer: 90 dias.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 5: RECEITA 04 -->
+    <div class="sheet">
+        <header class="recipe-header">
+            <h1 class="title">04. Pré-Treino</h1>
+            <span class="tag">Bolonhesa Fit</span>
+        </header>
+
+        <div class="content-grid">
+            <div class="col-left">
+                <h3>INSUMOS & PESOS</h3>
+                <table>
+                    <thead><tr><th>ITEM</th><th>1 UN</th><th>5 UN</th></tr></thead>
+                    <tbody>
+                        <tr><td>Massa Integral</td><td class="qty">50g</td><td class="qty">250g</td></tr>
+                        <tr><td>Patinho Moído</td><td class="qty">100g</td><td class="qty">500g</td></tr>
+                        <tr><td>Tomate Pelado</td><td class="qty">80g</td><td class="qty">400g</td></tr>
+                        <tr><td>Espinafre</td><td class="qty">1/4 mç</td><td class="qty">1 mç</td></tr>
+                        <tr><td colspan="3" class="sub-header">TEMPEROS E GORDURAS (Em Gramas)</td></tr>
+                        <tr><td>Sal Refinado</td><td>2g</td><td>10g</td></tr>
+                        <tr><td>Manjericão</td><td>A gosto</td><td>A gosto</td></tr>
+                        <tr><td>Alho/Cebola</td><td>15g</td><td>75g</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-right">
+                <h3 class="section-title">Execução Técnica Detalhada</h3>
+                <div class="step">
+                    <strong>1. Ponto de Cocção da Massa:</strong> Cozinhe a massa integral 2 minutos a MENOS do que pede a embalagem. Escorra e envolva em azeite frio. Ela terminará de cozinhar no micro-ondas do cliente. Se cozinhar tudo agora, virará papa depois.
+                </div>
+                <div class="step">
+                    <strong>2. Molho Protetor:</strong> O molho deve ser abundante. Refogue a carne, adicione o tomate batido e deixe apurar. O molho age como um isolante térmico, protegendo a massa de ressecar (queimadura do frio) dentro do freezer.
+                </div>
+                <div class="step">
+                    <strong>3. Incorporação Verde:</strong> Pique o espinafre cru grosseiramente. Jogue no molho quente já desligado. Ele vai murchar apenas com o calor residual, mantendo os nutrientes.
+                </div>
+
+                <div class="chef-secret">
+                    <strong>💡 Segredo do Chef:</strong> Adicione uma cenoura inteira ralada bem fina no molho à bolonhesa. Ela some no cozimento, tira a acidez do tomate (dispensando açúcar) e agrega vitaminas.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-manager">
+            <div class="nutrition-bar">
+                <span>🔥 390 KCAL</span><span>PROT: 30g</span><span>CARB: 50g</span><span>GORD: 7g</span>
+            </div>
+            <div class="biz-grid">
+                <div class="biz-box">
+                    <span class="biz-title">SCRIPT DE VENDAS (WHATSAPP)</span>
+                    <span class="script-text">"🍝 <strong>Energia Pura:</strong> Massa integral 'al dente' com molho à bolonhesa rico e espinafre. O combustível ideal e pesado para seu treino de perna."</span>
+                </div>
+                <div class="biz-box">
+                    <span class="biz-title">RÓTULO TÉCNICO (ANVISA)</span>
+                    <div class="label-text">
+                        <strong>Ingredientes:</strong> Macarrão integral, patinho, tomate, espinafre, manjericão, cebola, alho.<br>
+                        <strong>Alérgicos:</strong> CONTÉM GLÚTEN.<br>
+                        <strong>Conservação:</strong> Freezer: 90 dias.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 6: RECEITA 05 -->
+    <div class="sheet">
+        <header class="recipe-header">
+            <h1 class="title">05. Caseiro</h1>
+            <span class="tag">Picadinho da Vovó</span>
+        </header>
+
+        <div class="content-grid">
+            <div class="col-left">
+                <h3>INSUMOS & PESOS</h3>
+                <table>
+                    <thead><tr><th>ITEM</th><th>1 UN</th><th>5 UN</th></tr></thead>
+                    <tbody>
+                        <tr><td>Acém Magro</td><td class="qty">170g</td><td class="qty">850g</td></tr>
+                        <tr><td>Arroz Parb.</td><td class="qty">45g</td><td class="qty">225g</td></tr>
+                        <tr><td>Abobrinha</td><td class="qty">120g</td><td class="qty">600g</td></tr>
+                        <tr><td colspan="3" class="sub-header">TEMPEROS E GORDURAS (Em Gramas)</td></tr>
+                        <tr><td>Sal Refinado</td><td>2g</td><td>10g</td></tr>
+                        <tr><td>Cebola Roxa</td><td>30g</td><td>150g</td></tr>
+                        <tr><td>Louro</td><td>1 fl</td><td>3 fls</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-right">
+                <h3 class="section-title">Execução Técnica Detalhada</h3>
+                <div class="step">
+                    <strong>1. Braseado (Pressão):</strong> Corte a carne em cubos de 1,5cm. Aqueça o azeite na pressão e sele a carne. Adicione cebola roxa picada, louro e água até cobrir. Cozinhe na pressão por 30 min. Abra e deixe reduzir o caldo até ficar grosso (gelatinoso).
+                </div>
+                <div class="step">
+                    <strong>2. Técnica de Grelha:</strong> Corte a abobrinha em meias-luas. Aqueça uma frigideira até ficar muito quente. Sele a abobrinha 1 minuto de cada lado. Tempere com sal apenas no final. Ela deve ficar chamuscada por fora e crocante por dentro.
+                </div>
+                <div class="step">
+                    <strong>3. Arroz:</strong> Use arroz parboilizado ou integral. O arroz branco comum tende a empapar no descongelamento.
+                </div>
+
+                <div class="chef-secret">
+                    <strong>💡 Segredo do Chef:</strong> Pingue 5 gotas de <em>Molho Inglês</em> na panela de pressão antes de fechar. Ele intensifica o sabor "carnudo" (Umami) do molho.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-manager">
+            <div class="nutrition-bar">
+                <span>🔥 380 KCAL</span><span>PROT: 35g</span><span>CARB: 35g</span><span>GORD: 9g</span>
+            </div>
+            <div class="biz-grid">
+                <div class="biz-box">
+                    <span class="biz-title">SCRIPT DE VENDAS (WHATSAPP)</span>
+                    <span class="script-text">"🥩 <strong>Tempero de Casa:</strong> Picadinho de carne suculento cozido lentamente, arroz soltinho e abobrinha grelhada. Simples, nutritivo e delicioso."</span>
+                </div>
+                <div class="biz-box">
+                    <span class="biz-title">RÓTULO TÉCNICO (ANVISA)</span>
+                    <div class="label-text">
+                        <strong>Ingredientes:</strong> Acém, arroz, abobrinha, cebola roxa, alho, louro, molho inglês.<br>
+                        <strong>Alérgicos:</strong> NÃO CONTÉM GLÚTEN/LACTOSE.<br>
+                        <strong>Conservação:</strong> Freezer: 90 dias.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 7: RECEITA 06 -->
+    <div class="sheet">
+        <header class="recipe-header">
+            <h1 class="title">06. Favorito</h1>
+            <span class="tag">Strogonoff Fit</span>
+        </header>
+
+        <div class="content-grid">
+            <div class="col-left">
+                <h3>INSUMOS & PESOS</h3>
+                <table>
+                    <thead><tr><th>ITEM</th><th>1 UN</th><th>5 UN</th></tr></thead>
+                    <tbody>
+                        <tr><td>Peito Frango</td><td class="qty">150g</td><td class="qty">750g</td></tr>
+                        <tr><td>Arroz Integral</td><td class="qty">40g</td><td class="qty">200g</td></tr>
+                        <tr><td>Batata Doce</td><td class="qty">100g</td><td class="qty">500g</td></tr>
+                        <tr><td colspan="3" class="sub-header">TEMPEROS E GORDURAS (Em Gramas)</td></tr>
+                        <tr><td>Creme Ricota</td><td>30g</td><td>150g</td></tr>
+                        <tr><td>Molho Tomate</td><td>20g</td><td>100g</td></tr>
+                        <tr><td>Mostarda</td><td>5g</td><td>25g</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-right">
+                <h3 class="section-title">Execução Técnica Detalhada</h3>
+                <div class="step">
+                    <strong>1. Estabilização do Creme:</strong> Refogue o frango, adicione o molho de tomate e a mostarda. Acerte o tempero. AGORA DESLIGUE O FOGO. Espere 2 minutos. Adicione o Creme de Ricota Light e misture. Se ferver o creme de ricota (ou iogurte), ele talha e fica com aspecto granulado feio.
+                </div>
+                <div class="step">
+                    <strong>2. Chips de Batata:</strong> Fatie a batata doce no mandolim (lâminas finas). Disponha em assadeira antiaderente sem sobrepor. Asse em forno baixo (160°C) até secar. Elas dão a textura crocante que falta na marmita.
+                </div>
+
+                <div class="chef-secret">
+                    <strong>💡 Segredo do Chef:</strong> Use <em>Páprica Defumada</em> no tempero do frango. Ela dá um fundo de sabor que lembra o strogonoff feito no fogão a lenha.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-manager">
+            <div class="nutrition-bar">
+                <span>🔥 400 KCAL</span><span>PROT: 38g</span><span>CARB: 45g</span><span>GORD: 8g</span>
+            </div>
+            <div class="biz-grid">
+                <div class="biz-box">
+                    <span class="biz-title">SCRIPT DE VENDAS (WHATSAPP)</span>
+                    <span class="script-text">"🥣 <strong>Sem Culpa:</strong> Strogonoff leve (sem creme de leite gordo), arroz integral e chips de batata doce artesanal. O queridinho da casa."</span>
+                </div>
+                <div class="biz-box">
+                    <span class="biz-title">RÓTULO TÉCNICO (ANVISA)</span>
+                    <div class="label-text">
+                        <strong>Ingredientes:</strong> Frango, arroz int., batata doce, creme de ricota, tomate, mostarda, páprica.<br>
+                        <strong>Alérgicos:</strong> CONTÉM LEITE.<br>
+                        <strong>Conservação:</strong> Freezer: 90 dias.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
-
 
