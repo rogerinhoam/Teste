@@ -1,619 +1,923 @@
-import React, { useState, useEffect, useMemo } from 'react';
 
-// --- ÍCONES ---
-const ICONS = {
-    Dashboard: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>),
-    Transactions: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>),
-    Budget: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h12v4"></path><path d="M4 6v12h16v-6a2 2 0 0 0-2-2H6"></path></svg>),
-    Goals: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>),
-    Reports: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>),
-    Settings: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 0 2l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l-.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1 0-2l.15-.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>),
-    Plus: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>),
-    ChevronLeft: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>),
-    ChevronRight: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>),
-    Close: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>),
-    Trash: () => (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>),
-    Edit: () => (<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>),
-    Alimentacao: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21h18M12 3v18M18.4 12H5.6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h12.8a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2zM8 3v3M16 3v3"/></svg>),
-    Moradia: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>),
-    Transporte: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 17h2l.64-2.56a2 2 0 0 0-1.94-2.44H5.3a2 2 0 0 0-1.94 2.44L4 17h2m0 0h10m-5 0v-5m-5 0h10m0 0V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v5m12 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm-8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/></svg>),
-    Saude: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>),
-    Lazer: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>),
-    Salario: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>),
-    Outros: () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>),
-};
-
-// --- ESTRUTURA DE DADOS INICIAL ---
-const initialData = {
-    accounts: [
-        { id: 'acc1', name: 'Carteira', type: 'cash', balance: 1250, initialBalance: 1250 },
-        { id: 'acc2', name: 'Conta Corrente', type: 'cash', balance: 5300, initialBalance: 5300 },
-        { id: 'acc3', name: 'Cartão de Crédito', type: 'credit', balance: -850, limit: 10000 },
-    ],
-    transactions: [
-        { id: 'txn1', type: 'income', description: 'Salário', amount: 5000, categoryId: 'cat-i1', accountId: 'acc2', created_at: new Date(new Date().setDate(5)).toISOString() },
-        { id: 'txn2', type: 'expense', description: 'Aluguel', amount: 1500, categoryId: 'cat-e2', accountId: 'acc2', created_at: new Date(new Date().setDate(6)).toISOString() },
-        { id: 'txn3', type: 'expense', description: 'Supermercado', amount: 350, categoryId: 'cat-e1', accountId: 'acc3', created_at: new Date(new Date().setDate(10)).toISOString() },
-    ],
-    expenseCategories: [ { id: 'cat-e1', name: 'Alimentação', color: '#ef4444', icon: ICONS.Alimentacao }, { id: 'cat-e2', name: 'Moradia', color: '#3b82f6', icon: ICONS.Moradia }, { id: 'cat-e3', name: 'Transporte', color: '#f97316', icon: ICONS.Transporte }, { id: 'cat-e4', name: 'Saúde', color: '#14b8a6', icon: ICONS.Saude }, { id: 'cat-e5', name: 'Lazer', color: '#8b5cf6', icon: ICONS.Lazer }, { id: 'cat-e6', name: 'Outros', color: '#64748b', icon: ICONS.Outros }],
-    incomeCategories: [ { id: 'cat-i1', name: 'Salário', color: '#22c55e', icon: ICONS.Salario }, { id: 'cat-i2', name: 'Outros', color: '#64748b', icon: ICONS.Outros }],
-    budgets: { 'cat-e1': 500, 'cat-e2': 1500, 'cat-e3': 300, 'cat-e4': 200, 'cat-e5': 250, 'cat-e6': 100 },
-    goals: [{ id: 'goal1', name: 'Reserva de Emergência', target: 5000, saved: 150 }],
-    recurring: [{ id: 'rec1', description: 'Salário', amount: 5000, type: 'income', categoryId: 'cat-i1', accountId: 'acc2', frequency: 'monthly', day: 5 }],
-};
-
-// --- MODAIS ---
-const TransactionModal = ({ isOpen, onClose, onSave, transaction, accounts, expenseCategories, incomeCategories }) => {
-    const [type, setType] = useState('expense');
-    const [description, setDescription] = useState('');
-    const [amount, setAmount] = useState('');
-    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-    const [category, setCategory] = useState(expenseCategories[0]?.id || '');
-    const [accountId, setAccountId] = useState(accounts[0]?.id || '');
-
-    const categories = type === 'expense' ? expenseCategories : incomeCategories;
-
-    useEffect(() => {
-        const isEditing = !!transaction?.id;
-        const transactionType = isEditing ? transaction.type : (transaction?.type || 'expense');
-        setType(transactionType);
-        setDescription(isEditing ? transaction.description : '');
-        setAmount(isEditing ? transaction.amount : '');
-        setDate(isEditing ? new Date(transaction.created_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]);
-        setAccountId(isEditing ? transaction.accountId : (accounts[0]?.id || ''));
-        setCategory(isEditing ? transaction.categoryId : (type === 'expense' ? expenseCategories[0]?.id : incomeCategories[0]?.id));
-    }, [transaction, accounts, expenseCategories, incomeCategories]);
-
-    useEffect(() => {
-        if (!transaction?.id) {
-            setCategory(type === 'expense' ? expenseCategories[0]?.id : incomeCategories[0]?.id);
-        }
-    }, [type, transaction, expenseCategories, incomeCategories]);
-
-    if (!isOpen) return null;
-
-    const handleSave = () => {
-        if (!description || !amount || !date || !accountId || !category) {
-            alert("Por favor, preencha todos os campos.");
-            return;
-        }
-        const transactionDate = new Date(date);
-        const adjustedDate = new Date(transactionDate.getTime() + transactionDate.getTimezoneOffset() * 60000);
-        onSave({ ...transaction, type, description, amount: parseFloat(amount), categoryId: category, accountId, created_at: adjustedDate.toISOString() });
-        onClose();
-    };
-
-    return (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 p-4">
-            <div className="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-8 w-full max-w-md m-4">
-                <h2 className="text-2xl font-bold mb-6 text-white">{transaction?.id ? 'Editar' : 'Adicionar'} Transação</h2>
-                 <div className="grid grid-cols-2 gap-2 mb-6 bg-slate-900 p-1 rounded-lg">
-                    <button onClick={() => setType('expense')} className={`px-4 py-2 rounded-md text-sm font-semibold transition ${type === 'expense' ? 'bg-red-500 text-white' : 'text-slate-400 hover:bg-slate-700'}`}>Despesa</button>
-                    <button onClick={() => setType('income')} className={`px-4 py-2 rounded-md text-sm font-semibold transition ${type === 'income' ? 'bg-green-500 text-white' : 'text-slate-400 hover:bg-slate-700'}`}>Receita</button>
-                </div>
-                <div className="space-y-4">
-                    <div><label className="block text-sm font-medium text-slate-300 mb-1">Descrição</label><input type="text" value={description} onChange={(e) => setDescription(e.target.value)} className="mt-1 w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none"/></div>
-                    <div><label className="block text-sm font-medium text-slate-300 mb-1">Conta</label><select value={accountId} onChange={(e) => setAccountId(e.target.value)} className="mt-1 w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none">{accounts.map(acc => <option key={acc.id} value={acc.id}>{acc.name}</option>)}</select></div>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div><label className="block text-sm font-medium text-slate-300 mb-1">Valor (R$)</label><input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="mt-1 w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none"/></div>
-                        <div><label className="block text-sm font-medium text-slate-300 mb-1">Data</label><input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="mt-1 w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none"/></div>
-                    </div>
-                    <div><label className="block text-sm font-medium text-slate-300 mb-1">Categoria</label><select value={category} onChange={(e) => setCategory(e.target.value)} className="mt-1 w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none">{categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}</select></div>
-                </div>
-                <div className="mt-8 flex justify-end gap-4">
-                    <button onClick={onClose} className="px-6 py-2 bg-slate-600 text-slate-100 font-semibold rounded-lg hover:bg-slate-500 transition">Cancelar</button>
-                    <button onClick={handleSave} className="px-6 py-2 bg-cyan-500 text-white font-semibold rounded-lg hover:bg-cyan-600 transition">Salvar</button>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-// --- COMPONENTE PRINCIPAL ---
-export default function App() {
-    const [data, setData] = useState(initialData);
-    const [view, setView] = useState('dashboard');
-    const [isRechartsReady, setIsRechartsReady] = useState(false);
-    const [rechartsError, setRechartsError] = useState(null); // Para capturar erros de carregamento
-    const [modalOpen, setModalOpen] = useState(false);
-    const [transactionToEdit, setTransactionToEdit] = useState(null);
-    const [selectedDate, setSelectedDate] = useState(new Date());
-
-    useEffect(() => {
-        // Carregamento dinâmico da Recharts via CDN
-        if (!window.Recharts) {
-            const script = document.createElement('script');
-            script.src = 'https://unpkg.com/recharts@2/umd/Recharts.js'; // Versão estável; ajuste se necessário
-            script.async = true;
-            script.onload = () => {
-                setIsRechartsReady(true);
-            };
-            script.onerror = () => {
-                setRechartsError('Falha ao carregar a biblioteca de gráficos. Verifique sua conexão ou tente mais tarde.');
-            };
-            document.body.appendChild(script);
-
-            // Limpeza ao desmontar
-            return () => {
-                document.body.removeChild(script);
-            };
-        } else {
-            setIsRechartsReady(true);
-        }
-
-        const localData = localStorage.getItem('nexus-finance-data-v4');
-        if (localData) {
-            setData(JSON.parse(localData));
-        }
-    }, []);
-
-    useEffect(() => {
-        localStorage.setItem('nexus-finance-data-v4', JSON.stringify(data));
-    }, [data]);
-
-    const saveTransaction = (transactionData) => {
-        setData(prevData => {
-            const isEditing = !!transactionData.id;
-            const newTransactions = isEditing
-                ? prevData.transactions.map(t => t.id === transactionData.id ? transactionData : t)
-                : [...prevData.transactions, { ...transactionData, id: crypto.randomUUID() }];
-            
-            const newAccounts = JSON.parse(JSON.stringify(prevData.accounts));
-            newAccounts.forEach(acc => {
-                acc.balance = newTransactions
-                    .filter(t => t.accountId === acc.id)
-                    .reduce((bal, t) => {
-                        if (acc.type === 'credit') {
-                            return bal - t.amount;
-                        }
-                        return bal + (t.type === 'income' ? t.amount : -t.amount);
-                    }, acc.initialBalance || 0);
-            });
-
-            return { ...prevData, transactions: newTransactions, accounts: newAccounts };
-        });
-        setModalOpen(false);
-        setTransactionToEdit(null);
-    };
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codex Platinum: Marmitas Fit Profissionais</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     
-    const changeMonth = (offset) => {
-        setSelectedDate(prevDate => {
-            const newDate = new Date(prevDate.getFullYear(), prevDate.getMonth() + offset, 1);
-            return newDate;
-        });
-    };
-    
-    const filteredTransactions = useMemo(() => {
-        return data.transactions.filter(t => {
-            const transactionDate = new Date(t.created_at);
-            return transactionDate.getMonth() === selectedDate.getMonth() && transactionDate.getFullYear() === selectedDate.getFullYear();
-        }).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    }, [data.transactions, selectedDate]);
-    
-    const monthlyMetrics = useMemo(() => {
-        const income = filteredTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-        const expenses = filteredTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-        return { income, expenses, balance: income - expenses };
-    }, [filteredTransactions]);
-
-    const netWorth = useMemo(() => data.accounts.reduce((sum, acc) => sum + acc.balance, 0), [data.accounts]);
-    
-    const renderView = () => {
-        const allCategories = [...data.expenseCategories, ...data.incomeCategories];
-        const categoryMap = allCategories.reduce((acc, cat) => ({...acc, [cat.id]: cat}), {});
-        const expenseCategoryMap = data.expenseCategories.reduce((acc, cat) => ({...acc, [cat.id]: cat}), {});
-
-        switch(view) {
-            case 'dashboard':
-                return <DashboardView metrics={monthlyMetrics} netWorth={netWorth} isRechartsReady={isRechartsReady} rechartsError={rechartsError} transactions={filteredTransactions} changeMonth={changeMonth} selectedDate={selectedDate} categoryMap={categoryMap} />;
-            case 'transactions':
-                return <TransactionsView transactions={data.transactions} onEdit={t => { setTransactionToEdit(t); setModalOpen(true); }} categoryMap={categoryMap} />;
-            case 'budget':
-                return <BudgetView budgets={data.budgets} expenseCategories={data.expenseCategories} transactions={filteredTransactions} />;
-            case 'goals':
-                return <GoalsView goals={data.goals} />;
-            case 'reports':
-                return <ReportsView allTransactions={data.transactions} isRechartsReady={isRechartsReady} rechartsError={rechartsError} />;
-            case 'settings':
-                return <SettingsView data={data} setData={setData} />;
-            default:
-                return <div>View not found</div>;
+    <style>
+        :root {
+            --primary: #1b5e20;       /* Verde Floresta */
+            --primary-light: #e8f5e9;
+            --accent: #f9a825;        /* Dourado */
+            --sales-bg: #e3f2fd;      /* Azul Vendas */
+            --sales-text: #1565c0;
+            --label-bg: #f5f5f5;      /* Cinza Rótulo */
+            --text-dark: #212121;
+            --border-color: #cfd8dc;
         }
-    };
 
-    return (
-        <div className="bg-slate-900 min-h-screen font-sans text-slate-300 flex">
-            <style>{`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); body { font-family: 'Inter', sans-serif; }`}</style>
-            
-            {modalOpen && <TransactionModal isOpen={modalOpen} onClose={() => { setModalOpen(false); setTransactionToEdit(null); }} onSave={saveTransaction} transaction={transactionToEdit} accounts={data.accounts} expenseCategories={data.expenseCategories} incomeCategories={data.incomeCategories} />}
-
-            <aside className="w-20 lg:w-64 bg-slate-900/80 backdrop-blur-lg border-r border-slate-800 flex flex-col items-center lg:items-start p-4">
-                <h1 className="text-2xl font-bold text-white mb-12 hidden lg:block">Nexus</h1>
-                <nav className="space-y-2 w-full flex-1">
-                    <NavItem icon={<ICONS.Dashboard />} label="Dashboard" active={view === 'dashboard'} onClick={() => setView('dashboard')} />
-                    <NavItem icon={<ICONS.Transactions />} label="Transações" active={view === 'transactions'} onClick={() => setView('transactions')} />
-                    <NavItem icon={<ICONS.Budget />} label="Orçamento" active={view === 'budget'} onClick={() => setView('budget')} />
-                    <NavItem icon={<ICONS.Goals />} label="Metas" active={view === 'goals'} onClick={() => setView('goals')} />
-                    <NavItem icon={<ICONS.Reports />} label="Relatórios" active={view === 'reports'} onClick={() => setView('reports')} />
-                </nav>
-                 <div className="w-full">
-                    <NavItem icon={<ICONS.Settings />} label="Configurações" active={view === 'settings'} onClick={() => setView('settings')} />
-                </div>
-            </aside>
-
-            <main className="flex-1 max-w-7xl mx-auto p-4 sm:p-8 overflow-y-auto">
-                {renderView()}
-            </main>
-
-            <button onClick={() => { setTransactionToEdit(null); setModalOpen(true); }} className="fixed bottom-6 right-6 w-14 h-14 bg-cyan-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-cyan-600 transition-all transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-cyan-500/50" aria-label="Adicionar nova transação">
-                <ICONS.Plus />
-            </button>
-        </div>
-    );
-}
-
-// --- Componentes de Visualização (Views) ---
-const NavItem = ({ icon, label, active, onClick }) => (
-    <button onClick={onClick} className={`w-full flex items-center p-3 rounded-lg transition-colors ${active ? 'bg-cyan-500/10 text-cyan-400' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}`}>
-        <span className="h-6 w-6">{icon}</span>
-        <span className="ml-4 font-semibold hidden lg:block">{label}</span>
-    </button>
-);
-
-const DashboardView = ({ metrics, netWorth, isRechartsReady, rechartsError, transactions, changeMonth, selectedDate, categoryMap }) => {
-    const renderChart = () => {
-        if (rechartsError) return <div className="text-red-400">{rechartsError}</div>;
-        if (!isRechartsReady) return <div className="flex items-center justify-center h-[200px] text-slate-500">Carregando...</div>;
-        const { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } = window.Recharts;
-        const daysInMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0).getDate();
-        const chartData = Array.from({ length: daysInMonth }, (_, i) => {
-            const day = i + 1;
-            const dailyTotal = transactions
-                .filter(t => t.type === 'expense' && new Date(t.created_at).getDate() === day)
-                .reduce((sum, t) => sum + t.amount, 0);
-            return { name: day.toString(), Despesa: dailyTotal };
-        });
-
-        return (
-            <div style={{ width: '100%', height: 200 }}>
-                <ResponsiveContainer>
-                    <BarChart data={chartData} margin={{ top: 5, right: 0, left: -20, bottom: 5 }}>
-                        <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                        <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `R$${value}`}/>
-                        <Tooltip cursor={{ fill: 'rgba(148, 163, 184, 0.1)'}} contentStyle={{backgroundColor: 'rgba(30, 41, 59, 0.8)', border: 'none', borderRadius: '0.5rem'}} itemStyle={{color: '#f87171'}} formatter={(value) => value > 0 ? value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : null} />
-                        <Bar dataKey="Despesa" fill="#f87171" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
-        );
-    };
-
-    return (
-        <div>
-            <div className="flex justify-between items-center mb-8">
-                <h2 className="text-3xl font-bold text-white">Dashboard</h2>
-                <div className="flex items-center gap-2">
-                    <button onClick={() => changeMonth(-1)} className="p-2 rounded-full text-slate-400 hover:bg-slate-700"><ICONS.ChevronLeft /></button>
-                    <span className="font-semibold text-white w-36 text-center capitalize">{selectedDate.toLocaleString('pt-BR', { month: 'long', year: 'numeric' })}</span>
-                    <button onClick={() => changeMonth(1)} className="p-2 rounded-full text-slate-400 hover:bg-slate-700"><ICONS.ChevronRight /></button>
-                </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <MetricCard title="Receitas do Mês" value={metrics.income} color="text-green-400" />
-                <MetricCard title="Despesas do Mês" value={metrics.expenses} color="text-red-400" />
-                <MetricCard title="Balanço do Mês" value={metrics.balance} color={metrics.balance >= 0 ? 'text-green-400' : 'text-red-400'} />
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                <div className="lg:col-span-3 bg-slate-800/50 p-6 rounded-2xl border border-slate-800">
-                    <h3 className="font-semibold text-white mb-4">Gastos Diários</h3>
-                    {renderChart()}
-                </div>
-                <div className="lg:col-span-2 bg-slate-800/50 p-6 rounded-2xl border border-slate-800">
-                     <h3 className="font-semibold text-white mb-4">Patrimônio Líquido</h3>
-                     <p className="text-4xl font-bold text-cyan-400">{netWorth.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-                     <h3 className="font-semibold text-white mb-4 mt-8">Últimas Transações</h3>
-                     <ul className="space-y-3">
-                        {transactions.slice(0, 3).map(t => <TransactionItem key={t.id} transaction={t} categoryMap={categoryMap} />)}
-                     </ul>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const MetricCard = ({ title, value, color }) => (
-    <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-800">
-        <p className="text-sm text-slate-400">{title}</p>
-        <p className={`text-3xl font-bold ${color}`}>{value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-    </div>
-);
-
-const TransactionItem = ({ transaction, onEdit, categoryMap }) => {
-    const isExpense = transaction.type === 'expense';
-    const category = categoryMap[transaction.categoryId] || { name: 'N/A', color: '#64748b', icon: ICONS.Outros };
-    const color = isExpense ? 'text-red-400' : 'text-green-400';
-    const Icon = category.icon || ICONS.Outros;
-    return (
-        <li className="flex items-center bg-slate-800 p-4 rounded-xl transition-all hover:bg-slate-700/80 group">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${category.color}20`, color: category.color }}>
-                <Icon />
-            </div>
-            <div className="flex-1 ml-4 min-w-0">
-                <p className="font-semibold text-slate-100 truncate">{transaction.description}</p>
-                <p className="text-sm text-slate-400">{new Date(transaction.created_at).toLocaleDateString('pt-BR')}</p>
-            </div>
-            <div className="flex items-center gap-2 ml-2">
-                <span className={`font-semibold ${color}`}>{`${isExpense ? '-' : '+'} ${transaction.amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`}</span>
-                {onEdit && <button onClick={() => onEdit(transaction)} className="p-2 text-slate-500 hover:text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity"><ICONS.Edit /></button>}
-            </div>
-        </li>
-    );
-};
-
-const TransactionsView = ({ transactions, onEdit, categoryMap }) => (
-    <div>
-        <h2 className="text-3xl font-bold text-white mb-8">Todas as Transações</h2>
-        <ul className="space-y-3">
-            {transactions.length > 0 ?
-                transactions.map(t => <TransactionItem key={t.id} transaction={t} onEdit={onEdit} categoryMap={categoryMap} />) :
-                <p className="text-slate-500 text-center py-8">Nenhuma transação encontrada.</p>
-            }
-        </ul>
-    </div>
-);
-
-const BudgetView = ({ budgets, expenseCategories, transactions }) => {
-    return (
-        <div>
-            <h2 className="text-3xl font-bold text-white mb-8">Orçamento Mensal</h2>
-            <div className="space-y-4">
-            {expenseCategories.map(category => {
-                const budget = budgets[category.id] || 0;
-                const spent = transactions
-                    .filter(t => t.type === 'expense' && t.categoryId === category.id)
-                    .reduce((sum, t) => sum + t.amount, 0);
-                const remaining = budget - spent;
-                const percentage = budget > 0 ? (spent / budget) * 100 : 0;
-                
-                let progressBarColor = 'bg-green-500';
-                if (percentage > 75) progressBarColor = 'bg-yellow-500';
-                if (percentage >= 100) progressBarColor = 'bg-red-500';
-                
-                const IconComponent = category.icon || ICONS.Outros;
-
-                return (
-                    <div key={category.id} className="bg-slate-800/50 p-4 rounded-lg border border-slate-800">
-                        <div className="flex justify-between items-center mb-2">
-                            <div className="flex items-center gap-3">
-                                <span className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: `${category.color}20`, color: category.color }}><IconComponent /></span>
-                                <span className="font-semibold text-white">{category.name}</span>
-                            </div>
-                            <div className="text-sm">
-                                <span className="text-slate-400">{spent.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</span> / {budget.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
-                            </div>
-                        </div>
-                        <div className="w-full bg-slate-700 rounded-full h-2.5">
-                            <div className={`${progressBarColor} h-2.5 rounded-full`} style={{ width: `${Math.min(percentage, 100)}%` }}></div>
-                        </div>
-                        <p className={`text-right text-xs mt-1 ${remaining < 0 ? 'text-red-400' : 'text-slate-500'}`}>
-                            {remaining >= 0 ? `${remaining.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})} restantes` : `${(remaining * -1).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})} acima`}
-                        </p>
-                    </div>
-                );
-            })}
-            </div>
-        </div>
-    );
-};
-
-const GoalsView = ({ goals }) => (
-    <div>
-        <h2 className="text-3xl font-bold text-white mb-8">Minhas Metas</h2>
-        <div className="space-y-4">
-        {goals.map(goal => {
-            const percentage = goal.target > 0 ? (goal.saved / goal.target) * 100 : 0;
-            return (
-                <div key={goal.id} className="bg-slate-800/50 p-4 rounded-lg border border-slate-800">
-                    <div className="flex justify-between items-center mb-2">
-                        <span className="font-semibold text-white">{goal.name}</span>
-                        <span className="text-sm text-cyan-400">{Math.round(percentage)}%</span>
-                    </div>
-                    <div className="w-full bg-slate-700 rounded-full h-2.5 mb-1">
-                        <div className="bg-cyan-500 h-2.5 rounded-full" style={{ width: `${percentage}%` }}></div>
-                    </div>
-                    <div className="text-xs text-slate-500 text-right">
-                        {goal.saved.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})} de {goal.target.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
-                    </div>
-                </div>
-            );
-        })}
-        </div>
-    </div>
-);
-
-const SettingsView = ({ data, setData }) => {
-    const handleUpdateCategory = (type, id, newName, newColor) => {
-        setData(prev => {
-            const key = type === 'expense' ? 'expenseCategories' : 'incomeCategories';
-            const updatedCategories = prev[key].map(cat => 
-                cat.id === id ? { ...cat, name: newName, color: newColor } : cat
-            );
-            return { ...prev, [key]: updatedCategories };
-        });
-    };
-
-    const handleExportCSV = () => {
-        const headers = "Data,Descricao,Tipo,Valor,Categoria,Conta\n";
-        const allCategories = [...data.expenseCategories, ...data.incomeCategories].reduce((acc, cat) => ({...acc, [cat.id]: cat.name}), {});
-        const allAccounts = data.accounts.reduce((acc, accData) => ({...acc, [accData.id]: accData.name}), {});
-
-        const csv = data.transactions.map(t => {
-            return [
-                new Date(t.created_at).toLocaleDateString('pt-BR'),
-                `"${t.description.replace(/"/g, '""')}"`,
-                t.type === 'expense' ? 'Despesa' : 'Receita',
-                t.amount.toFixed(2),
-                allCategories[t.categoryId] || 'N/A',
-                allAccounts[t.accountId] || 'N/A'
-            ].join(',');
-        }).join('\n');
-
-        const blob = new Blob([headers + csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", "nexus-finance-transacoes.csv");
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
-    const handleSaveBackup = () => {
-        const json = JSON.stringify(data, null, 2);
-        const blob = new Blob([json], { type: 'application/json' });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", "nexus-finance-backup.json");
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-    
-    const handleRestoreBackup = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const restoredData = JSON.parse(e.target.result);
-                    if (window.confirm("Tem certeza? Isso substituirá todos os dados atuais.")) {
-                        setData(restoredData);
-                    }
-                } catch (err) {
-                    alert("Arquivo de backup inválido.");
-                }
-            };
-            reader.readAsText(file);
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #eeeeee;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.4;
         }
-    };
 
-    return (
-        <div>
-            <h2 className="text-3xl font-bold text-white mb-8">Configurações</h2>
-            <div className="space-y-8">
-                <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-800">
-                    <h3 className="text-xl font-semibold text-white mb-4">Gerenciamento de Dados</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <button onClick={handleExportCSV} className="p-3 bg-cyan-500/10 text-cyan-400 rounded-lg hover:bg-cyan-500/20 transition">Exportar para Excel (CSV)</button>
-                        <button onClick={handleSaveBackup} className="p-3 bg-cyan-500/10 text-cyan-400 rounded-lg hover:bg-cyan-500/20 transition">Salvar Backup Local</button>
-                        <label className="p-3 bg-cyan-500/10 text-cyan-400 rounded-lg hover:bg-cyan-500/20 transition text-center cursor-pointer">
-                            Restaurar de um Backup
-                            <input type="file" accept=".json" onChange={handleRestoreBackup} className="hidden" />
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <h3 className="text-xl font-semibold text-white mb-4">Categorias de Despesa</h3>
-                    <div className="space-y-2">
-                        {data.expenseCategories.map(cat => (
-                            <div key={cat.id} className="flex items-center gap-4 p-2 bg-slate-800/50 rounded-lg">
-                                <input type="color" value={cat.color} onChange={e => handleUpdateCategory('expense', cat.id, cat.name, e.target.value)} className="w-8 h-8 bg-transparent border-none rounded-md cursor-pointer" style={{'WebkitAppearance': 'none', 'MozAppearance': 'none', 'appearance': 'none'}} />
-                                <input type="text" value={cat.name} onChange={e => handleUpdateCategory('expense', cat.id, e.target.value, cat.color)} className="flex-1 bg-transparent text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 rounded px-2" />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-                 <div>
-                    <h3 className="text-xl font-semibold text-white mb-4">Categorias de Receita</h3>
-                    <div className="space-y-2">
-                        {data.incomeCategories.map(cat => (
-                            <div key={cat.id} className="flex items-center gap-4 p-2 bg-slate-800/50 rounded-lg">
-                                <input type="color" value={cat.color} onChange={e => handleUpdateCategory('income', cat.id, cat.name, e.target.value)} className="w-8 h-8 bg-transparent border-none rounded-md cursor-pointer" style={{'WebkitAppearance': 'none', 'MozAppearance': 'none', 'appearance': 'none'}} />
-                                <input type="text" value={cat.name} onChange={e => handleUpdateCategory('income', cat.id, e.target.value, cat.color)} className="flex-1 bg-transparent text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 rounded px-2" />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const ReportsView = ({ allTransactions, isRechartsReady, rechartsError }) => {
-    if (rechartsError) return <div className="text-red-400">{rechartsError}</div>;
-    if (!isRechartsReady) return <div className="flex items-center justify-center h-full text-slate-500">Carregando relatórios...</div>;
-    
-    const { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } = window.Recharts;
-
-    const cashFlowData = useMemo(() => {
-        const months = [];
-        for (let i = 5; i >= 0; i--) {
-            const d = new Date();
-            d.setDate(1);
-            d.setMonth(d.getMonth() - i);
-            months.push({ 
-                month: d.toLocaleString('pt-BR', { month: 'short' }), 
-                Receita: 0, 
-                Despesa: 0,
-                Balanco: 0 
-            });
+        /* --- BOTÃO FLUTUANTE --- */
+        .fab-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
         }
+
+        .btn-action {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- ESTRUTURA --- */
+        .page-container {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+
+        .cover {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 3px double var(--primary);
+            margin-bottom: 40px;
+        }
+
+        .brand-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        /* --- BLOCO DE RECEITA --- */
+        .recipe-block {
+            page-break-inside: avoid;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            border-radius: 6px;
+            background: white;
+            overflow: hidden;
+        }
+
+        /* Cabeçalho */
+        .recipe-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .recipe-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        /* Corpo (Ingredientes + Preparo) */
+        .recipe-body {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .ingredients-col {
+            flex: 1;
+            padding: 15px;
+            background-color: #fafafa;
+            border-right: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+
+        .method-col {
+            flex: 1.4;
+            padding: 15px;
+            font-size: 0.9rem;
+        }
+
+        table.ing-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th { text-align: left; border-bottom: 2px solid var(--accent); color: var(--primary); font-size: 0.8rem; }
+        td { padding: 4px 2px; border-bottom: 1px dotted #ccc; }
+        .highlight-qty { font-weight: bold; color: #333; }
         
-        allTransactions.forEach(t => {
-            const transactionDate = new Date(t.created_at);
-            const today = new Date();
-            const monthDiff = (today.getFullYear() - transactionDate.getFullYear()) * 12 + (today.getMonth() - transactionDate.getMonth());
+        h4.section-title {
+            color: var(--accent);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #eee;
+            margin: 0 0 10px 0;
+        }
 
-            if (monthDiff >= 0 && monthDiff <= 5) {
-                const monthIndex = 5 - monthDiff;
-                if (t.type === 'income') {
-                    months[monthIndex].Receita += t.amount;
-                } else {
-                    months[monthIndex].Despesa += t.amount;
-                }
-                months[monthIndex].Balanco = months[monthIndex].Receita - months[monthIndex].Despesa;
-            }
-        });
-        return months;
-    }, [allTransactions]);
+        .method-step { margin-bottom: 8px; text-align: justify; }
+        .method-step strong { color: var(--primary); }
 
-    return (
-        <div>
-            <h2 className="text-3xl font-bold text-white mb-8">Relatórios</h2>
-            <div className="grid grid-cols-1 gap-8">
-                <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-800">
-                    <h3 className="font-semibold text-white mb-4">Fluxo de Caixa (Últimos 6 Meses)</h3>
-                    <div style={{ width: '100%', height: 300 }}>
-                        <ResponsiveContainer>
-                            <BarChart data={cashFlowData}>
-                                <XAxis dataKey="month" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                                <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `R$${value}`} />
-                                <Tooltip cursor={{ fill: 'rgba(148, 163, 184, 0.1)' }} contentStyle={{ backgroundColor: 'rgba(30, 41, 59, 0.8)', border: 'none', borderRadius: '0.5rem' }} formatter={(value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} />
-                                <Legend />
-                                <Bar dataKey="Receita" fill="#22c55e" radius={[4, 4, 0, 0]} />
-                                <Bar dataKey="Despesa" fill="#ef4444" radius={[4, 4, 0, 0]} />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
+        /* --- RODAPÉ DE GESTÃO (NOVO) --- */
+        .recipe-footer {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Barra de Macros */
+        .macro-bar {
+            background-color: var(--primary-light);
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-around;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--primary);
+            border-bottom: 1px solid #ddd;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* Área de Marketing e Rótulo */
+        .biz-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .marketing-box {
+            background-color: var(--sales-bg);
+            padding: 15px;
+            border-right: 1px solid white;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .label-box {
+            background-color: var(--label-bg);
+            padding: 15px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .biz-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            opacity: 0.7;
+        }
+
+        .copy-text {
+            font-style: italic;
+            color: var(--sales-text);
+            font-size: 0.85rem;
+        }
+
+        .label-text {
+            font-size: 0.75rem;
+            color: #555;
+            line-height: 1.2;
+        }
+
+        /* --- IMPRESSÃO --- */
+        @media print {
+            body { background: white; padding: 0; }
+            .fab-container { display: none; }
+            .page-container { box-shadow: none; width: 100%; margin: 0; padding: 0; }
+            .recipe-block { border: 1px solid #000; break-inside: avoid; }
+            .recipe-header { background-color: #333 !important; color: white !important; }
+            .macro-bar { background-color: #eee !important; color: black !important; border: 1px solid #ccc; }
+            .marketing-box { background-color: #e3f2fd !important; } 
+            .label-box { background-color: #f5f5f5 !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="fab-container">
+        <button class="btn-action" onclick="window.print()">🖨️ Salvar PDF Completo</button>
+    </div>
+
+    <div class="page-container">
+        
+        <div class="cover">
+            <h1 class="brand-title">Codex Platinum</h1>
+            <p>Manual Integrado de Produção, Nutrição e Vendas</p>
+        </div>
+
+        <!-- ================= RECIPE 01 ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">01. O Clássico (Frango & Batata Doce)</span>
+                <span style="font-size:0.8rem">BEST SELLER</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Frango (Cru)</td><td class="highlight-qty">170g</td><td class="highlight-qty">850g</td></tr>
+                        <tr><td>Batata Doce</td><td class="highlight-qty">140g</td><td class="highlight-qty">700g</td></tr>
+                        <tr><td>Brócolis</td><td class="highlight-qty">120g</td><td class="highlight-qty">600g</td></tr>
+                        <tr><td colspan="3" style="padding-top:5px"><strong>Temperos:</strong></td></tr>
+                        <tr><td>Sal</td><td>2g</td><td>10g</td></tr>
+                        <tr><td>Cúrcuma</td><td>1g</td><td>5g</td></tr>
+                        <tr><td>Azeite</td><td>5ml</td><td>25ml</td></tr>
+                    </table>
                 </div>
-                <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-800">
-                    <h3 className="font-semibold text-white mb-4">Tendência de Balanço (Últimos 6 Meses)</h3>
-                    <div style={{ width: '100%', height: 300 }}>
-                        <ResponsiveContainer>
-                            <LineChart data={cashFlowData}>
-                                <XAxis dataKey="month" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
-                                <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `R$${value}`} />
-                                <Tooltip cursor={{ stroke: '#64748b', strokeWidth: 1 }} contentStyle={{ backgroundColor: 'rgba(30, 41, 59, 0.8)', border: 'none', borderRadius: '0.5rem' }} formatter={(value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} />
-                                <Legend />
-                                <Line type="monotone" dataKey="Balanco" stroke="#06b6d4" strokeWidth={3} dot={{ fill: '#06b6d4', r: 4 }} />
-                            </LineChart>
-                        </ResponsiveContainer>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Frango:</strong> Cortar cubos de 2cm. Marinar com sal, cúrcuma e alho. Selar em chapa quente para dourar.</div>
+                    <div class="method-step"><strong>2. Vegetais:</strong> Batata doce cozida com casca (rodelas). Brócolis no vapor (4 min) para ficar crocante.</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 380 kcal</span>
+                    <span>🥩 P: 38g</span>
+                    <span>⚡ C: 40g</span>
+                    <span>🥑 G: 6g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🥗 <strong>O Clássico que Funciona:</strong> Peito de frango grelhado com açafrão (anti-inflamatório), batata doce rústica e brócolis. Emagrecimento limpo e saboroso. Peça já!"</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Frango, batata doce, brócolis, azeite, cúrcuma, alho, sal.<br>
+                            <strong>Alérgenos:</strong> NÃO CONTÉM GLÚTEN/LACTOSE.<br>
+                            <strong>Val:</strong> 90 dias (-12°C).
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    );
-};
+
+        <!-- ================= RECIPE 02 ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">02. Patinho & Purê Abóbora</span>
+                <span style="font-size:0.8rem">COMFORT FOOD</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Patinho (Cru)</td><td class="highlight-qty">160g</td><td class="highlight-qty">800g</td></tr>
+                        <tr><td>Abóbora</td><td class="highlight-qty">250g</td><td class="highlight-qty">1.25kg</td></tr>
+                        <tr><td>Vagem</td><td class="highlight-qty">90g</td><td class="highlight-qty">450g</td></tr>
+                        <tr><td colspan="3" style="padding-top:5px"><strong>Temperos:</strong></td></tr>
+                        <tr><td>Sal</td><td>2g</td><td>10g</td></tr>
+                        <tr><td>Páprica</td><td>2g</td><td>10g</td></tr>
+                        <tr><td>Alecrim</td><td>0.5g</td><td>2.5g</td></tr>
+                    </table>
+                </div>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Purê:</strong> Assar abóbora com casca e alecrim. Raspar a polpa e amassar. Zero água.</div>
+                    <div class="method-step"><strong>2. Carne:</strong> Refogar com cebola. Deixar secar bem. Finalizar com páprica.</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 350 kcal</span>
+                    <span>🥩 P: 36g</span>
+                    <span>⚡ C: 28g</span>
+                    <span>🥑 G: 8g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🧡 <strong>Abraço no Estômago:</strong> Patinho moído magrinho com nosso purê de abóbora assada (super doce e cremoso) e vagem. Baixa caloria, muita saciedade."</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Patinho, abóbora cabotiá, vagem, cebola, alho, páprica, alecrim, sal.<br>
+                            <strong>Alérgenos:</strong> NÃO CONTÉM GLÚTEN/LACTOSE.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RECIPE 03 ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">03. Sobrecoxa & Purê Inglês</span>
+                <span style="font-size:0.8rem">LUCRO MÁXIMO</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Sobrecoxa</td><td class="highlight-qty">160g</td><td class="highlight-qty">800g</td></tr>
+                        <tr><td>Batata</td><td class="highlight-qty">150g</td><td class="highlight-qty">750g</td></tr>
+                        <tr><td>Mix Legumes</td><td class="highlight-qty">130g</td><td class="highlight-qty">650g</td></tr>
+                        <tr><td colspan="3" style="padding-top:5px"><strong>Temperos:</strong></td></tr>
+                        <tr><td>Sal</td><td>2g</td><td>10g</td></tr>
+                        <tr><td>Orégano</td><td>1g</td><td>5g</td></tr>
+                        <tr><td>Colorau</td><td>1g</td><td>5g</td></tr>
+                    </table>
+                </div>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Frango:</strong> Retirar pele/gordura. Assar com colorau/orégano a 180°C.</div>
+                    <div class="method-step"><strong>2. Purê:</strong> Cozinhar batatas, espremer, pingo de leite desnatado para dar liga.</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 410 kcal</span>
+                    <span>🥩 P: 30g</span>
+                    <span>⚡ C: 38g</span>
+                    <span>🥑 G: 14g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🍗 <strong>Sabor de Domingo:</strong> Sobrecoxa assada suculenta (sem pele), purê de batatas cremoso e mix de legumes. Comida de verdade com preço justo."</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Sobrecoxa, batata, cenoura, chuchu, leite desn., orégano, colorau, sal.<br>
+                            <strong>Alérgenos:</strong> CONTÉM LEITE.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RECIPE 04 ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">04. Bolonhesa Fit & Integral</span>
+                <span style="font-size:0.8rem">PRÉ-TREINO</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Massa Integral</td><td class="highlight-qty">50g</td><td class="highlight-qty">250g</td></tr>
+                        <tr><td>Patinho</td><td class="highlight-qty">100g</td><td class="highlight-qty">500g</td></tr>
+                        <tr><td>Tomate Pelado</td><td class="highlight-qty">80g</td><td class="highlight-qty">400g</td></tr>
+                        <tr><td>Espinafre</td><td class="highlight-qty">1/4 mç</td><td class="highlight-qty">1 mç</td></tr>
+                    </table>
+                </div>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Massa:</strong> Cozinhar 2 min a menos que o pacote. Envolver em azeite.</div>
+                    <div class="method-step"><strong>2. Molho:</strong> Carne + Tomate. Espinafre entra no fim, só para murchar. Cobrir bem a massa.</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 390 kcal</span>
+                    <span>🥩 P: 30g</span>
+                    <span>⚡ C: 50g</span>
+                    <span>🥑 G: 7g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🍝 <strong>Energia Pura:</strong> Macarrão integral com molho bolonhesa rico (carne magra e tomates) enriquecido com ferro do espinafre. Ideal para seu treino."</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Macarrão integral, patinho, tomate, cebola, espinafre, manjericão, sal.<br>
+                            <strong>Alérgenos:</strong> CONTÉM GLÚTEN.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RECIPE 05 ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">05. Picadinho da Vovó</span>
+                <span style="font-size:0.8rem">CASEIRO</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Acém (Cru)</td><td class="highlight-qty">170g</td><td class="highlight-qty">850g</td></tr>
+                        <tr><td>Arroz Parboil.</td><td class="highlight-qty">45g</td><td class="highlight-qty">225g</td></tr>
+                        <tr><td>Abobrinha</td><td class="highlight-qty">120g</td><td class="highlight-qty">600g</td></tr>
+                    </table>
+                </div>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Carne:</strong> Cubos na pressão com cebola e louro (30min). Reduzir molho.</div>
+                    <div class="method-step"><strong>2. Legume:</strong> Abobrinha em meia-lua selada em frigideira quente (crocante).</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 380 kcal</span>
+                    <span>🥩 P: 35g</span>
+                    <span>⚡ C: 35g</span>
+                    <span>🥑 G: 9g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🥩 <strong>Tempero de Casa:</strong> Picadinho de carne suculento cozido lentamente, arroz soltinho e abobrinha grelhada. Simples e perfeito."</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Acém, arroz, abobrinha, cebola roxa, louro, alho, sal.<br>
+                            <strong>Alérgenos:</strong> NÃO CONTÉM GLÚTEN/LACTOSE.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RECIPE 06 ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">06. Strogonoff Fit</span>
+                <span style="font-size:0.8rem">FAVORITO</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Frango (Cru)</td><td class="highlight-qty">150g</td><td class="highlight-qty">750g</td></tr>
+                        <tr><td>Arroz Integral</td><td class="highlight-qty">40g</td><td class="highlight-qty">200g</td></tr>
+                        <tr><td>Batata Doce</td><td class="highlight-qty">100g</td><td class="highlight-qty">500g</td></tr>
+                        <tr><td colspan="3" style="font-size:0.75rem"><em>*Creme de Ricota ou Iogurte Natural</em></td></tr>
+                    </table>
+                </div>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Molho:</strong> Refogar frango + tomate/mostarda. Desligar fogo. Adicionar creme de ricota (para não talhar).</div>
+                    <div class="method-step"><strong>2. Chips:</strong> Batata doce fatiada fina e assada até secar.</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 400 kcal</span>
+                    <span>🥩 P: 38g</span>
+                    <span>⚡ C: 45g</span>
+                    <span>🥑 G: 8g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🥣 <strong>Sem Culpa:</strong> Strogonoff leve e cremoso (sem creme de leite!), arroz integral e chips de batata doce artesanal. O queridinho da casa."</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Frango, arroz integral, batata doce, creme de ricota, tomate, mostarda.<br>
+                            <strong>Alérgenos:</strong> CONTÉM LEITE.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RECIPE 07 ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">07. Frango Xadrez Adaptado</span>
+                <span style="font-size:0.8rem">ORIENTAL</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Frango (Cru)</td><td class="highlight-qty">160g</td><td class="highlight-qty">800g</td></tr>
+                        <tr><td>Pimentões</td><td class="highlight-qty">60g</td><td class="highlight-qty">300g</td></tr>
+                        <tr><td>Arroz Integral</td><td class="highlight-qty">45g</td><td class="highlight-qty">225g</td></tr>
+                        <tr><td>Repolho</td><td class="highlight-qty">100g</td><td class="highlight-qty">500g</td></tr>
+                    </table>
+                </div>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Wok:</strong> Selar frango + cubos de pimentão/cebola. Adicionar Shoyu Light + Gengibre + 1 colher café amido. Engrossar.</div>
+                    <div class="method-step"><strong>2. Repolho:</strong> Refogado rápido no alho.</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 360 kcal</span>
+                    <span>🥩 P: 35g</span>
+                    <span>⚡ C: 35g</span>
+                    <span>🥑 G: 8g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🥢 <strong>Toque Asiático:</strong> Frango em cubos, pimentões crocantes e molho shoyu light. Acompanha arroz integral e repolho refogado. Exótico e leve."</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Frango, arroz, pimentão, repolho, shoyu light, gengibre, amido, sal.<br>
+                            <strong>Alérgenos:</strong> CONTÉM SOJA E GLÚTEN.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RECIPE 08 ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">08. Escondidinho Invertido</span>
+                <span style="font-size:0.8rem">LOW CARB</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Frango Desfiado</td><td class="highlight-qty">120g</td><td class="highlight-qty">600g</td></tr>
+                        <tr><td>Mandioca/Aipim</td><td class="highlight-qty">150g</td><td class="highlight-qty">750g</td></tr>
+                        <tr><td>Couve Manteiga</td><td class="highlight-qty">80g</td><td class="highlight-qty">400g</td></tr>
+                    </table>
+                </div>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Purê:</strong> Mandioca cozida amassada com a própria água do cozimento (ponto chiclete).</div>
+                    <div class="method-step"><strong>2. Montagem:</strong> Purê embaixo, frango com molho de tomate em cima, couve ao lado.</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 340 kcal</span>
+                    <span>🥩 P: 35g</span>
+                    <span>⚡ C: 30g</span>
+                    <span>🥑 G: 8g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🍲 <strong>Raiz Brasileira:</strong> Creme de mandioca aveludado coberto com frango desfiado suculento e couve mineira. Impossível comer um só."</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Mandioca, frango, couve, tomate, cebola, alho, azeite, sal.<br>
+                            <strong>Alérgenos:</strong> NÃO CONTÉM GLÚTEN/LACTOSE.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RECIPE 09 ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">09. Almôndegas Funcionais</span>
+                <span style="font-size:0.8rem">PRÁTICO</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Patinho (Cru)</td><td class="highlight-qty">150g</td><td class="highlight-qty">750g</td></tr>
+                        <tr><td>Aveia Flocos</td><td class="highlight-qty">10g</td><td class="highlight-qty">50g</td></tr>
+                        <tr><td>Batata Doce</td><td class="highlight-qty">140g</td><td class="highlight-qty">700g</td></tr>
+                        <tr><td>Mix Legumes</td><td class="highlight-qty">110g</td><td class="highlight-qty">550g</td></tr>
+                    </table>
+                </div>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Carne:</strong> Misturar carne, aveia, ovo, hortelã. Assar bolinhas a 200°C (15min). Não fritar.</div>
+                    <div class="method-step"><strong>2. Acomp:</strong> Purê simples e legumes na manteiga/azeite.</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 380 kcal</span>
+                    <span>🥩 P: 34g</span>
+                    <span>⚡ C: 35g</span>
+                    <span>🥑 G: 10g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🍛 <strong>Almôndegas Fit:</strong> Assadas (não fritas!), feitas com patinho e aveia. Acompanha purê de batata doce e legumes. Leve para digerir."</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Patinho, batata doce, legumes, aveia, ovo, hortelã, sal.<br>
+                            <strong>Alérgenos:</strong> CONTÉM OVO E GLÚTEN (Aveia).
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RECIPE 10 ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">10. Iscas Aceboladas</span>
+                <span style="font-size:0.8rem">FORÇA</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Coxão Mole (Iscas)</td><td class="highlight-qty">160g</td><td class="highlight-qty">800g</td></tr>
+                        <tr><td>Cebola</td><td class="highlight-qty">50g</td><td class="highlight-qty">250g</td></tr>
+                        <tr><td>Arroz (Cru)</td><td class="highlight-qty">45g</td><td class="highlight-qty">225g</td></tr>
+                        <tr><td>Couve-Flor</td><td class="highlight-qty">120g</td><td class="highlight-qty">600g</td></tr>
+                    </table>
+                </div>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Carne:</strong> Frigideira estalando de quente. Iscas aos poucos. Cebola no final.</div>
+                    <div class="method-step"><strong>2. Arroz:</strong> Refogar cúrcuma com o arroz cru para ficar amarelo vibrante.</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 390 kcal</span>
+                    <span>🥩 P: 38g</span>
+                    <span>⚡ C: 35g</span>
+                    <span>🥑 G: 10g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🥘 <strong>Sabor Intenso:</strong> Iscas de carne macias aceboladas, arroz de açafrão aromático e couve-flor no vapor. Refeição completa e rica."</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Coxão mole, arroz, couve-flor, cebola, cúrcuma, azeite, sal.<br>
+                            <strong>Alérgenos:</strong> NÃO CONTÉM GLÚTEN/LACTOSE.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RECIPE 11 (NEW) ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">11. Tilápia & Purê de Ervilha</span>
+                <span style="font-size:0.8rem">PREMIUM LEVE</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Tilápia (Filé)</td><td class="highlight-qty">150g</td><td class="highlight-qty">750g</td></tr>
+                        <tr><td>Ervilha (Seca)</td><td class="highlight-qty">50g</td><td class="highlight-qty">250g</td></tr>
+                        <tr><td>Cenoura</td><td class="highlight-qty">100g</td><td class="highlight-qty">500g</td></tr>
+                        <tr><td colspan="3" style="font-size:0.75rem"><em>*Raspas de Limão e Hortelã</em></td></tr>
+                    </table>
+                </div>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Peixe:</strong> Assar com raspas de limão e pimenta branca (15 min). Não usar suco na marinada.</div>
+                    <div class="method-step"><strong>2. Purê:</strong> Cozinhar ervilha até desmanchar. Processar com hortelã e azeite.</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 320 kcal</span>
+                    <span>🥩 P: 30g</span>
+                    <span>⚡ C: 35g</span>
+                    <span>🥑 G: 6g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🐟 <strong>Leveza Premium:</strong> Filé de tilápia assado com raspas de limão siciliano, acompanhado de um purê de ervilhas com hortelã refrescante."</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Tilápia, ervilha, cenoura, limão, hortelã, azeite, sal.<br>
+                            <strong>Alérgenos:</strong> CONTÉM PEIXE.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RECIPE 12 (NEW) ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">12. Lombo Agridoce & Cabotiá</span>
+                <span style="font-size:0.8rem">GOURMET</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Lombo Suíno</td><td class="highlight-qty">160g</td><td class="highlight-qty">800g</td></tr>
+                        <tr><td>Abóbora</td><td class="highlight-qty">250g</td><td class="highlight-qty">1.25kg</td></tr>
+                        <tr><td>Couve</td><td class="highlight-qty">2 fls</td><td class="highlight-qty">1 mç</td></tr>
+                        <tr><td colspan="3" style="font-size:0.75rem"><em>*Suco de Laranja e Páprica Defumada</em></td></tr>
+                    </table>
+                </div>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Lombo:</strong> Marinar no suco de laranja e páprica defumada. Refogar e deixar caramelizar.</div>
+                    <div class="method-step"><strong>2. Acomp:</strong> Purê de abóbora denso e couve chiffonade (fina) refogada 30seg.</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 360 kcal</span>
+                    <span>🥩 P: 35g</span>
+                    <span>⚡ C: 30g</span>
+                    <span>🥑 G: 12g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🍊 <strong>Agridoce Sofisticado:</strong> Cubos de lombo suíno caramelizados na laranja e páprica defumada, com purê de cabotiá. Uma explosão de sabor."</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Lombo suíno, abóbora, couve, laranja, páprica defumada, sal.<br>
+                            <strong>Alérgenos:</strong> NÃO CONTÉM GLÚTEN/LACTOSE.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RECIPE 13 (NEW) ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">13. Curry Vegano (Grão de Bico)</span>
+                <span style="font-size:0.8rem">PLANT-BASED</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Grão de Bico</td><td class="highlight-qty">150g</td><td class="highlight-qty">750g</td></tr>
+                        <tr><td>Cogumelos</td><td class="highlight-qty">80g</td><td class="highlight-qty">400g</td></tr>
+                        <tr><td>Arroz 7 Grãos</td><td class="highlight-qty">45g</td><td class="highlight-qty">225g</td></tr>
+                        <tr><td colspan="3" style="font-size:0.75rem"><em>*Leite de Coco e Cominho</em></td></tr>
+                    </table>
+                </div>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Curry:</strong> Refogar grão de bico e cogumelos com cominho. Adicionar leite de coco e reduzir até cremosidade.</div>
+                    <div class="method-step"><strong>2. Arroz:</strong> Integral ou 7 grãos para complementar a proteína vegetal.</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 340 kcal</span>
+                    <span>🥩 P: 18g (Veg)</span>
+                    <span>⚡ C: 45g</span>
+                    <span>🥑 G: 10g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🌱 <strong>Energia Plant-Based:</strong> Curry aromático de grão de bico e cogumelos ao leite de coco, com arroz 7 grãos. 100% Vegano e proteico."</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Grão de bico, cogumelos, arroz 7 grãos, leite de coco, cominho, coentro, sal.<br>
+                            <strong>Alérgenos:</strong> VEGANO. NÃO CONTÉM GLÚTEN.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RECIPE 14 (NEW) ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">14. Feijoada Fit</span>
+                <span style="font-size:0.8rem">VENDA CERTA</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Feijão Preto</td><td class="highlight-qty">100g</td><td class="highlight-qty">500g</td></tr>
+                        <tr><td>Lombo + Frango</td><td class="highlight-qty">120g</td><td class="highlight-qty">600g</td></tr>
+                        <tr><td>Couve</td><td class="highlight-qty">50g</td><td class="highlight-qty">250g</td></tr>
+                        <tr><td>Arroz</td><td class="highlight-qty">40g</td><td class="highlight-qty">200g</td></tr>
+                    </table>
+                </div>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Carnes:</strong> Usar cubos de lombo e frango temperados com muita páprica defumada (simula o gosto do defumado sem gordura).</div>
+                    <div class="method-step"><strong>2. Caldo:</strong> Cozinhar junto ao feijão para engrossar o caldo naturalmente.</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 380 kcal</span>
+                    <span>🥩 P: 35g</span>
+                    <span>⚡ C: 40g</span>
+                    <span>🥑 G: 10g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🇧🇷 <strong>Sabor Brasileiro:</strong> Nossa versão leve da Feijoada. Feijão preto, lombo magro e frango defumado (na páprica), arroz e couve. Mata a vontade sem pesar."</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Feijão preto, lombo, frango, arroz, couve, páprica defumada, louro, sal.<br>
+                            <strong>Alérgenos:</strong> NÃO CONTÉM GLÚTEN/LACTOSE.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= RECIPE 15 (NEW) ================= -->
+        <div class="recipe-block">
+            <div class="recipe-header">
+                <span class="recipe-name">15. Risoto Fake (Couve-Flor)</span>
+                <span style="font-size:0.8rem">ULTRA LOW CARB</span>
+            </div>
+            <div class="recipe-body">
+                <div class="ingredients-col">
+                    <table class="ing-table">
+                        <tr><th>Insumo</th><th>1 Unid.</th><th>5 Unid.</th></tr>
+                        <tr><td>Couve-Flor</td><td class="highlight-qty">200g</td><td class="highlight-qty">1kg</td></tr>
+                        <tr><td>Frango Desfiado</td><td class="highlight-qty">120g</td><td class="highlight-qty">600g</td></tr>
+                        <tr><td>Creme Ricota</td><td class="highlight-qty">30g</td><td class="highlight-qty">150g</td></tr>
+                        <tr><td>Parmesão</td><td class="highlight-qty">10g</td><td class="highlight-qty">50g</td></tr>
+                    </table>
+                </div>
+                <div class="method-col">
+                    <h4 class="section-title">Modo de Preparo</h4>
+                    <div class="method-step"><strong>1. Arroz Fake:</strong> Processar couve-flor crua até virar grãos. Refogue na cebola.</div>
+                    <div class="method-step"><strong>2. Risoto:</strong> Adicionar frango e creme de ricota. Mexer até dar liga. Finalizar com parmesão e noz moscada.</div>
+                </div>
+            </div>
+            <div class="recipe-footer">
+                <div class="macro-bar">
+                    <span>🔥 290 kcal</span>
+                    <span>🥩 P: 30g</span>
+                    <span>⚡ C: 15g</span>
+                    <span>🥑 G: 12g</span>
+                </div>
+                <div class="biz-grid">
+                    <div class="marketing-box">
+                        <span class="biz-title">WhatsApp Copy</span>
+                        <div class="copy-text">"🍄 <strong>Risoto Ultra Low Carb:</strong> Cremoso e sofisticado, mas feito com 'arroz' de couve-flor, frango e toque de parmesão. Apenas 15g de carboidrato!"</div>
+                    </div>
+                    <div class="label-box">
+                        <span class="biz-title">Dados do Rótulo</span>
+                        <div class="label-text">
+                            <strong>Ingr:</strong> Couve-flor, frango, creme de ricota, parmesão, cebola, noz moscada, sal.<br>
+                            <strong>Alérgenos:</strong> CONTÉM LEITE.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
+
+
